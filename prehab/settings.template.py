@@ -83,10 +83,7 @@ DATABASES = {
         'USER': 'prehab_user',
         'PASSWORD': 'Vf1mzubPejW4RqrbL3cm',
         'HOST': 'prehab-pg-db.c4sdnouwglfv.eu-west-2.rds.amazonaws.com',  # Or an IP Address that your DB is hosted on
-        'PORT': '5432',
-        'OPTIONS': {
-            'options': '-c search_path=auth'
-        }
+        'PORT': '5432'
     }
 }
 
