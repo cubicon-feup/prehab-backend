@@ -1,12 +1,12 @@
 from django.db import models
 
 
-class PatientType(models.Model):
+class TaskScheduleStatus(models.Model):
     id = models.AutoField(primary_key=True)
-    title = models.CharField(max_length=64, blank=False, null=False)
+    title = models.CharField(max_length=64, blank=False, null=True)
     description = models.CharField(max_length=512, blank=False, null=True)
 
     class Meta:
         managed = False
-        db_table = 'patient_type'
+        db_table = 'task_schedule_status'
         ordering = ['-id']

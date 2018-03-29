@@ -1,21 +1,17 @@
 from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidator
-from .PatientType import PatientType
-from .User import User
+
+from prehab_app.models.PatientType import PatientType
+from prehab_app.models.User import User
 
 
 class Patient(models.Model):
-    male = "m"
-    female = "f"
-    SEX_TYPE = (
-        (male, 'Male'),
-        (female, 'Female')
-    )
-    tag = models.CharField(max_length=50, unique=True)
-    age = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)])
-    sex = models.CharField(max_length=1, choices=SEX_TYPE, default=male)
-    typePatient = models.ForeignKey(PatientType, on_delete=models.CASCADE, db_column='id')
-    patient_id = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE, default=1, db_column='id')
+    id = models.ForeignKey(User, on_delete=models.CASCADE, db_column='patient_type_id')
+    patient_tag = models.CharField(max_length=16, blank=False, null=False)
+    age = models.IntegerField(blank=False, null=False)
+    sex = models.CharField(max_length=1, blank=False, null=False)
+    patient_type_id = models.ForeignKey(PatientType, on_delete=models.CASCADE, db_column='patient_type_id')
 
     class Meta:
+        managed = False
         db_table = 'patient'
+        ordering = ['-id']
