@@ -15,12 +15,21 @@ Including another URLconf
 """
 import re
 
-from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(re.compile(r'^test/').pattern, include('prehab_app.urls')),
-
+    path('', include('prehab_app.urls'))
 ]
+
+
+#from django.conf.urls import url
+#from django.contrib import admin
+#from django.urls import path, include
+
+#urlpatterns = [
+#    path('admin/', admin.site.urls),
+#    url(re.compile(r'^test/').pattern, include('prehab_app.urls')),
+
+#]
