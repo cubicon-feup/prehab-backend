@@ -1,6 +1,7 @@
 from django.urls import path, include
 from .views.Doctor import DoctorView
 from .views.Patient import PatientView
+from .views.Auth import AuthView
 from rest_framework import routers
 
 router = routers.DefaultRouter()
@@ -9,6 +10,7 @@ router.register('Patient', PatientView)
 
 
 urlpatterns = [
+    path('login/', AuthView.login, name='login'),
     path('', include(router.urls))
 ]
 
