@@ -1,16 +1,15 @@
+from django.conf.urls import url
 from django.urls import path, include
-from .views.Doctor import DoctorView
-from .views.Patient import PatientView
-from .views.Auth import AuthView
+from prehab_app.views.Auth import AuthView
 from rest_framework import routers
 
 router = routers.DefaultRouter()
-router.register('Doctor', DoctorView)
-router.register('Patient', PatientView)
 
 
 urlpatterns = [
-    path('login/', AuthView.login, name='login'),
+    url(r'login/', AuthView.as_view({'post': 'login'}), name='Login in the platform'),
+    url(r'web/register_patient/', AuthView.as_view({'post': 'register_patient'}), name='Register a new patient in the platform'),
+
     path('', include(router.urls))
 ]
 
