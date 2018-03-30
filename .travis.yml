@@ -12,7 +12,6 @@ install:
 
 # run test scripts
 script:
-- python manage.py collectstatic --noinput
 - coverage run --source=. manage.py test prehab_app --noinput
 
 # run coveralls after successful tests
