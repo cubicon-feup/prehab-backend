@@ -12,7 +12,7 @@ install:
 
 # run test scripts
 script:
-- coverage run --source=. manage.py test prehab_app --noinput
+- coverage run --source=. manage.py test prehab_app --noinput --settings=prehab.settings_test
 
 # run coveralls after successful tests
 after_success:
