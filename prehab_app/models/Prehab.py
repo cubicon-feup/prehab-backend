@@ -10,9 +10,9 @@ class Prehab(models.Model):
     actual_end_date = models.DateField(blank=False, null=False)
     surgery_date = models.DateField(blank=False, null=False)
     week_number = models.IntegerField(blank=False, null=False)
-    status_id = models.ForeignKey(PrehabStatus, on_delete=models.CASCADE, db_column='status_id')
+    status = models.ForeignKey(PrehabStatus, on_delete=models.CASCADE, db_column='status_id')
 
     class Meta:
         managed = False
-        db_table = 'prehab_end_date'
+        db_table = 'prehab'
         ordering = ['-id']

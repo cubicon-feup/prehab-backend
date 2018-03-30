@@ -6,9 +6,9 @@ from prehab_app.models.TaskSchedule import TaskSchedule
 
 class ScheduleWeekTask(models.Model):
     id = models.AutoField(primary_key=True)
-    task_schedule_id = models.ForeignKey(TaskSchedule, on_delete=models.CASCADE, db_column='task_schedule_id')
+    task_schedule = models.ForeignKey(TaskSchedule, on_delete=models.CASCADE, db_column='task_schedule_id')
     week_number = models.IntegerField(blank=False, null=False)
-    task_id = models.ForeignKey(Task, on_delete=models.CASCADE, db_column='task_id')
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, db_column='task_id')
 
     class Meta:
         managed = False
