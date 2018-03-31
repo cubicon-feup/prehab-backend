@@ -8,12 +8,18 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 import os
 
+if os.path.exists('prehab/prod_env.py'):
+    import prehab.prod_env as env
+else:
+    import prehab.dev_env as env
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ''
+SECRET_KEY = env.SECRET_KEY
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 ALLOWED_HOSTS = [
@@ -89,14 +95,7 @@ WSGI_APPLICATION = 'prehab.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': '',
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',  # Or an IP Address that your DB is hosted on
-        'PORT': ''
-    }
+    'default': env.DATABASE
 }
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -132,5 +131,5 @@ REST_FRAMEWORK = {
     )
 }
 
-JWT_SECRET = ''
+JWT_SECRET = env.JWT_SECRET
 JWT_ALGORITHM = 'HS256'
