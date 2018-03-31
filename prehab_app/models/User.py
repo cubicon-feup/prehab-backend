@@ -16,6 +16,8 @@ class User(models.Model):
     username = models.CharField(max_length=64, blank=False, null=False, unique=True)
     password = models.CharField(max_length=64, blank=False, null=True)
     role = models.ForeignKey(Role, on_delete=models.CASCADE, db_column='role_id')
+    activation_code = models.CharField(max_length=8, blank=False, null=False)
+    is_active = models.BooleanField(blank=False, null=False, default=False)
 
     objects = UserQuerySet.as_manager()
 
@@ -28,4 +30,12 @@ class User(models.Model):
 
     @property
     def is_admin(self):
-        return self.role.title == 'ADMIN'
+        return self.role.title == 'Admin'
+
+    @property
+    def is_doctor(self):
+        return self.role.title == 'Doctor'
+
+    @property
+    def is_patient(self):
+        return self.role.title == 'Patient'

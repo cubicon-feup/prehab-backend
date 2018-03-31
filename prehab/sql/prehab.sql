@@ -27,11 +27,13 @@ CREATE TABLE doctor
 
 CREATE TABLE patient
 (
-  id          INTEGER PRIMARY KEY REFERENCES users,
-  patient_tag VARCHAR(16) NOT NULL,
-  age         INTEGER     NOT NULL,
-  weight      FLOAT       NOT NULL,
-  sex         VARCHAR(1)  NOT NULL
+  id              INTEGER PRIMARY KEY REFERENCES users,
+  patient_tag     VARCHAR(16) NOT NULL,
+  age             INTEGER     NOT NULL,
+  weight          FLOAT       NOT NULL,
+  sex             VARCHAR(1)  NOT NULL,
+  activation_code VARCHAR(8)  NOT NULL,
+  is_active       BOOLEAN     NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE constraint_type
