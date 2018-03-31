@@ -5,7 +5,7 @@ from rest_framework import viewsets
 from prehab.helpers.HttpException import HttpException
 from prehab.helpers.HttpResponseHandler import HTTP
 from prehab.settings import JWT_SECRET, JWT_ALGORITHM
-from prehab_app.models import User
+from prehab_app.models.User import User
 
 
 class AuthView(viewsets.ModelViewSet):
