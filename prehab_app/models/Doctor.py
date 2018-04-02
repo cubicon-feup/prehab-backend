@@ -8,6 +8,7 @@ class Doctor(models.Model):
     department = models.CharField(max_length=64, blank=False, null=True)
 
     class Meta:
+        app_label = 'Doctor'
         managed = False
         db_table = 'doctor'
         ordering = ['-id']

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from prehab_app.models import TaskScheduleStatus
+from prehab_app.models.TaskScheduleStatus import TaskScheduleStatus
 
 
 class TaskScheduleStatusSerializer(serializers.ModelSerializer):

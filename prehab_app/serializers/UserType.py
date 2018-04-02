@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
-from prehab_app.models import UserType
+from prehab_app.models.Role import Role
 
 
-class UserTypeSerializer(serializers.ModelSerializer):
+class RoleSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserType
+        model = Role
         fields = '__all__'

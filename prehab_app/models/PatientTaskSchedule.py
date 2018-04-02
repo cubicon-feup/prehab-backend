@@ -15,6 +15,7 @@ class PatientTaskSchedule(models.Model):
     status = models.IntegerField(blank=False, null=True, default=1)
 
     class Meta:
+        app_label = 'PatientTaskSchedule'
         managed = False
         db_table = 'patient_task_schedule'
         ordering = ['-id']

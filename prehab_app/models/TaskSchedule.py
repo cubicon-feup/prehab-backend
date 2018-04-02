@@ -10,6 +10,7 @@ class TaskSchedule(models.Model):
     is_active = models.BooleanField(blank=False, default=True)
 
     class Meta:
+        app_label = 'TaskSchedule'
         managed = False
         db_table = 'task_schedule'
         ordering = ['-id']

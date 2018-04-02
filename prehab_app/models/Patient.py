@@ -12,6 +12,7 @@ class Patient(models.Model):
     sex = models.CharField(max_length=1, blank=False, null=False)
 
     class Meta:
+        app_label = 'Patient'
         managed = False
         db_table = 'patient'
         ordering = ['-id']

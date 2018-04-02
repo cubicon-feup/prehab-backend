@@ -13,13 +13,6 @@ if os.path.exists('prehab/prod_env.py'):
 else:
     import prehab.dev_env as env
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env.SECRET_KEY
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 ALLOWED_HOSTS = [
@@ -91,11 +84,7 @@ TEMPLATES = [
     },
 ]
 WSGI_APPLICATION = 'prehab.wsgi.application'
-# Database
-# https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-DATABASES = {
-    'default': env.DATABASE
-}
+
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
@@ -132,6 +121,26 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 2
 }
 
-JWT_SECRET = env.JWT_SECRET
 JWT_ALGORITHM = 'HS256'
 PERMISSIONS = False
+
+#####################################################################
+
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+JWT_SECRET = 'xyz'
+
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'secret'
+
+# Database
+# https://docs.djangoproject.com/en/2.0/ref/settings/#databases
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(os.path.dirname(__file__), 'test.db'),
+        'TEST_NAME': os.path.join(os.path.dirname(__file__), 'test.db'),
+    }
+}
