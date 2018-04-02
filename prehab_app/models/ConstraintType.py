@@ -7,6 +7,7 @@ class ConstraintType(models.Model):
     description = models.CharField(max_length=512, blank=False, null=True)
 
     class Meta:
+        app_label = 'ConstraintType'
         managed = False
         db_table = 'constraint_type'
         ordering = ['-id']

@@ -10,13 +10,15 @@ CREATE TABLE role
 
 CREATE TABLE users
 (
-  id       SERIAL PRIMARY KEY,
-  name     VARCHAR(64),
-  email    VARCHAR(64),
-  phone    VARCHAR(64),
-  username VARCHAR(64) NOT NULL,
-  password VARCHAR(64),
-  role_id  INTEGER REFERENCES role
+  id              SERIAL PRIMARY KEY,
+  name            VARCHAR(64),
+  email           VARCHAR(64),
+  phone           VARCHAR(64),
+  username        VARCHAR(64) NOT NULL,
+  password        VARCHAR(64),
+  role_id         INTEGER REFERENCES role,
+  activation_code VARCHAR(8),
+  is_active       BOOLEAN     NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE doctor

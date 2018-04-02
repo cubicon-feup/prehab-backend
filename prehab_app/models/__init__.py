@@ -1,4 +1,4 @@
-# from .ConstraintType import ConstraintType
+# from prehab_app.models import ConstraintType
 # from .Doctor import Doctor
 # from .DoctorPatient import DoctorPatient
 # from .Patient import Patient

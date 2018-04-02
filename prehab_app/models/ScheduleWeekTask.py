@@ -11,6 +11,7 @@ class ScheduleWeekTask(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE, db_column='task_id')
 
     class Meta:
+        app_label = 'ScheduleWeekTask'
         managed = False
         db_table = 'schedule_week_task'
         ordering = ['-id']

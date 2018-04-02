@@ -13,6 +13,7 @@ class Prehab(models.Model):
     status = models.ForeignKey(PrehabStatus, on_delete=models.CASCADE, db_column='status_id')
 
     class Meta:
+        app_label = 'Prehab'
         managed = False
         db_table = 'prehab'
         ordering = ['-id']

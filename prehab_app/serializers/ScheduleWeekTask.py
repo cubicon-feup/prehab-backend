@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from prehab_app.models import ScheduleWeekTask
+from prehab_app.models.ScheduleWeekTask import ScheduleWeekTask
 
 
 class ScheduleWeekTaskSerializer(serializers.ModelSerializer):

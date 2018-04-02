@@ -10,6 +10,7 @@ class DoctorPatient(models.Model):
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, db_column='doctor_id')
 
     class Meta:
+        app_label = 'DoctorPatient'
         managed = False
         db_table = 'doctor_patient'
         ordering = ['-id']

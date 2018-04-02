@@ -10,6 +10,7 @@ class PatientConstraintType(models.Model):
     constraint_type = models.ForeignKey(ConstraintType, on_delete=models.CASCADE, db_column='constraint_type_id')
 
     class Meta:
+        app_label = 'PatientConstraintType'
         managed = False
         db_table = 'patient_constraint_type'
         ordering = ['-id']

@@ -7,6 +7,7 @@ class TaskScheduleStatus(models.Model):
     description = models.CharField(max_length=512, blank=False, null=True)
 
     class Meta:
+        app_label = 'TaskScheduleStatus'
         managed = False
         db_table = 'task_schedule_status'
         ordering = ['-id']

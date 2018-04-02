@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from prehab_app.models import DoctorPatient
+from prehab_app.models.DoctorPatient import DoctorPatient
 
 
 class DoctorPatientSerializer(serializers.ModelSerializer):
