@@ -3,12 +3,15 @@ from django.urls import path, include
 from prehab_app.views.Auth import AuthView
 from rest_framework import routers
 
+from prehab_app.views.Task import TaskView
+
 router = routers.DefaultRouter()
 
 
 urlpatterns = [
     url(r'login/', AuthView.as_view({'post': 'login'}), name='Login in the platform'),
     url(r'web/register_patient/', AuthView.as_view({'post': 'register_patient'}), name='Register a new patient in the platform'),
+    url(r'task/', TaskView.as_view({'post': 'post'}), name='Create a new Task'),
 
     path('', include(router.urls))
 ]

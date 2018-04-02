@@ -21,7 +21,7 @@ CREATE TABLE users
 
 CREATE TABLE doctor
 (
-  id         INTEGER NOT NULL PRIMARY KEY REFERENCES users,
+  id         INTEGER PRIMARY KEY REFERENCES users,
   department VARCHAR(64)
 );
 
@@ -65,7 +65,7 @@ CREATE TABLE prehab_status
 );
 
 CREATE TABLE task_schedule (
-  id         INTEGER PRIMARY KEY,
+  id         SERIAL PRIMARY KEY,
   title      VARCHAR(64),
   created_by INTEGER REFERENCES doctor,
   is_active  BOOLEAN DEFAULT TRUE
@@ -79,7 +79,7 @@ CREATE TABLE task_type
 );
 
 CREATE TABLE task (
-  id              INTEGER PRIMARY KEY,
+  id              SERIAL PRIMARY KEY,
   title           VARCHAR(64),
   description     VARCHAR(512),
   multimedia_link VARCHAR(512),
@@ -87,7 +87,7 @@ CREATE TABLE task (
 );
 
 CREATE TABLE schedule_week_task (
-  id               INTEGER PRIMARY KEY,
+  id               SERIAL PRIMARY KEY,
   task_schedule_id INTEGER REFERENCES task_schedule,
   week_number      INTEGER NOT NULL,
   task_id          INTEGER REFERENCES task
@@ -95,7 +95,7 @@ CREATE TABLE schedule_week_task (
 
 CREATE TABLE prehab
 (
-  id                INTEGER PRIMARY KEY,
+  id                SERIAL PRIMARY KEY,
   init_date         DATE    NOT NULL                 DEFAULT now(),
   expected_end_date DATE,
   actual_end_date   DATE,
@@ -113,7 +113,7 @@ CREATE TABLE task_schedule_status
 
 CREATE TABLE patient_task_schedule
 (
-  id                   INTEGER PRIMARY KEY,
+  id                   SERIAL PRIMARY KEY,
   prehab_id            INTEGER REFERENCES prehab,
   week_number          INTEGER NOT NULL,
   day_number           INTEGER NOT NULL, -- 1 to 7: Sunday to Saturday
