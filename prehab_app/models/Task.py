@@ -4,7 +4,6 @@ from prehab_app.models.TaskType import TaskType
 
 
 class Task(models.Model):
-    id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=64, blank=False, null=True)
     description = models.CharField(max_length=512, blank=False, null=True)
     multimedia_link = models.CharField(max_length=512, blank=False, null=True)
@@ -12,5 +11,5 @@ class Task(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'task_schedule'
+        db_table = 'task'
         ordering = ['-id']
