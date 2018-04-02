@@ -2,6 +2,9 @@ from django.db import models
 
 
 class RoleQuerySet(models.QuerySet):
+    def which_role(self, role_id):
+        return self.get(role_id)
+
     def admin_role(self):
         return self.filter(title='Admin')
 

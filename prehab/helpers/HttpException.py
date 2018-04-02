@@ -1,6 +1,6 @@
 class HttpException(Exception):
 
-    def __init__(self, code, details):
+    def __init__(self, code, details=''):
         # Call the base class constructor with the parameters it needs
         super(Exception, self).__init__(details)
 
