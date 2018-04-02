@@ -2,19 +2,25 @@ from rest_framework import viewsets
 
 from prehab.helpers.HttpException import HttpException
 from prehab.helpers.HttpResponseHandler import HTTP
+from prehab_app.models.Role import Role
+from prehab_app.models.User import User
 from prehab_app.models.Task import Task
 from prehab_app.models.TaskType import TaskType
+from prehab_app.permissions import Permission
 
 
 class TaskView(viewsets.ModelViewSet):
 
     @staticmethod
     def post(request):
+        if Permission.verify(request, ['Admin']):
+            raise HttpException(401)
+
         try:
             data = request.data
             # 1. Check if title is not null
             if data['title'] is None:
-                raise HttpException (400, 'You need to send a title.')
+                raise HttpException(400, 'You need to send a title.')
 
             # 2. Check if task type is available
             task_type = TaskType.objects.title(data['task_type_id'])
