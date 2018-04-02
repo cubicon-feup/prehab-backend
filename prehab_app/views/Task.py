@@ -1,19 +1,21 @@
-from rest_framework import viewsets
+from rest_framework.viewsets import ViewSet
 
 from prehab.helpers.HttpException import HttpException
 from prehab.helpers.HttpResponseHandler import HTTP
-from prehab_app.models.Role import Role
-from prehab_app.models.User import User
 from prehab_app.models.Task import Task
 from prehab_app.models.TaskType import TaskType
 from prehab_app.permissions import Permission
 
 
-class TaskView(viewsets.ModelViewSet):
+class TaskViewSet(ViewSet):
 
-    @staticmethod
-    def post(request):
-        if Permission.verify(request, ['Admin']):
+    def list(self, request):
+        # self.serializer_class = self.serializer_class
+        # queryset = self.model.objects.all()
+        return HTTP.response(200, '')
+
+    def create(self, request):
+        if not Permission.verify(request, ['Admin']):
             raise HttpException(401)
 
         try:
