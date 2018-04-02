@@ -1,20 +1,34 @@
-from rest_framework.viewsets import ViewSet
+from rest_framework.viewsets import GenericViewSet
 
 from prehab.helpers.HttpException import HttpException
 from prehab.helpers.HttpResponseHandler import HTTP
 from prehab_app.models.Task import Task
 from prehab_app.models.TaskType import TaskType
 from prehab_app.permissions import Permission
+from prehab_app.serializers.Task import TaskSerializer
 
 
-class TaskViewSet(ViewSet):
+class TaskViewSet(GenericViewSet):
 
     def list(self, request):
-        # self.serializer_class = self.serializer_class
-        # queryset = self.model.objects.all()
-        return HTTP.response(200, '')
+        queryset = self.paginate_queryset(Task.objects.all())
+        data = TaskSerializer(queryset, many=True).data
 
-    def create(self, request):
+        return HTTP.response(200, '', data=data, paginator=self.paginator)
+
+
+    @staticmethod
+    def retrieve(request, pk=None):
+        queryset = Task.objects.filter(id=pk)
+        if len(queryset) == 0:
+            return HTTP.response(404, '')
+
+        data = TaskSerializer(queryset, many=True).data[0]
+        return HTTP.response(200, '', data)
+
+
+    @staticmethod
+    def create(request):
         if not Permission.verify(request, ['Admin']):
             raise HttpException(401)
 
@@ -45,3 +59,13 @@ class TaskViewSet(ViewSet):
 
         # Send Response
         return HTTP.response(201, '')
+
+
+    @staticmethod
+    def update(request, pk=None):
+        return HTTP.response(405, '')
+
+
+    @staticmethod
+    def destroy(request, pk=None):
+        return HTTP.response(405, '')
