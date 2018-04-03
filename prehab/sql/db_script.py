@@ -1,5 +1,4 @@
 #!/usr/bin/python
-import json
 import os
 import re
 import shutil
@@ -26,11 +25,6 @@ CONFIG = {
         "patient_task_schedule"
     ]
 }
-
-
-
-
-
 
 
 def snake_to_camel(word):
@@ -208,6 +202,7 @@ class {2}ViewSet(HuubViewSet):
 
     return True
 
+
 def get_urls_config(service_name, service_name_capitalized):
     url_config = """
     url(r'{0}/(?P<obj_pk>\d+)',
@@ -267,7 +262,7 @@ def connect_to_db():
     try:
         conn = psycopg2.connect(conn_string)
         conn.autocommit = True
-    except Exception as e:
+    except Exception:
         return None
     cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
