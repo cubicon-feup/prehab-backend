@@ -1,6 +1,4 @@
-from prehab_app.models import Role
 from prehab_app.models.TaskType import TaskType
-from prehab_app.models.User import User
 from prehab_app.tests.testSuit import TestSuit
 
 
