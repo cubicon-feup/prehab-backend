@@ -16,7 +16,6 @@ class TaskViewSet(GenericViewSet):
 
         return HTTP.response(200, '', data=data, paginator=self.paginator)
 
-
     @staticmethod
     def retrieve(request, pk=None):
         queryset = Task.objects.filter(id=pk)
@@ -26,7 +25,6 @@ class TaskViewSet(GenericViewSet):
         data = TaskSerializer(queryset, many=True).data[0]
         return HTTP.response(200, '', data)
 
-
     @staticmethod
     def create(request):
         if not Permission.verify(request, ['Admin']):
@@ -35,8 +33,8 @@ class TaskViewSet(GenericViewSet):
         try:
             data = request.data
             # 1. Check if task_type is not null
-            if data['task_type'] is None:
-                raise HttpException(400, 'You need to send a task_type.')
+            if 'task_type_id' not in data:
+                raise HttpException(400, 'You need to send a task_type_id.')
 
             # 2. Check if task type is available
             task_type = TaskType.objects.task_type(data['task_type_id'])
@@ -45,7 +43,7 @@ class TaskViewSet(GenericViewSet):
                 raise HttpException(400, 'Task Type does not exist.')
 
             t = Task(
-                title=data['task_type'],
+                title=data['title'],
                 description=data.get('description', None),
                 multimedia_link=data.get('multimedia_link', None),
                 task_type=task_type.get()
@@ -60,11 +58,9 @@ class TaskViewSet(GenericViewSet):
         # Send Response
         return HTTP.response(201, '')
 
-
     @staticmethod
     def update(request, pk=None):
         return HTTP.response(405, '')
-
 
     @staticmethod
     def destroy(request, pk=None):
