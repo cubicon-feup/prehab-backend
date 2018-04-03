@@ -103,7 +103,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'prehab_db',
         'USER': 'prehab_user',
-        'PASSWORD': DB_PASSWORD,
+        'PASSWORD': ENV_DB_PASSWORD,
         'HOST': 'prehab-pg-db.c4sdnouwglfv.eu-west-2.rds.amazonaws.com',  # Or an IP Address that your DB is hosted on
         'PORT': '5432'
     }
