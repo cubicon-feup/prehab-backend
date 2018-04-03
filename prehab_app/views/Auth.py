@@ -51,7 +51,7 @@ class AuthView(viewsets.ModelViewSet):
         # Send Response
         data = {
             'jwt': jwt_encoded,
-            'role': user.role.task_type
+            'role': user.role.title
         }
         return HTTP.response(200, '', data)
 
