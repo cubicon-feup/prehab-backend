@@ -144,6 +144,8 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 2
 }
 
+FIXTURE_DIRS = (os.path.join(BASE_DIR, 'prehab/fixtures'),)
+
 JWT_SECRET = ENV_JWT_SECRET
 JWT_ALGORITHM = 'HS256'
 PERMISSIONS = False

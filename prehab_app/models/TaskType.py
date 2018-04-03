@@ -3,7 +3,7 @@ from django.db import models
 
 class TaskTypeQuerySet(models.QuerySet):
 
-    def title(self, task_type_id):
+    def task_type(self, task_type_id):
         return self.filter(id=task_type_id)
 
 
@@ -18,3 +18,6 @@ class TaskType(models.Model):
         # app_label = 'TaskType'
         db_table = 'task_type'
         ordering = ['-id']
+
+    def __str__(self):
+        return self.title

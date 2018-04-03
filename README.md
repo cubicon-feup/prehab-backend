@@ -12,4 +12,7 @@ Now with CI/CD on jenkins
 `python manage.py loaddata prehab_app/fixtures/*`
 
 ### Run Unit Tests
-`python manage.py test`
+`coverage run --source=. manage.py test prehab_app html --noinput`
+
+### Get Coverage Report in HTML
+`coverage html`

@@ -14,6 +14,6 @@ class PrehabStatus(models.Model):
 
     class Meta:
         # # app_label = 'PrehabStatus'
-        # managed = False
+        # managed = Falsey
         db_table = 'prehab_status'
         ordering = ['-id']

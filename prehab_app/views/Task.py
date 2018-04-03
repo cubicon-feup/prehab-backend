@@ -34,18 +34,18 @@ class TaskViewSet(GenericViewSet):
 
         try:
             data = request.data
-            # 1. Check if title is not null
-            if data['title'] is None:
-                raise HttpException(400, 'You need to send a title.')
+            # 1. Check if task_type is not null
+            if data['task_type'] is None:
+                raise HttpException(400, 'You need to send a task_type.')
 
             # 2. Check if task type is available
-            task_type = TaskType.objects.title(data['task_type_id'])
+            task_type = TaskType.objects.task_type(data['task_type_id'])
 
             if len(task_type) == 0:
                 raise HttpException(400, 'Task Type does not exist.')
 
             t = Task(
-                title=data['title'],
+                title=data['task_type'],
                 description=data.get('description', None),
                 multimedia_link=data.get('multimedia_link', None),
                 task_type=task_type.get()
