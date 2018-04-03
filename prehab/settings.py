@@ -8,17 +8,22 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 import os
 
-if os.path.exists('prehab/prod_env.py'):
-    import prehab.prod_env as env
+if 'TRAVIS' in os.environ:
+    ENV_DB_PASSWORD = os.environ["DB_PASSWORD"]
+    ENV_SECRET_KEY = os.environ["SECRET_KEY"]
+    ENV_JWT_SECRET = os.environ["JWT_SECRET"]
 else:
-    import prehab.dev_env as env
+    import prehab.prod_env as env
+    ENV_DB_PASSWORD = env.ENV_DB_PASSWORD
+    ENV_SECRET_KEY = env.ENV_SECRET_KEY
+    ENV_JWT_SECRET = env.ENV_JWT_SECRET
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env.SECRET_KEY
+SECRET_KEY = ENV_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -94,7 +99,14 @@ WSGI_APPLICATION = 'prehab.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 DATABASES = {
-    'default': env.DATABASE
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'prehab_db',
+        'USER': 'prehab_user',
+        'PASSWORD': DB_PASSWORD,
+        'HOST': 'prehab-pg-db.c4sdnouwglfv.eu-west-2.rds.amazonaws.com',  # Or an IP Address that your DB is hosted on
+        'PORT': '5432'
+    }
 }
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -132,6 +144,6 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 2
 }
 
-JWT_SECRET = env.JWT_SECRET
+JWT_SECRET = ENV_JWT_SECRET
 JWT_ALGORITHM = 'HS256'
 PERMISSIONS = False
