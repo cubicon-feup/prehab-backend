@@ -9,10 +9,10 @@ Now with CI/CD on jenkins
 `python manage.py migrate prehab_app`
 
 ### Sync Database with information (Only if needed)
-`python manage.py loaddata prehab_app/fixtures/*`
+`python manage.py loaddata prehab/fixtures/*`
 
 ### Run Unit Tests
-`coverage run --source=. manage.py test prehab_app html --noinput`
+`coverage run manage.py test prehab_app`
 
 ### Get Coverage Report in HTML
 `coverage html`
