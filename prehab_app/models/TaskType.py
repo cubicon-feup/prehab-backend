@@ -15,6 +15,6 @@ class TaskType(models.Model):
     objects = TaskTypeQuerySet.as_manager()
 
     class Meta:
-        app_label = 'TaskType'
+        # app_label = 'TaskType'
         db_table = 'task_type'
         ordering = ['-id']

@@ -4,6 +4,10 @@ from prehab_app.models.Task import Task
 from prehab_app.models.Prehab import Prehab
 
 
+class PatientTaskScheduleQuerySet(models.QuerySet):
+    pass
+
+
 class PatientTaskSchedule(models.Model):
     id = models.AutoField(primary_key=True)
     prehab = models.ForeignKey(Prehab, on_delete=models.CASCADE, db_column='prehab_id')
@@ -14,8 +18,10 @@ class PatientTaskSchedule(models.Model):
     actual_repetitions = models.IntegerField(blank=False, null=True)
     status = models.IntegerField(blank=False, null=True, default=1)
 
+    objects = PatientTaskScheduleQuerySet.as_manager()
+
     class Meta:
-        app_label = 'PatientTaskSchedule'
-        managed = False
+        # app_label = 'PatientTaskSchedule'
+        # managed = False
         db_table = 'patient_task_schedule'
         ordering = ['-id']

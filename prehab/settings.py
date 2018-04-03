@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
-    'prehab_app',
+    'prehab_app'
 ]
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',

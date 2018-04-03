@@ -1,0 +1,30 @@
+[
+    {
+        "model": "prehab_app.PrehabStatus",
+        "pk": 1,
+        "fields": {
+            "title": "PENDING"
+        }
+    },
+    {
+        "model": "prehab_app.PrehabStatus",
+        "pk": 2,
+        "fields": {
+            "title": "ONGOING"
+        }
+    },
+    {
+        "model": "prehab_app.PrehabStatus",
+        "pk": 3,
+        "fields": {
+            "title": "COMPLETED"
+        }
+    },
+    {
+        "model": "prehab_app.PrehabStatus",
+        "pk": 4,
+        "fields": {
+            "title": "NOT COMPLETED"
+        }
+    }
+]

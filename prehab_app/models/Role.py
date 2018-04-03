@@ -23,6 +23,6 @@ class Role(models.Model):
     objects = RoleQuerySet.as_manager()
 
     class Meta:
-        app_label = 'Role'
+        # app_label = 'Role'
         db_table = 'role'
         ordering = ['-id']

@@ -1,0 +1,44 @@
+[
+    {
+        "model": "prehab_app.ConstraintType",
+        "pk": 1,
+        "fields": {
+            "title": "Diabético"
+        }
+    },
+    {
+        "model": "prehab_app.ConstraintType",
+        "pk": 2,
+        "fields": {
+            "title": "Insuficiente Renal"
+        }
+    },
+    {
+        "model": "prehab_app.ConstraintType",
+        "pk": 3,
+        "fields": {
+            "title": "Desnutrido"
+        }
+    },
+    {
+        "model": "prehab_app.ConstraintType",
+        "pk": 4,
+        "fields": {
+            "title": "Vegetariano"
+        }
+    },
+    {
+        "model": "prehab_app.ConstraintType",
+        "pk": 5,
+        "fields": {
+            "title": "Hepático"
+        }
+    },
+    {
+        "model": "prehab_app.ConstraintType",
+        "pk": 6,
+        "fields": {
+            "title": "Hipertenso"
+        }
+    }
+]

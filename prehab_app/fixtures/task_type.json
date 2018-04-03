@@ -1,0 +1,23 @@
+[
+    {
+        "model": "prehab_app.TaskType",
+        "pk": 1,
+        "fields": {
+            "title": "Respiratório"
+        }
+    },
+    {
+        "model": "prehab_app.TaskType",
+        "pk": 2,
+        "fields": {
+            "title": "Endurance"
+        }
+    },
+    {
+        "model": "prehab_app.TaskType",
+        "pk": 3,
+        "fields": {
+            "title": "Resistência"
+        }
+    }
+]

@@ -1,0 +1,38 @@
+[
+    {
+        "model": "prehab_app.User",
+        "pk": 1,
+        "fields": {
+            "name": "Admin",
+            "email": "admin@cubicon.xyz",
+            "phone": null,
+            "username": "admin",
+            "password": "admin",
+            "role_id": 1
+        }
+    },
+    {
+        "model": "prehab_app.User",
+        "pk": 2,
+        "fields": {
+            "name": "Sample Doctor",
+            "email": "doctor@cubicon.xyz",
+            "phone": null,
+            "username": "doctor",
+            "password": "doctor",
+            "role_id": 2
+        }
+    },
+    {
+        "model": "prehab_app.User",
+        "pk": 3,
+        "fields": {
+            "name": "Sample Patient",
+            "email": "patient@cubicon.xyz",
+            "phone": null,
+            "username": "patient",
+            "password": "patient",
+            "role_id": 3
+        }
+    }
+]

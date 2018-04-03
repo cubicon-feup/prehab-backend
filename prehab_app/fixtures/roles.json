@@ -1,0 +1,23 @@
+[
+    {
+        "model": "prehab_app.role",
+        "pk": 1,
+        "fields": {
+            "title": "Admin"
+        }
+    },
+    {
+        "model": "prehab_app.role",
+        "pk": 2,
+        "fields": {
+            "title": "Doctor"
+        }
+    },
+    {
+        "model": "prehab_app.role",
+        "pk": 3,
+        "fields": {
+            "title": "Patient"
+        }
+    }
+]
