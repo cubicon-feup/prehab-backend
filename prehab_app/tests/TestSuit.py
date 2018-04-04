@@ -15,21 +15,22 @@ class TestSuit(TestCase):
         self.doctor_user = User.objects.get(id=2)
         self.patient_user = User.objects.get(id=3)
 
-    def http_request(self, method, url, body=None, auth_user = None, custom_headers=None):
+        self.admin_jwt = self.client.post('/api/login/', {'username': 'admin', 'password': 'admin'}).json()['data']['jwt']
+        self.doctor_jwt = self.client.post('/api/login/', {'username': 'doctor', 'password': 'doctor'}).json()['data']['jwt']
+        self.patient_jwt = self.client.post('/api/login/', {'username': 'patient', 'password': 'patient'}).json()['data']['jwt']
+
+    def http_request(self, method, url, body=None, auth_user=None, custom_headers=None):
         if not url.endswith('/'):
             url += '/'
 
-        if auth_user in ('admin', 'Admin') or auth_user is None:
-            body = {'username': 'admin', 'password': 'admin'}
-        elif auth_user in ('doctor', 'Doctor'):
-            body = {'username': 'doctor', 'password': 'doctor'}
-        elif auth_user in ('patient', 'Patient'):
-            body = {'username': 'patient', 'password': 'patient'}
+        headers = {}
 
-        response = self.client.post('/api/login/', body)
-        headers = {
-            'HTTP_JWT': response.json()['data']['jwt']
-        }
+        if auth_user in ('admin', 'Admin') or auth_user is None:
+            headers = {'HTTP_JWT': self.admin_jwt}
+        elif auth_user in ('doctor', 'Doctor'):
+            headers = {'HTTP_JWT': self.doctor_jwt}
+        elif auth_user in ('patient', 'Patient'):
+            headers = {'HTTP_JWT': self.patient_jwt}
 
         if custom_headers is not None:
             headers = {**headers, **custom_headers}
