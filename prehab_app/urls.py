@@ -8,6 +8,7 @@ from prehab_app.views.Task import TaskViewSet
 router = routers.DefaultRouter()
 
 router.register(r'task', TaskViewSet, 'crud-task')
+router.register(r'schedule/task', TaskViewSet, 'crud-task-schedule')
 
 urlpatterns = [
     url(r'login/', AuthViewSet.as_view({'post': 'login'}), name='login'),

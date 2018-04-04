@@ -7,6 +7,7 @@ Now with CI on Travis and CD on Jenkins
 
 ### Migrate Database
 `python manage.py makemigrations prehab_app`
+
 `python manage.py migrate prehab_app`
 
 ### Sync Database with information (Only if needed)
