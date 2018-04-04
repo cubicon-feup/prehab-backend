@@ -10,7 +10,7 @@ from prehab_app.serializers.TaskSchedule import TaskScheduleSerializer
 class TaskScheduleViewSet(GenericViewSet):
 
     def list(self, request):
-        queryset = self.paginate_queryset(Task.objects.all())
+        queryset = self.paginate_queryset(TaskSchedule.objects.all())
         data = TaskScheduleSerializer(queryset, many=True).data
 
         return HTTP.response(200, '', data=data, paginator=self.paginator)

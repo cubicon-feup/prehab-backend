@@ -1,5 +1,7 @@
 import jwt
+from jwt import DecodeError
 
+from prehab.helpers.HttpResponseHandler import HTTP
 from prehab.settings import JWT_SECRET, JWT_ALGORITHM
 
 
@@ -11,11 +13,17 @@ class PrehabGlobalMiddleware(object):
     def __call__(self, request):
         # Code to be executed for each request before
         # the view (and later middleware) are called.
-        jwt_encoded = request.META.get('HTTP_JWT', None)
-        jwt_decoded = jwt.decode(jwt_encoded, JWT_SECRET, algorithm=JWT_ALGORITHM)
+        if request.path != '/api/login':
+            if 'HTTP_JWT' not in request.META:
+                    return HTTP.response(401, 'Token not present')
 
-        request.USER_ID = jwt_decoded['user_id']
-        request.ROLE_ID = jwt_decoded['role_id']
+            try:
+                jwt_encoded = request.META['HTTP_JWT']
+                jwt_decoded = jwt.decode(jwt_encoded, JWT_SECRET, algorithm=JWT_ALGORITHM)
+            except DecodeError:
+                return HTTP.response(401, 'Token not valid.')
 
-        response = self.get_response(request)
-        return response
+            request.USER_ID = jwt_decoded['user_id']
+            request.ROLE_ID = jwt_decoded['role_id']
+
+        return self.get_response(request)
