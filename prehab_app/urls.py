@@ -2,17 +2,18 @@ from django.conf.urls import url
 from django.urls import path, include
 from rest_framework import routers
 
-from prehab_app.views.Auth import AuthView
+from prehab_app.views.Auth import AuthViewSet
 from prehab_app.views.Task import TaskViewSet
 
 router = routers.DefaultRouter()
 
-router.register(r'task', TaskViewSet, 'CRUD all over Tasks')
+router.register(r'task', TaskViewSet, 'crud-task')
 
 urlpatterns = [
-    url(r'login/', AuthView.as_view({'post': 'login'}), name='Login in the platform'),
-    url(r'web/register_patient/', AuthView.as_view({'post': 'register_patient'}),
-        name='Register a new patient in the platform'),
+    url(r'login/', AuthViewSet.as_view({'post': 'login'}), name='login'),
+    url(r'logout/', AuthViewSet.as_view({'post': 'logout'}), name='logout'),
+    url(r'web/register_patient/', AuthViewSet.as_view({'post': 'register_patient'}),
+        name='register_new_patient'),
 
     path('', include(router.urls))
 ]

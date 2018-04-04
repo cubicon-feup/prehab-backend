@@ -1,5 +1,5 @@
 from prehab_app.models.User import User
-from prehab_app.tests.testSuit import TestSuit
+from prehab_app.tests.TestSuit import TestSuit
 
 
 class UserQuerySetTests(TestSuit):

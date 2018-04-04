@@ -17,7 +17,7 @@ from prehab_app.models.Role import Role
 from prehab_app.models.User import User
 
 
-class AuthView(viewsets.ModelViewSet):
+class AuthViewSet(viewsets.ModelViewSet):
 
     @staticmethod
     def login(request):
@@ -57,7 +57,7 @@ class AuthView(viewsets.ModelViewSet):
 
     @staticmethod
     def logout(request):
-        # TODO - Not Implemented
+        # TODO - Not Implemented - blacklist token
         return HTTP.response(200, '', None)
 
     @staticmethod

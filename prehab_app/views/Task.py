@@ -42,13 +42,13 @@ class TaskViewSet(GenericViewSet):
             if len(task_type) == 0:
                 raise HttpException(400, 'Task Type does not exist.')
 
-            t = Task(
+            new_task = Task(
                 title=data['title'],
                 description=data.get('description', None),
                 multimedia_link=data.get('multimedia_link', None),
                 task_type=task_type.get()
             )
-            t.save()
+            new_task.save()
 
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
@@ -56,7 +56,10 @@ class TaskViewSet(GenericViewSet):
             return HTTP.response(400, str(e))
 
         # Send Response
-        return HTTP.response(201, '')
+        data = {
+            'task_id': new_task.id
+        }
+        return HTTP.response(201, '', data)
 
     @staticmethod
     def update(request, pk=None):
