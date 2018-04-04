@@ -43,7 +43,7 @@ class HTTP:
             "message": message,
             "details": details,
             **pagination_info,
-            "data": data
+            "data": data if data is not None else dict()
         }
 
         return JsonResponse(res, status=res['code'])

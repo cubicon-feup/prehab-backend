@@ -7,20 +7,21 @@ class AuthViewTests(TestSuit):
 
     def test_task_create(self):
         # ERROR - test creation of Task without body parameters
-        response = self.client.post(self.url_path, {})
-        self.assertEqual(response.status_code, 400)
+        body = {}
+        res = self.http_request('post', self.url_path, body)
+        self.assertEqual(res.status_code, 400)
 
         # ERROR - test creation of Task without required parameters: title, multimedia_link
         body = {
             "task_type_id": 1
         }
-        response = self.client.post(self.url_path, body)
-        self.assertEqual(response.status_code, 400)
+        res = self.http_request('post', self.url_path, body)
+        self.assertEqual(res.status_code, 400)
         body = {
             "title": "task1"
         }
-        response = self.client.post(self.url_path, body)
-        self.assertEqual(response.status_code, 400)
+        res = self.http_request('post', self.url_path, body)
+        self.assertEqual(res.status_code, 400)
 
         # ERROR - test creation of Task with task_id not valid
         body = {
@@ -29,8 +30,8 @@ class AuthViewTests(TestSuit):
             "description": "This is the task 1",
             "multimedia_link": "prehab.pt/task1.jpg"
         }
-        response = self.client.post(self.url_path, body)
-        self.assertEqual(response.status_code, 400)
+        res = self.http_request('post', self.url_path, body)
+        self.assertEqual(res.status_code, 400)
 
         # SUCCESS
         body = {
@@ -39,11 +40,11 @@ class AuthViewTests(TestSuit):
             "description": "This is the task 1",
             "multimedia_link": "prehab.pt/task1.jpg"
         }
-        response = self.client.post(self.url_path, body)
-        self.assertEqual(response.status_code, 201)
-        self.assertTrue('task_id' in response.json()['data'])
+        res = self.http_request('post', self.url_path, body)
+        self.assertEqual(res.status_code, 201)
+        self.assertTrue('task_id' in res.json()['data'])
         # Assert New Task in Database
-        task = Task.objects.filter(id=response.json()['data']['task_id'])
+        task = Task.objects.filter(id=res.json()['data']['task_id'])
         self.assertEqual(task.count(), 1)
         task = task.get()
         self.assertEqual(task.title, body['title'])
@@ -52,9 +53,8 @@ class AuthViewTests(TestSuit):
         self.assertEqual(task.multimedia_link, body['multimedia_link'])
 
     def test_task_list(self):
-        # ERROR - test Login without body parameters
-        response = self.client.get(self.url_path)
-        self.assertEqual(response.status_code, 200)
+        res = self.http_request('get', self.url_path)
+        self.assertEqual(res.status_code, 200)
 
     def test_task_retrieve(self):
         pass
