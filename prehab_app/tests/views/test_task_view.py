@@ -57,6 +57,7 @@ class AuthViewTests(TestSuit):
         self.assertEqual(response.status_code, 200)
 
     def test_task_retrieve(self):
+        pass
         # ERROR - test retrieve task with inexistent id
         # response = self.client.get(self.url_path + '10000000')
         # self.assertEqual(response.status_code, 404)
