@@ -13,6 +13,7 @@ class ScheduleWeekTask(models.Model):
     task_schedule = models.ForeignKey(TaskSchedule, on_delete=models.CASCADE, db_column='task_schedule_id')
     week_number = models.IntegerField(blank=False, null=False)
     task = models.ForeignKey(Task, on_delete=models.CASCADE, db_column='task_id')
+    times_per_week = models.IntegerField(blank=False, null=False, default=1)
 
     objects = ScheduleWeekTaskQuerySet.as_manager()
 
