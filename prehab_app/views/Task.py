@@ -4,7 +4,7 @@ from prehab.helpers.HttpException import HttpException
 from prehab.helpers.HttpResponseHandler import HTTP
 from prehab_app.models.Task import Task
 from prehab_app.models.TaskType import TaskType
-from prehab_app.permissions import Permission
+from prehab.permissions import Permission
 from prehab_app.serializers.Task import TaskSerializer
 
 
