@@ -10,9 +10,10 @@ router = routers.DefaultRouter()
 router.register(r'task', TaskViewSet, 'CRUD all over Tasks')
 
 urlpatterns = [
-    url(r'login/', AuthView.as_view({'post': 'login'}), name='Login in the platform'),
+    url(r'login/', AuthView.as_view({'post': 'login'}), name='login'),
+    url(r'logout/', AuthView.as_view({'post': 'logout'}), name='logout'),
     url(r'web/register_patient/', AuthView.as_view({'post': 'register_patient'}),
-        name='Register a new patient in the platform'),
+        name='register_new_patient'),
 
     path('', include(router.urls))
 ]
