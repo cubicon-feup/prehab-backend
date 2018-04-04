@@ -1,9 +1,11 @@
+from django.test import Client
 from django.urls import reverse
 
 from prehab_app.tests.TestSuit import TestSuit
+from prehab_app.views.Auth import AuthViewSet
 
 
-class ViewTests(TestSuit):
+class AuthViewTests(TestSuit):
 
     def test_login(self):
         # ERROR - test Login without body parameters
@@ -35,5 +37,6 @@ class ViewTests(TestSuit):
         self.assertEqual(request.json()['data']['role'], 'Doctor')
 
     def test_logout(self):
-        request = self.client.post(reverse('logout'))
+        c = Client()
+        request = c.post(reverse('logout'))
         self.assertEqual(request.status_code, 200)
