@@ -15,11 +15,14 @@ class TestSuit(TestCase):
         self.doctor_user = User.objects.get(id=2)
         self.patient_user = User.objects.get(id=3)
 
-        self.admin_jwt = self.client.post('/api/login/', {'username': 'admin', 'password': 'admin'}).json()['data']['jwt']
-        self.doctor_jwt = self.client.post('/api/login/', {'username': 'doctor', 'password': 'doctor'}).json()['data']['jwt']
-        self.patient_jwt = self.client.post('/api/login/', {'username': 'patient', 'password': 'patient'}).json()['data']['jwt']
+        self.admin_jwt = self.get_jwt_from_login('admin', 'admin')
+        self.doctor_jwt = self.get_jwt_from_login('doctor', 'doctor')
+        self.patient_jwt = self.get_jwt_from_login('patient', 'patient')
 
-    def http_request(self, method, url, body=None, auth_user=None, custom_headers=None):
+    def get_jwt_from_login(self, username, password):
+        return self.client.post('/api/login/', {'username': username, 'password': password}).json()['data']['jwt']
+
+    def http_request(self, method, url, body=None, auth_user=None, custom_headers=None, custom_auth=None):
         if not url.endswith('/'):
             url += '/'
 
@@ -31,6 +34,10 @@ class TestSuit(TestCase):
             headers = {'HTTP_JWT': self.doctor_jwt}
         elif auth_user in ('patient', 'Patient'):
             headers = {'HTTP_JWT': self.patient_jwt}
+
+        if custom_auth is not None:
+            jwt = self.get_jwt_from_login(custom_auth['username'], custom_auth['password'])
+            headers = {'HTTP_JWT': jwt}
 
         if custom_headers is not None:
             headers = {**headers, **custom_headers}
@@ -46,5 +53,7 @@ class TestSuit(TestCase):
             response = self.client.put(url, body, **headers)
         elif method == 'delete' or method == 'DELETE':
             response = self.client.delete(url, body, **headers)
+        else:
+            response = None
 
         return response
