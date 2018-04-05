@@ -3,13 +3,17 @@ from django.urls import path, include
 from rest_framework import routers
 
 from prehab_app.views.Auth import AuthViewSet
+from prehab_app.views.Patient import PatientViewSet
 from prehab_app.views.Task import TaskViewSet
 from prehab_app.views.TaskSchedule import TaskScheduleViewSet
 from prehab_app.views.TaskScheduleFull import TaskScheduleFullViewSet
+from prehab_app.views.User import UserViewSet
 
 router = routers.DefaultRouter()
 
 router.register(r'task', TaskViewSet, 'crud-task')
+router.register(r'patient', PatientViewSet, 'crud-patient')
+router.register(r'user', UserViewSet, 'crud-user')
 router.register(r'schedule/task', TaskScheduleViewSet, 'crud-task-schedule')
 
 urlpatterns = [
