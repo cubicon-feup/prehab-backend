@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
 import sys
+from .prehab.config import SETTINGS_MODULE
 
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "prehab.settings")
@@ -12,4 +13,11 @@ if __name__ == "__main__":
             "available on your PYTHONPATH environment variable? Did you "
             "forget to activate a virtual environment?"
         ) from exc
+    execute_from_command_line(sys.argv)
+
+
+
+if __name__ == "__main__":
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", SETTINGS_MODULE)
+    from django.core.management import execute_from_command_line
     execute_from_command_line(sys.argv)

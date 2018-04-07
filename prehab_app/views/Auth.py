@@ -7,7 +7,7 @@ from rest_framework import viewsets
 
 from prehab.helpers.HttpException import HttpException
 from prehab.helpers.HttpResponseHandler import HTTP
-from prehab.settings import JWT_SECRET, JWT_ALGORITHM
+from prehab.settings.settings import JWT_SECRET, JWT_ALGORITHM
 from prehab_app.models.ConstraintType import ConstraintType
 from prehab_app.models.Doctor import Doctor
 from prehab_app.models.DoctorPatient import DoctorPatient

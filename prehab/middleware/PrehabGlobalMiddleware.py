@@ -2,7 +2,7 @@ import jwt
 from jwt import DecodeError
 
 from prehab.helpers.HttpResponseHandler import HTTP
-from prehab.settings import JWT_SECRET, JWT_ALGORITHM
+from prehab.settings.settings import JWT_SECRET, JWT_ALGORITHM
 
 
 class PrehabGlobalMiddleware(object):

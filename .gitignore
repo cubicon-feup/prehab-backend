@@ -116,3 +116,5 @@ coverage
 # vim tmp files
 *.swp
 prehab/prod_env.py
+prehab/settings/prod_env.py
+prehab/settings/production.py
