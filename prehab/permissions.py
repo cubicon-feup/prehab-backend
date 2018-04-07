@@ -1,6 +1,6 @@
 from rest_framework.permissions import IsAuthenticated
 
-from prehab.settings.settings import PERMISSIONS
+from prehab.settings.base import PERMISSIONS
 from prehab_app.models.Role import Role
 
 
