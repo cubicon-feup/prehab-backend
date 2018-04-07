@@ -2,7 +2,7 @@
 ENVIRONMENT = 'development'
 # ENVIRONMENT = 'production'
 
-SETTINGS_MODULE = 'config.settings.local'
+SETTINGS_MODULE = 'settings.development'
 
 if ENVIRONMENT == 'development':
     SETTINGS_MODULE = 'settings.development'
