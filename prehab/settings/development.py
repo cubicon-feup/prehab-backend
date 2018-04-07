@@ -12,3 +12,5 @@ DATABASES = {
 INSTALLED_APPS.append('debug_toolbar')
 
 MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware', )
+
+JWT_SECRET = 'test'

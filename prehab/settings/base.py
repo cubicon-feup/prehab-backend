@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ENV_SECRET_KEY
+SECRET_KEY = 'k&b05=-bsxwn$7$z8_$_d^d&n0vb)t4t#xmyd3y2y268djnnqs'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -136,6 +136,5 @@ REST_FRAMEWORK = {
 
 FIXTURE_DIRS = (os.path.join(BASE_DIR, 'fixtures'),)
 
-JWT_SECRET = ENV_JWT_SECRET
 JWT_ALGORITHM = 'HS256'
 PERMISSIONS = False
