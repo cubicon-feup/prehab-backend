@@ -2,6 +2,7 @@ from rest_framework.viewsets import GenericViewSet
 
 from prehab.helpers.HttpException import HttpException
 from prehab.helpers.HttpResponseHandler import HTTP
+from prehab.helpers.SchemaValidator import SchemaValidator
 from prehab_app.models.Task import Task
 from prehab_app.models.TaskType import TaskType
 from prehab.permissions import Permission
@@ -27,14 +28,13 @@ class TaskViewSet(GenericViewSet):
 
     @staticmethod
     def create(request):
-        if not Permission.verify(request, ['Admin']):
-            raise HttpException(401)
-
         try:
+            if not Permission.verify(request, ['Admin']):
+                raise HttpException(401)
+
             data = request.data
-            # 1. Check if task_type is not null
-            if 'task_type_id' not in data:
-                raise HttpException(400, 'You need to send a task_type_id.')
+            # 1. Check schema
+            SchemaValidator.validate_obj_structure(data, 'task/create.json')
 
             # 2. Check if task type is available
             task_type = TaskType.objects.task_type(data['task_type_id'])

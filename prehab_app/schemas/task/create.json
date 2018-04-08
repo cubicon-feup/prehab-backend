@@ -1,0 +1,32 @@
+{
+    "type": "object",
+    "properties": {
+        "title": {
+            "maxLength": 64,
+            "type": [
+                "string"
+            ]
+        },
+        "task_type_id": {
+            "type": [
+                "integer"
+            ]
+        },
+        "description": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "multimedia_link": {
+            "type": [
+                "string",
+                "null"
+            ]
+        }
+    },
+    "required": [
+        "title",
+        "task_type_id"
+    ]
+}

@@ -1,0 +1,60 @@
+{
+    "type": "object",
+    "properties": {
+        "title": {
+            "maxLength": 64,
+            "type": [
+                "string"
+            ]
+        },
+        "number_of_weeks": {
+            "type": [
+                "integer"
+            ]
+        },
+        "weeks": {
+            "type": [
+                "array"
+            ],
+            "items": {
+                "type": "object",
+                "properties": {
+                    "week_number": {
+                        "type": "integer"
+                    },
+                    "tasks": {
+                        "type": [
+                            "array"
+                        ],
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "task_id": {
+                                    "type": "integer"
+                                },
+                                "times_per_week": {
+                                    "type": "integer"
+                                }
+                            },
+                            "required": [
+                                "task_id",
+                                "times_per_week"
+                            ]
+                        }
+                    }
+                },
+                "required": [
+                    "week_number",
+                    "tasks"
+                ]
+            }
+        }
+    },
+    "required": [
+        "title",
+        "number_of_weeks",
+        "weeks"
+    ]
+}
+
+
