@@ -8,6 +8,7 @@ from rest_framework import viewsets
 
 from prehab.helpers.HttpException import HttpException
 from prehab.helpers.HttpResponseHandler import HTTP
+from prehab.helpers.SchemaValidator import SchemaValidator
 from prehab_app.models.ConstraintType import ConstraintType
 from prehab_app.models.Doctor import Doctor
 from prehab_app.models.DoctorPatient import DoctorPatient
@@ -63,6 +64,10 @@ class AuthViewSet(viewsets.ModelViewSet):
     @staticmethod
     def register_patient(request):
         try:
+            data = request.data
+            # 1. Check schema
+            SchemaValidator.validate_obj_structure(data, 'auth/full_plan.json')
+
             # 0. Validate Input (age, height, weight, sex, constraints, task_schedule_plan_id)
             if 'age' not in request.data or 'height' not in request.data or 'weight' not in request.data:
                 raise HttpException(400, 'You need to send Age, Height and Weight.')
