@@ -2,7 +2,7 @@ import jwt
 from jwt import DecodeError
 
 from prehab.helpers.HttpResponseHandler import HTTP
-from prehab.settings import JWT_SECRET, JWT_ALGORITHM
+from django.conf import settings
 
 
 class PrehabGlobalMiddleware(object):
@@ -19,7 +19,7 @@ class PrehabGlobalMiddleware(object):
 
             try:
                 jwt_encoded = request.META['HTTP_JWT']
-                jwt_decoded = jwt.decode(jwt_encoded, JWT_SECRET, algorithm=JWT_ALGORITHM)
+                jwt_decoded = jwt.decode(jwt_encoded, settings.JWT_SECRET, algorithm=settings.JWT_ALGORITHM)
             except DecodeError:
                 return HTTP.response(401, 'Token not valid.')
 

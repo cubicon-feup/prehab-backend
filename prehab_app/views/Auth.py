@@ -3,11 +3,11 @@ import string
 from datetime import datetime
 
 import jwt
+from django.conf import settings
 from rest_framework import viewsets
 
 from prehab.helpers.HttpException import HttpException
 from prehab.helpers.HttpResponseHandler import HTTP
-from prehab.settings import JWT_SECRET, JWT_ALGORITHM
 from prehab_app.models.ConstraintType import ConstraintType
 from prehab_app.models.Doctor import Doctor
 from prehab_app.models.DoctorPatient import DoctorPatient
@@ -41,7 +41,7 @@ class AuthViewSet(viewsets.ModelViewSet):
                 'user_id': user.id,
                 'role_id': user.role.id,
             }
-            jwt_encoded = jwt.encode(jwt_data, JWT_SECRET, algorithm=JWT_ALGORITHM).decode('utf-8')
+            jwt_encoded = jwt.encode(jwt_data, settings.JWT_SECRET, algorithm=settings.JWT_ALGORITHM).decode('utf-8')
 
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)

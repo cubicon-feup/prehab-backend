@@ -8,31 +8,18 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 import os
 
-if 'TRAVIS' in os.environ:
-    ENV_DB_PASSWORD = os.environ["DB_PASSWORD"]
-    ENV_SECRET_KEY = os.environ["SECRET_KEY"]
-    ENV_JWT_SECRET = os.environ["JWT_SECRET"]
-else:
-    import prehab.prod_env as env
-    ENV_DB_PASSWORD = env.ENV_DB_PASSWORD
-    ENV_SECRET_KEY = env.ENV_SECRET_KEY
-    ENV_JWT_SECRET = env.ENV_JWT_SECRET
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ENV_SECRET_KEY
+SECRET_KEY = 'k&b05=-bsxwn$7$z8_$_d^d&n0vb)t4t#xmyd3y2y268djnnqs'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = [
-    'ec2-35-176-153-210.eu-west-2.compute.amazonaws.com',
-    '35.176.153.210',
-    'localhost',
-    '127.0.0.1'
-]
+ALLOWED_HOSTS = ['*']
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -97,18 +84,7 @@ TEMPLATES = [
     },
 ]
 WSGI_APPLICATION = 'prehab.wsgi.application'
-# Database
-# https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'prehab_db',
-        'USER': 'prehab_user',
-        'PASSWORD': ENV_DB_PASSWORD,
-        'HOST': 'prehab-pg-db.c4sdnouwglfv.eu-west-2.rds.amazonaws.com',  # Or an IP Address that your DB is hosted on
-        'PORT': '5432'
-    }
-}
+
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
@@ -135,6 +111,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework.authentication.TokenAuthentication',),
@@ -145,8 +125,7 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 100
 }
 
-FIXTURE_DIRS = (os.path.join(BASE_DIR, 'prehab/fixtures'),)
+FIXTURE_DIRS = (os.path.join(BASE_DIR, 'fixtures'),)
 
-JWT_SECRET = ENV_JWT_SECRET
 JWT_ALGORITHM = 'HS256'
 PERMISSIONS = False

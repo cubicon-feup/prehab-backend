@@ -20,5 +20,5 @@ exclude_paths:
   - '*/*/__init__'
   - 'prehab/wsgi'
   - 'prehab/manage'
-  - 'prehab/settings.py'
+  - 'prehab/settings'
   - 'prehab/sql'
