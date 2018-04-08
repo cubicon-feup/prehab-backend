@@ -3,21 +3,24 @@
         "model": "prehab_app.TaskType",
         "pk": 1,
         "fields": {
-            "title": "Respiratório"
+            "title": "Respiratório",
+            "description": ""
         }
     },
     {
         "model": "prehab_app.TaskType",
         "pk": 2,
         "fields": {
-            "title": "Endurance"
+            "title": "Endurance",
+            "description": "para melhoria  da reserva funcional por optimização dos parâmetros hemodinâmicos., como, caminhadas e bicicleta (a última preferível em doentes com patologia osteoarticular). Avaliação por contagem de passos, distância percorrida ou gasto calórico."
         }
     },
     {
         "model": "prehab_app.TaskType",
         "pk": 3,
         "fields": {
-            "title": "Resistência"
+            "title": "Musculares",
+            "description": "envolvendo todos os grupos musculares solicitados nas atividades de vida diária (braços, ombros, tórax, abdómen, dorso, ancas e membros inferiores)."
         }
     }
 ]
