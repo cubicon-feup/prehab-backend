@@ -8,11 +8,11 @@ class ScheduleWeekTaskQuerySet(models.QuerySet):
     pass
 
 
-class ScheduleWeekTask(models.Model):
+class WeekTaskSchedule(models.Model):
     id = models.AutoField(primary_key=True)
-    task_schedule = models.ForeignKey(TaskSchedule, on_delete=models.CASCADE, db_column='task_schedule_id')
+    task_schedule = models.ForeignKey(TaskSchedule, on_delete=models.CASCADE, db_column='task_schedule_id', related_name='week_task_schedule')
     week_number = models.IntegerField(blank=False, null=False)
-    task = models.ForeignKey(Task, on_delete=models.CASCADE, db_column='task_id')
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, db_column='task_id', related_name='task')
     times_per_week = models.IntegerField(blank=False, null=False, default=1)
 
     objects = ScheduleWeekTaskQuerySet.as_manager()
@@ -20,5 +20,5 @@ class ScheduleWeekTask(models.Model):
     class Meta:
         # app_label = 'ScheduleWeekTask'
         # managed = False
-        db_table = 'schedule_week_task'
+        db_table = 'week_task_schedule'
         ordering = ['-id']

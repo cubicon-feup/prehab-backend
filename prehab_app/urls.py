@@ -6,7 +6,7 @@ from prehab_app.views.Auth import AuthViewSet
 from prehab_app.views.Patient import PatientViewSet
 from prehab_app.views.Task import TaskViewSet
 from prehab_app.views.TaskSchedule import TaskScheduleViewSet
-from prehab_app.views.TaskScheduleFull import TaskScheduleFullViewSet
+from prehab_app.views.FullTaskSchedule import FullTaskScheduleViewSet
 from prehab_app.views.User import UserViewSet
 
 router = routers.DefaultRouter()
@@ -14,18 +14,23 @@ router = routers.DefaultRouter()
 router.register(r'task', TaskViewSet, 'crud-task')
 router.register(r'patient', PatientViewSet, 'crud-patient')
 router.register(r'user', UserViewSet, 'crud-user')
+router.register(r'schedule/task/full', FullTaskScheduleViewSet, 'crud-full-task-schedule')
 router.register(r'schedule/task', TaskScheduleViewSet, 'crud-task-schedule')
 
 urlpatterns = [
     url(r'login/', AuthViewSet.as_view({'post': 'login'}), name='login'),
     url(r'logout/', AuthViewSet.as_view({'post': 'logout'}), name='logout'),
 
-    url(r'web/register_patient/', AuthViewSet.as_view({'post': 'register_patient'}),
+    url(r'web/register_patient/',
+        AuthViewSet.as_view({'post': 'register_patient'}),
         name='register_new_patient'),
 
-    url(r'schedule/task/add_full', TaskScheduleFullViewSet.as_view({
-        'post': 'create_task_schedule_full'
-    }), name='create_task_schedule_full'),
+    # url(r'schedule/task/full/(?P<task_schedule_id>.+)',
+    #     TaskScheduleFullViewSet.as_view({'get': 'get_task_schedule_full'}),
+    #     name='get_task_schedule_full'),
+    # url(r'schedule/task/full/',
+    #     TaskScheduleFullViewSet.as_view({'post': 'create_task_schedule_full'}),
+    #     name='create_task_schedule_full'),
 
     path('', include(router.urls))
 ]
