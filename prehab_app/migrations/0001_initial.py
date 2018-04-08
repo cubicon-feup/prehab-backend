@@ -38,7 +38,8 @@ class Migration(migrations.Migration):
             name='PatientConstraintType',
             fields=[
                 ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('constraint_type', models.ForeignKey(db_column='constraint_type_id', on_delete=django.db.models.deletion.CASCADE, to='prehab_app.ConstraintType')),
+                ('constraint_type', models.ForeignKey(db_column='constraint_type_id',
+                                                      on_delete=django.db.models.deletion.CASCADE, to='prehab_app.ConstraintType')),
             ],
             options={
                 'db_table': 'patient_constraint_type',
@@ -179,7 +180,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Doctor',
             fields=[
-                ('id', models.OneToOneField(db_column='id', on_delete=django.db.models.deletion.CASCADE, primary_key=True, serialize=False, to='prehab_app.User')),
+                ('id', models.OneToOneField(db_column='id', on_delete=django.db.models.deletion.CASCADE,
+                                            primary_key=True, serialize=False, to='prehab_app.User')),
                 ('department', models.CharField(max_length=64, null=True)),
             ],
             options={
@@ -190,7 +192,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Patient',
             fields=[
-                ('id', models.OneToOneField(db_column='id', on_delete=django.db.models.deletion.CASCADE, primary_key=True, serialize=False, to='prehab_app.User')),
+                ('id', models.OneToOneField(db_column='id', on_delete=django.db.models.deletion.CASCADE,
+                                            primary_key=True, serialize=False, to='prehab_app.User')),
                 ('patient_tag', models.CharField(max_length=16)),
                 ('age', models.IntegerField()),
                 ('height', models.FloatField()),
@@ -220,7 +223,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='scheduleweektask',
             name='task_schedule',
-            field=models.ForeignKey(db_column='task_schedule_id', on_delete=django.db.models.deletion.CASCADE, to='prehab_app.TaskSchedule'),
+            field=models.ForeignKey(db_column='task_schedule_id', on_delete=django.db.models.deletion.CASCADE,
+                                    to='prehab_app.TaskSchedule'),
         ),
         migrations.AddField(
             model_name='prehab',

@@ -7,19 +7,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 import os
-#
-# if 'TRAVIS' in os.environ:
-#     ENV_DB_PASSWORD = os.environ["DB_PASSWORD"]
-#     ENV_SECRET_KEY = os.environ["SECRET_KEY"]
-#     ENV_JWT_SECRET = os.environ["JWT_SECRET"]
-# else:
-#     import prehab.settings.prod_env as env
-#     ENV_DB_PASSWORD = env.ENV_DB_PASSWORD
-#     ENV_SECRET_KEY = env.ENV_SECRET_KEY
-#     ENV_JWT_SECRET = env.ENV_JWT_SECRET
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 # SECURITY WARNING: keep the secret key used in production secret!

@@ -1,11 +1,8 @@
-from rest_framework.decorators import list_route
 from rest_framework.viewsets import GenericViewSet
 
 from prehab.helpers.HttpException import HttpException
 from prehab.helpers.HttpResponseHandler import HTTP
-from prehab_app.models import User
 from prehab_app.models.Patient import Patient
-from prehab.permissions import Permission
 from prehab_app.serializers.Patient import PatientSerializer
 
 

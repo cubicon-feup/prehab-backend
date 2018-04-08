@@ -14,13 +14,15 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='prehab',
             name='created_by',
-            field=models.ForeignKey(db_column='created_by', default=None, on_delete=django.db.models.deletion.CASCADE, to='prehab_app.Doctor'),
+            field=models.ForeignKey(db_column='created_by', default=None,
+                                    on_delete=django.db.models.deletion.CASCADE, to='prehab_app.Doctor'),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='prehab',
             name='patient',
-            field=models.ForeignKey(db_column='patient_id', default=None, on_delete=django.db.models.deletion.CASCADE, to='prehab_app.Patient'),
+            field=models.ForeignKey(db_column='patient_id', default=None,
+                                    on_delete=django.db.models.deletion.CASCADE, to='prehab_app.Patient'),
             preserve_default=False,
         ),
     ]
