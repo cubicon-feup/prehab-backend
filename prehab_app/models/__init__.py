@@ -7,7 +7,7 @@ from .PatientTaskSchedule import PatientTaskSchedule
 from .Prehab import Prehab
 from .PrehabStatus import PrehabStatus
 from .Role import Role
-from .ScheduleWeekTask import ScheduleWeekTask
+from .WeekTaskSchedule import WeekTaskSchedule
 from .Task import Task
 from .TaskSchedule import TaskSchedule
 from .TaskScheduleStatus import TaskScheduleStatus
@@ -23,7 +23,7 @@ __all__ = [
     'Prehab',
     'PrehabStatus',
     'Role',
-    'ScheduleWeekTask',
+    'WeekTaskSchedule',
     'Task',
     'TaskSchedule',
     'TaskScheduleStatus',
