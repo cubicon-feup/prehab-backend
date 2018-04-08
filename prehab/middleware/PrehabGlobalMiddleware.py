@@ -13,9 +13,9 @@ class PrehabGlobalMiddleware(object):
     def __call__(self, request):
         # Code to be executed for each request before
         # the view (and later middleware) are called.
-        if request.path not in ('/api/login/', '/api/login', '/api/user/activate/'):
+        if request.path not in ('/api/login/', '/api/login', '/api/user/activate/', '/api/user/activate'):
             if 'HTTP_JWT' not in request.META:
-                    return HTTP.response(401, 'Token not present')
+                return HTTP.response(401, 'Token not present')
 
             try:
                 jwt_encoded = request.META['HTTP_JWT']

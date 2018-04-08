@@ -1,15 +1,10 @@
-from django.test import Client
-from django.urls import reverse
-
 from prehab_app.tests.TestSuit import TestSuit
-from prehab_app.views.Auth import AuthViewSet
 
 
 class AuthViewTests(TestSuit):
     login_path_url = '/api/login/'
 
     def test_login(self):
-
         # ERROR - test Login without body parameters
         res = self.client.post(self.login_path_url)
         self.assertEqual(res.status_code, 400)

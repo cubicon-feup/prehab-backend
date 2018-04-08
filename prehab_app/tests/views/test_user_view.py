@@ -1,4 +1,4 @@
-from prehab_app.models import Task, User, Role
+from prehab_app.models import User, Role
 from prehab_app.tests.TestSuit import TestSuit
 
 

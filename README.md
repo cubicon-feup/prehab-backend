@@ -16,5 +16,8 @@ Now with CI on Travis and CD on Jenkins
 ### Run Unit Tests
 `coverage run manage.py test prehab_app`
 
+### Lint All the Code
+`autopep8 ./ --recursive --in-place --pep8-passes 2000 --verbose --max-line-length 140`
+
 ### Get Coverage Report in HTML
 `coverage html`
