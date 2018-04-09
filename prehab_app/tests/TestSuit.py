@@ -1,5 +1,3 @@
-import json
-
 from django.test import TestCase
 
 from prehab_app.models import User, Role

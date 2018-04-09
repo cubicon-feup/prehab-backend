@@ -1,0 +1,22 @@
+{
+    "type": "object",
+    "properties": {
+        "required_string": {
+            "type": "string"
+        },
+        "max_len_string": {
+            "maxLength": 10,
+            "type": "string"
+        },
+        "number": {
+            "type": "number"
+        },
+        "pattern": {
+            "type": "string",
+            "pattern": "^[1,2,3]$"
+        }
+    },
+    "required": [
+        "required_string"
+    ]
+}
