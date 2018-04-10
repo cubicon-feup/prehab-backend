@@ -66,15 +66,7 @@ class AuthViewSet(viewsets.ModelViewSet):
         try:
             data = request.data
             # 1. Check schema
-            SchemaValidator.validate_obj_structure(data, 'auth/create.json')
-
-            # 0. Validate Input (age, height, weight, sex, constraints, task_schedule_plan_id)
-            if 'age' not in request.data or 'height' not in request.data or 'weight' not in request.data:
-                raise HttpException(400, 'You need to send Age, Height and Weight.')
-            if 'constraints' not in request.data and type(request.data['constraints']).__name__ != 'list':
-                raise HttpException(400, 'You need to send Constraints.')
-            if 'task_schedule_plan_id' not in request.data:
-                raise HttpException(400, 'You need to send Task Schedule Id.')
+            SchemaValidator.validate_obj_structure(data, 'auth/register_patient.json')
 
             new_user = User()
             doctor = Doctor.objects.get(request.USER_ID)

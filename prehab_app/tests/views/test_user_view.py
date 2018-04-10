@@ -37,6 +37,15 @@ class UserViewTests(TestSuit):
         self.assertEqual(res.status_code, 400)
         self.assertEqual(res.json()['details'], 'You need to send activation code and password')
 
+        # ERROR - Invalid activation code
+        body = {
+            "activation_code": "xxxxx",
+            "password": "test-password"
+        }
+        res = self.http_request('post', self.url_path + 'activate/', body)
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(res.json()['details'], 'Invalid Activation Code.')
+
         # SUCCESS
         body = {
             "activation_code": "12345",

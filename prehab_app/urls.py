@@ -21,9 +21,9 @@ urlpatterns = [
     url(r'login/', AuthViewSet.as_view({'post': 'login'}), name='login'),
     url(r'logout/', AuthViewSet.as_view({'post': 'logout'}), name='logout'),
 
-    url(r'web/register_patient/',
-        AuthViewSet.as_view({'post': 'register_patient'}),
-        name='register_new_patient'),
+    url(r'register_patient/',
+        AuthViewSet.as_view({'post': "register_patient"}),
+        name="register_new_patient"),
 
     # url(r'schedule/task/full/(?P<task_schedule_id>.+)',
     #     TaskScheduleFullViewSet.as_view({'get': 'get_task_schedule_full'}),

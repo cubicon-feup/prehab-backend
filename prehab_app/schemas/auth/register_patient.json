@@ -1,7 +1,69 @@
 {
-    "type": "object",
-    "properties": {
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": [
+        "string",
+        "null"
+      ]
     },
-    "required": [
-    ]
+    "phone": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "age": {
+      "type": [
+        "string",
+        "integer"
+      ],
+      "pattern": "^\\d+$"
+    },
+    "height": {
+      "type": [
+        "string",
+        "number"
+      ],
+      "pattern": "^\\d+\\.*\\d*$"
+    },
+    "weight": {
+      "type": [
+        "string",
+        "number"
+      ],
+      "pattern": "^\\d+\\.*\\d*$"
+    },
+    "sex": {
+      "type": "string",
+      "enum": [
+        "M",
+        "F"
+      ]
+    },
+    "constraints": {
+      "type": "array",
+      "items": {
+        "type": [
+          "string",
+          "number"
+        ],
+        "pattern": "^\\d+$"
+      }
+    },
+    "task_schedule_plan_id": {
+      "type": [
+        "string",
+        "number"
+      ],
+      "pattern": "^\\d+$"
+    }
+  },
+  "required": [
+    "age",
+    "height",
+    "weight",
+    "constraints",
+    "task_schedule_plan_id"
+  ]
 }
