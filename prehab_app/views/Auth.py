@@ -66,7 +66,7 @@ class AuthViewSet(viewsets.ModelViewSet):
         try:
             data = request.data
             # 1. Check schema
-            SchemaValidator.validate_obj_structure(data, 'auth/create.json')
+            # SchemaValidator.validate_obj_structure(data, 'auth/create.json')
 
             # 0. Validate Input (age, height, weight, sex, constraints, task_schedule_plan_id)
             if 'age' not in request.data or 'height' not in request.data or 'weight' not in request.data:
