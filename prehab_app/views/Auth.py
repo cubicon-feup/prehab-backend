@@ -83,7 +83,7 @@ class AuthViewSet(viewsets.ModelViewSet):
                 phone=request.data['phone'] if 'phone' in request.data else None,
                 password=None,
                 role=Role.objects.patient_role().get(),
-                activation_code=''.join(random.choices(string.ascii_uppercase + string.digits, k=8)),
+                activation_code=''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8)),
                 is_active=False,
             )
             new_user.save()
