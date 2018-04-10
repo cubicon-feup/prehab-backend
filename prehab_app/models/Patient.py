@@ -1,14 +1,10 @@
 from django.db import models
 
-from prehab_app.models import DoctorPatient
 from prehab_app.models.User import User
 
 
 class PatientQuerySet(models.QuerySet):
-
-    def patients_of_doctor(self, doctor_id):
-        patients_ids = DoctorPatient.objects.filter(doctor_id=doctor_id).get()
-        return self.filter(id__in=patients_ids)
+    pass
 
 
 class Patient(models.Model):
@@ -30,5 +26,5 @@ class Patient(models.Model):
     def __str__(self):
         return self.patient_tag
 
-    def doctor(self):
-        return DoctorPatient.objects.filter(patient_id=self.id).values_list('doctor', flat=True)
+    # def doctor(self):
+    #     return DoctorPatient.objects.filter(patient_id=self.id).values_list('doctor', flat=True)

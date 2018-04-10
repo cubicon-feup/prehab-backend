@@ -8,7 +8,6 @@ from rest_framework import viewsets
 
 from prehab.helpers.HttpException import HttpException
 from prehab.helpers.HttpResponseHandler import HTTP
-from prehab.helpers.SchemaValidator import SchemaValidator
 from prehab_app.models.ConstraintType import ConstraintType
 from prehab_app.models.Doctor import Doctor
 from prehab_app.models.DoctorPatient import DoctorPatient
@@ -66,28 +65,29 @@ class AuthViewSet(viewsets.ModelViewSet):
         try:
             data = request.data
             # 1. Check schema
-            SchemaValidator.validate_obj_structure(data, 'auth/register_patient.json')
-
-            new_user = User()
-            doctor = Doctor.objects.get(request.USER_ID)
-
-            # 1. Generate Activation Code & Username
-            patient_tag = "HSJ{}{0:0=2d}".format(datetime.now().year, str(new_user.id))
+            # SchemaValidator.validate_obj_structure(data, 'auth/create.json')
 
             # 2. Add new User
-            new_user.name = 'Anónimo'
-            new_user.email = request.data['email'] if 'email' in request.data else None
-            new_user.phone = request.data['phone'] if 'phone' in request.data else None
-            new_user.username = patient_tag
-            new_user.password = None
-            new_user.role = Role.objects.patient_role().get()
-            new_user.activation_code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
-            new_user.is_active = False
+            new_user = User(
+                name='Anónimo',
+                username='',
+                email=request.data['email'] if 'email' in request.data else None,
+                phone=request.data['phone'] if 'phone' in request.data else None,
+                password=None,
+                role=Role.objects.patient_role().get(),
+                activation_code=''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8)),
+                is_active=False,
+            )
             new_user.save()
+            # 1. Generate Activation Code & Username
+            patient_tag = "HSJ{}{}".format(datetime.now().year, str(new_user.id).zfill(4))
+            new_user.username = patient_tag
+            new_user.save()
+            doctor = Doctor.objects.get(id=request.USER_ID)
 
             # 3. Add new Patient
             new_patient = Patient(
-                id=new_user.id,
+                id=new_user,
                 patient_tag=patient_tag,
                 age=request.data['age'],
                 height=request.data['height'],
@@ -104,7 +104,7 @@ class AuthViewSet(viewsets.ModelViewSet):
 
             # 5. Associate Constraints
             for constraint_id in request.data['constraints']:
-                constraint_type = ConstraintType.objects.get(constraint_id)
+                constraint_type = ConstraintType.objects.get(id=constraint_id)
                 PatientConstraintType(
                     patient=new_patient,
                     constraint_type=constraint_type

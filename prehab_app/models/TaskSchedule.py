@@ -6,9 +6,8 @@ from prehab_app.models.User import User
 
 
 class TaskScheduleQuerySet(models.QuerySet):
-    pass
-    # def weeks(self, task_schedule_id):
-    #     return WeekTaskSchedule.objects.filter('task_schedule_id', task_schedule_id)
+    def created_by(self, doctor_id):
+        return self.filter(created_by=doctor_id).all()
 
 
 class TaskSchedule(models.Model):
