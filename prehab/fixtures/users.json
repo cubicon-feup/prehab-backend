@@ -34,5 +34,12 @@
             "password": "patient",
             "role_id": 3
         }
+    },
+
+    {
+        "model": "prehab_app.Doctor",
+        "pk": 2,
+        "fields": {
+        }
     }
 ]
