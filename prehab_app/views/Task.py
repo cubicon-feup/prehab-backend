@@ -19,11 +19,17 @@ class TaskViewSet(GenericViewSet):
 
     @staticmethod
     def retrieve(request, pk=None):
-        queryset = Task.objects.filter(id=pk)
-        if len(queryset) == 0:
-            return HTTP.response(404, '')
+        try:
+            task = Task.objects.get(id=pk)
 
-        data = TaskSerializer(queryset, many=True).data[0]
+        except Task.DoesNotExist:
+            return HTTP.response(404, 'Task with id {} does not exist'.format(str(pk)))
+        except HttpException as e:
+            return HTTP.response(e.http_code, e.http_detail)
+        except Exception as e:
+            return HTTP.response(400, 'Some error occurred')
+
+        data = TaskSerializer(task, many=False).data
         return HTTP.response(200, '', data)
 
     @staticmethod

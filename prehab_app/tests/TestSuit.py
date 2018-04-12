@@ -1,12 +1,15 @@
-from django.test import TestCase
+import json
 
 from prehab_app.models import User, Role
+from django.test import TestCase, Client
 
 
 class TestSuit(TestCase):
     fixtures = ('constraint_types.json', 'prehab_status.json', 'roles.json', 'task_schedule_status.json', 'task_type.json', 'users.json')
 
     def setUp(self):
+        self.client = Client()
+
         self.admin_role = Role.objects.get(id=1)
         self.doctor_role = Role.objects.get(id=2)
         self.patient_role = Role.objects.get(id=3)
@@ -48,11 +51,11 @@ class TestSuit(TestCase):
         if method == 'get' or method == 'GET':
             response = self.client.get(url, **headers)
         elif method == 'post' or method == 'POST':
-            response = self.client.post(url, body, **headers)
+            response = self.client.post(url, json.dumps(body), **headers, format='json', content_type='application/json')
         elif method == 'put' or method == 'PUT':
-            response = self.client.put(url, body, **headers)
+            response = self.client.put(url, json.dumps(body), **headers, format='json', content_type='application/json')
         elif method == 'delete' or method == 'DELETE':
-            response = self.client.delete(url, body, **headers)
+            response = self.client.delete(url, json.dumps(body), **headers, format='json', content_type='application/json')
         else:
             response = None
 
