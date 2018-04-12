@@ -11,8 +11,8 @@ class DoctorViewSet(GenericViewSet):
 
     def list(self, request):
         try:
-            # In case it's an Admin -> Retrieve ALL doctors info
-            if request.ROLE_ID == 1:
+            # In case it's an Admin and Doctors(need confirmation[security reasons]) -> Retrieve ALL doctors info
+            if request.ROLE_ID == 1 and request.ROLE_ID == 2:
                 queryset = self.paginate_queryset(Doctor.objects.all())
             else:
                 raise HttpException(400, 'Some error occurred')
@@ -29,11 +29,8 @@ class DoctorViewSet(GenericViewSet):
     def retrieve(request, pk=None):
         try:
             doctor = Doctor.objects.get(id=pk)
-            # In case it's a Admin -> check if he/she has permission
-            if request.ROLE_ID == 1 and request.USER_ID not in doctor.which_doctor():
-                raise HttpException(401, 'You don\t have permission to access this Doctor Information')
             # In case it's not Admin -> fails
-            elif request.ROLE_ID != 1:
+            if request.ROLE_ID != 1:
                 raise HttpException(401, 'You don\t have permission to access this Doctor Information')
 
             data = DoctorSerializer(doctor, many=False).data
@@ -64,7 +61,7 @@ class DoctorViewSet(GenericViewSet):
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, str(e))
+            return HTTP.response(405, str(e))
 
         # Send Response
         return HTTP.response(201, 'New doctor account created')
