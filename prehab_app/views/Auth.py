@@ -1,6 +1,6 @@
 import random
 import string
-import SchemaValidator
+#import SchemaValidator
 from datetime import datetime
 
 import jwt
@@ -65,7 +65,7 @@ class AuthViewSet(viewsets.ModelViewSet):
     def register_doctor(request):
         try:
             # 1. Check schema
-            SchemaValidator.validate_obj_structure(request.data, 'auth/doctor.json')
+            #SchemaValidator.validate_obj_structure(request.data, 'auth/doctor.json')
             #1 Check if all needed info was passed
             if 'username' not in request.data or 'password' not in request.data or 'email' not in request.data:
                 raise HttpException(400, "Error ")
