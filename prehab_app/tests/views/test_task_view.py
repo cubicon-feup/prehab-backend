@@ -43,6 +43,7 @@ class AuthViewTests(TestSuit):
         res = self.http_request('post', self.url_path, body)
         self.assertEqual(res.status_code, 201)
         self.assertTrue('task_id' in res.json()['data'])
+
         # Assert New Task in Database
         task = Task.objects.filter(id=res.json()['data']['task_id'])
         self.assertEqual(task.count(), 1)

@@ -8,6 +8,8 @@ from rest_framework import viewsets
 
 from prehab.helpers.HttpException import HttpException
 from prehab.helpers.HttpResponseHandler import HTTP
+from prehab.helpers.SchemaValidator import SchemaValidator
+from prehab.permissions import Permission
 from prehab_app.models.ConstraintType import ConstraintType
 from prehab_app.models.Doctor import Doctor
 from prehab_app.models.DoctorPatient import DoctorPatient
@@ -63,16 +65,20 @@ class AuthViewSet(viewsets.ModelViewSet):
     @staticmethod
     def register_patient(request):
         try:
+            # 0 - Handle Permissions
+            if not Permission.verify(request, ['Doctor']):
+                raise HttpException(401)
+
             data = request.data
             # 1. Check schema
-            # SchemaValidator.validate_obj_structure(data, 'auth/create.json')
+            SchemaValidator.validate_obj_structure(data, 'auth/register_patient.json')
 
             # 2. Add new User
             new_user = User(
                 name='Anónimo',
                 username='',
-                email=request.data['email'] if 'email' in request.data else None,
-                phone=request.data['phone'] if 'phone' in request.data else None,
+                email=data['email'] if 'email' in data else None,
+                phone=data['phone'] if 'phone' in data else None,
                 password=None,
                 role=Role.objects.patient_role().get(),
                 activation_code=''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8)),
@@ -89,10 +95,10 @@ class AuthViewSet(viewsets.ModelViewSet):
             new_patient = Patient(
                 id=new_user,
                 patient_tag=patient_tag,
-                age=request.data['age'],
-                height=request.data['height'],
-                weight=request.data['weight'],
-                sex=request.data['sex']
+                age=data['age'],
+                height=data['height'],
+                weight=data['weight'],
+                sex=data['sex']
             )
             new_patient.save()
 
@@ -103,7 +109,7 @@ class AuthViewSet(viewsets.ModelViewSet):
             )
 
             # 5. Associate Constraints
-            for constraint_id in request.data['constraints']:
+            for constraint_id in data['constraints']:
                 constraint_type = ConstraintType.objects.get(id=constraint_id)
                 PatientConstraintType(
                     patient=new_patient,

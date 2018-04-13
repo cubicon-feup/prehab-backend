@@ -14,25 +14,13 @@
       ]
     },
     "age": {
-      "type": [
-        "string",
-        "integer"
-      ],
-      "pattern": "^\\d+$"
+      "type": "integer"
     },
     "height": {
-      "type": [
-        "string",
-        "number"
-      ],
-      "pattern": "^\\d+\\.*\\d*$"
+      "type": "number"
     },
     "weight": {
-      "type": [
-        "string",
-        "number"
-      ],
-      "pattern": "^\\d+\\.*\\d*$"
+      "type": "number"
     },
     "sex": {
       "type": "string",
@@ -44,19 +32,11 @@
     "constraints": {
       "type": "array",
       "items": {
-        "type": [
-          "string",
-          "number"
-        ],
-        "pattern": "^\\d+$"
+        "type": "number"
       }
     },
     "task_schedule_plan_id": {
-      "type": [
-        "string",
-        "number"
-      ],
-      "pattern": "^\\d+$"
+      "type": "number"
     }
   },
   "required": [
