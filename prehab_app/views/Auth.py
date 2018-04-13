@@ -1,5 +1,6 @@
 import random
 import string
+#import SchemaValidator
 from datetime import datetime
 
 import jwt
@@ -59,6 +60,43 @@ class AuthViewSet(viewsets.ModelViewSet):
     def logout(request):
         # TODO - Not Implemented - blacklist token
         return HTTP.response(200, '', None)
+
+    @staticmethod
+    def register_doctor(request):
+        try:
+            # 1. Check schema
+            #SchemaValidator.validate_obj_structure(request.data, 'auth/doctor.json')
+            #1 Check if all needed info was passed
+            if 'username' not in request.data or 'password' not in request.data or 'email' not in request.data:
+                raise HttpException(400, "Error ")
+
+            # 2. Add new User
+            new_user = User(
+                name=request.data['name'] if 'name' in request.data else None,
+                username=request.data['username'],
+                email=request.data['email'],
+                phone=request.data['phone'] if 'phone' in request.data else None,
+                password=request.data['password'],
+                role=Role.objects.doctor_role().get(),
+                activation_code=''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8)),
+                is_active=True,
+            )
+            new_user.save()
+
+            #3 Create new Doctor
+            doctor = Doctor(
+                id = new_user,
+                department=request.data['department'] if 'department' in request.data else None
+            )
+            doctor.save()
+
+
+        except HttpException as e:
+            return HTTP.response(e.http_code, e.http_detail)
+        except Exception as e:
+            return HTTP.response(400, str(e))
+
+        return HTTP.response(200, 'New doctor account created sucessfully')
 
     @staticmethod
     def register_patient(request):
