@@ -3,10 +3,10 @@ from django.urls import path, include
 from rest_framework import routers
 
 from prehab_app.views.Auth import AuthViewSet
+from prehab_app.views.FullTaskSchedule import FullTaskScheduleViewSet
 from prehab_app.views.Patient import PatientViewSet
 from prehab_app.views.Task import TaskViewSet
 from prehab_app.views.TaskSchedule import TaskScheduleViewSet
-from prehab_app.views.FullTaskSchedule import FullTaskScheduleViewSet
 from prehab_app.views.User import UserViewSet
 
 router = routers.DefaultRouter()
@@ -20,11 +20,12 @@ router.register(r'schedule/task', TaskScheduleViewSet, 'crud-task-schedule')
 urlpatterns = [
     url(r'login/', AuthViewSet.as_view({'post': 'login'}), name='login'),
     url(r'logout/', AuthViewSet.as_view({'post': 'logout'}), name='logout'),
-
-    url(r'register_patient/',
-        AuthViewSet.as_view({'post': "register_patient"}),
-        name="register_new_patient"),
-
+    url(r'web/register_patient/',
+        AuthViewSet.as_view({'post': 'register_patient'}),
+        name='register_new_patient'),
+    url(r'web/register_doctor',
+        AuthViewSet.as_view({'post': 'register_doctor'}),
+        name="register_new_doctor"),
     # url(r'schedule/task/full/(?P<task_schedule_id>.+)',
     #     TaskScheduleFullViewSet.as_view({'get': 'get_task_schedule_full'}),
     #     name='get_task_schedule_full'),

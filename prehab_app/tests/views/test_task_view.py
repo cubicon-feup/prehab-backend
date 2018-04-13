@@ -1,4 +1,4 @@
-from prehab_app.models import Task
+from prehab_app.models.Task import Task
 from prehab_app.tests.TestSuit import TestSuit
 
 
@@ -58,23 +58,22 @@ class AuthViewTests(TestSuit):
         self.assertEqual(res.status_code, 200)
 
     def test_task_retrieve(self):
-        pass
-        # ERROR - test retrieve task with inexistent id
-        # response = self.client.get(self.url_path + '10000000')
-        # self.assertEqual(response.status_code, 404)
-        #
-        # # ERROR - test retrieve task with existent id
-        # body = {
-        #     "title": "task1",
-        #     "task_type_id": 1,
-        #     "description": "This is the task 1",
-        #     "multimedia_link": "prehab.pt/task1.jpg"
-        # }
-        # response = self.client.post(self.url_path, body)
-        # task_id = response.json()['data']['task_id']
-        # response = self.client.get(self.url_path + str(task_id))
-        # self.assertEqual(response.status_code, 200)
-        # self.assertEqual(response.json()['data'].title, body['title'])
-        # self.assertEqual(response.json()['data'].task_type_id, body['task_type_id'])
-        # self.assertEqual(response.json()['data'].description, body['description'])
-        # self.assertEqual(response.json()['data'].multimedia_link, body['multimedia_link'])
+        # ERROR - test retrieve task with not existent id
+        response = self.http_request('get', self.url_path + '10000')
+        self.assertEqual(response.status_code, 404)
+
+        # SUCCESS - test retrieve task with existent id
+        task = Task(
+            title="task1",
+            task_type_id=1,
+            description="This is the task 1",
+            multimedia_link="prehab.pt/task1.jpg"
+        )
+        task.save()
+
+        response = self.http_request('get', self.url_path + str(task.id))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['data']['title'], task.title)
+        self.assertEqual(response.json()['data']['task_type'], task.task_type.id)
+        self.assertEqual(response.json()['data']['description'], task.description)
+        self.assertEqual(response.json()['data']['multimedia_link'], task.multimedia_link)

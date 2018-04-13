@@ -1,5 +1,7 @@
-from django.test import TestCase
-from rest_framework.test import APIRequestFactory, RequestsClient, APIClient
+import json
+
+from django.test import TestCase, Client
+from rest_framework.test import APIClient
 
 from prehab_app.models import User, Role
 
@@ -15,7 +17,7 @@ class TestSuit(TestCase):
     )
 
     def setUp(self):
-        self.factory = APIRequestFactory()
+        self.client = Client()
 
         self.admin_role = Role.objects.get(id=1)
         self.doctor_role = Role.objects.get(id=2)
@@ -60,31 +62,14 @@ class TestSuit(TestCase):
         if method == 'get' or method == 'GET':
             response = client.get(url, **headers)
         elif method == 'post' or method == 'POST':
-            response = client.post(url, body, **headers)
+            response = self.client.post(url, json.dumps(body), **headers, format='json',
+                                        content_type='application/json')
         elif method == 'put' or method == 'PUT':
-            response = client.put(url, body, **headers, format='json')
+            response = self.client.put(url, json.dumps(body), **headers, format='json', content_type='application/json')
         elif method == 'delete' or method == 'DELETE':
-            response = client.delete(url, **headers, format='json')
+            response = self.client.delete(url, json.dumps(body), **headers, format='json',
+                                          content_type='application/json')
         else:
             response = None
 
         return response
-
-    def get_http_request(self, method, url, body=None, args=None, user_id=1, role_id=1):
-        client = RequestsClient()
-
-        if method == 'get' or method == 'GET':
-            request = self.factory.get(url, args=args)
-        elif method == 'post' or method == 'POST':
-            request = self.factory.post(url, body)
-        elif method == 'put' or method == 'PUT':
-            request = self.factory.put(url, body)
-        elif method == 'delete' or method == 'DELETE':
-            request = self.factory.delete(url, body)
-        else:
-            return None
-
-        request.USER_ID = user_id
-        request.ROLE_ID = role_id
-
-        return request

@@ -34,16 +34,12 @@
       "items": {
         "type": "number"
       }
-    },
-    "task_schedule_plan_id": {
-      "type": "number"
     }
   },
   "required": [
     "age",
     "height",
     "weight",
-    "constraints",
-    "task_schedule_plan_id"
+    "constraints"
   ]
 }
