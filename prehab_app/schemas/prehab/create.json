@@ -1,0 +1,25 @@
+{
+    "type": "object",
+    "properties": {
+        "patient_id": {
+            "type": "integer"
+        },
+        "init_date": {
+            "type": "string",
+            "format": "date"
+        },
+        "surgery_date": {
+            "type": "string",
+            "format": "date"
+        },
+        "task_schedule_id": {
+            "type": "integer"
+        }
+    },
+    "required": [
+        "patient_id",
+        "init_date",
+        "surgery_date",
+        "task_schedule_id"
+    ]
+}

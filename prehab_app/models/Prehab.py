@@ -13,9 +13,9 @@ class Prehab(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, db_column='patient_id')
     init_date = models.DateField(blank=False, null=False)
     expected_end_date = models.DateField(blank=False, null=False)
-    actual_end_date = models.DateField(blank=False, null=False)
+    actual_end_date = models.DateField(blank=False, null=True, default=None)
     surgery_date = models.DateField(blank=False, null=False)
-    week_number = models.IntegerField(blank=False, null=False)
+    number_of_weeks = models.IntegerField(blank=False, null=False)
     status = models.ForeignKey(PrehabStatus, on_delete=models.CASCADE, db_column='status_id')
     created_by = models.ForeignKey(Doctor, on_delete=models.CASCADE, db_column='created_by')
 

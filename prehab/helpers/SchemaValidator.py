@@ -14,8 +14,8 @@ class SchemaValidator:
                 schema = json.loads(data_file.read())
             jsonschema.validate(req_json, schema)
 
-        # except jsonschema.SchemaError as e:
-        #     raise HttpException(400, e.message)
+        except jsonschema.SchemaError as e:
+            raise HttpException(400, e.message)
 
         except jsonschema.ValidationError as e:
             if e.validator in ('pattern', 'required', 'maxLength'):
