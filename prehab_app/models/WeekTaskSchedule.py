@@ -10,7 +10,8 @@ class ScheduleWeekTaskQuerySet(models.QuerySet):
 
 class WeekTaskSchedule(models.Model):
     id = models.AutoField(primary_key=True)
-    task_schedule = models.ForeignKey(TaskSchedule, on_delete=models.CASCADE, db_column='task_schedule_id', related_name='week_task_schedule')
+    task_schedule = models.ForeignKey(TaskSchedule, on_delete=models.CASCADE,
+                                      db_column='task_schedule_id', related_name='week_task_schedule')
     week_number = models.IntegerField(blank=False, null=False)
     task = models.ForeignKey(Task, on_delete=models.CASCADE, db_column='task_id', related_name='task')
     times_per_week = models.IntegerField(blank=False, null=False, default=1)

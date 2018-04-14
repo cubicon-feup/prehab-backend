@@ -1,7 +1,12 @@
+import string
+import random
+
 from rest_framework.viewsets import GenericViewSet
 
 from prehab.helpers.HttpException import HttpException
 from prehab.helpers.HttpResponseHandler import HTTP
+from prehab.helpers.SchemaValidator import SchemaValidator
+from prehab_app.models import Role
 from prehab_app.models.Doctor import Doctor
 from prehab_app.models.User import User
 from prehab_app.serializers.Doctor import DoctorSerializer
@@ -46,25 +51,36 @@ class DoctorViewSet(GenericViewSet):
 
     @staticmethod
     def create(request):
-        #Allow only Admin to create
-        if request.ROLE_ID != 1:
-            raise HttpException(400, 'Not Allowed')
-
-        if 'username' not in request.data or 'password' not in request.data or 'email' not in request.data:
-            raise HttpException(400, 'Need more data')
-
         try:
-            doctor = Doctor
-            doctor.department = request.data['department']
+            # 1. Check schema
+            SchemaValidator.validate_obj_structure(request.data, 'auth/doctor.json')
+
+            # 2. Add new User
+            new_user = User(
+                name=request.data['name'] if 'name' in request.data else None,
+                username=request.data['username'],
+                email=request.data['email'],
+                phone=request.data['phone'] if 'phone' in request.data else None,
+                password=request.data['password'],
+                role=Role.objects.doctor_role().get(),
+                activation_code=''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8)),
+                is_active=True,
+            )
+            new_user.save()
+
+            # 3 Create new Doctor
+            doctor = Doctor(
+                id=new_user,
+                department=request.data['department'] if 'department' in request.data else None
+            )
             doctor.save()
 
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
-            return HTTP.response(405, str(e))
+            return HTTP.response(400, str(e))
 
-        # Send Response
-        return HTTP.response(201, 'New doctor account created')
+        return HTTP.response(200, 'New doctor account created sucessfully')
 
     @staticmethod
     def update(request, pk=None):

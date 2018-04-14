@@ -1,0 +1,32 @@
+[
+    {
+        "model": "prehab_app.Task",
+        "pk": 1,
+        "fields": {
+            "title": "Task 1",
+            "task_type_id": 1,
+            "description": "This is the First Task",
+            "multimedia_link": "https://media.giphy.com/media/krP2NRkLqnKEg/giphy.gif"
+        }
+    },
+    {
+        "model": "prehab_app.Task",
+        "pk": 2,
+        "fields": {
+            "title": "Task 2",
+            "task_type_id": 2,
+            "description": "This is the Second Task",
+            "multimedia_link": "https://media.giphy.com/media/l44QeXqzp5JoYSNe8/giphy.gif"
+        }
+    },
+    {
+        "model": "prehab_app.Task",
+        "pk": 3,
+        "fields": {
+            "title": "Task 3",
+            "task_type_id": 3,
+            "description": "This is the Third Task",
+            "multimedia_link": "https://media.giphy.com/media/Vq6up3A0oBjsk/giphy.gif"
+        }
+    }
+]

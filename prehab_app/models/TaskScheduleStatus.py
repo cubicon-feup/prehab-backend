@@ -2,7 +2,17 @@ from django.db import models
 
 
 class TaskScheduleStatusQuerySet(models.QuerySet):
-    pass
+    def pending(self):
+        return self.get(id=1)
+
+    def ongoing(self):
+        return self.get(id=2)
+
+    def completed(self):
+        return self.get(id=3)
+
+    def not_completed(self):
+        return self.get(id=4)
 
 
 class TaskScheduleStatus(models.Model):
@@ -16,4 +26,4 @@ class TaskScheduleStatus(models.Model):
         # app_label = 'TaskScheduleStatus'
         # managed = False
         db_table = 'task_schedule_status'
-        ordering = ['-id']
+        ordering = ['id']

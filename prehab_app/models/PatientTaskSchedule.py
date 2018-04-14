@@ -1,5 +1,6 @@
 from django.db import models
 
+from prehab_app.models.PatientTaskScheduleStatus import PatientTaskScheduleStatus
 from prehab_app.models.Task import Task
 from prehab_app.models.Prehab import Prehab
 
@@ -16,7 +17,7 @@ class PatientTaskSchedule(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE, db_column='task_id')
     expected_repetitions = models.IntegerField(blank=False, null=True)
     actual_repetitions = models.IntegerField(blank=False, null=True)
-    status = models.IntegerField(blank=False, null=True, default=1)
+    status = models.ForeignKey(PatientTaskScheduleStatus, on_delete=models.CASCADE, db_column='status_id')
 
     objects = PatientTaskScheduleQuerySet.as_manager()
 

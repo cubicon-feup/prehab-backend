@@ -6,11 +6,7 @@
             "type": "string"
         },
         "task_type_id": {
-            "type": [
-                "number",
-                "string"
-            ],
-            "pattern": "^[1,2,3]$",
+            "type": "integer",
             "minimum": 1,
             "maximum": 3
         },

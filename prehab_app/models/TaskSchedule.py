@@ -25,3 +25,6 @@ class TaskSchedule(models.Model):
         # managed = False
         db_table = 'task_schedule'
         ordering = ['-id']
+
+    def doctor_can_use(self, doctor_id):
+        return self.created_by.is_admin or self.created_by.id == doctor_id
