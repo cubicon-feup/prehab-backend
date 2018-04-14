@@ -130,7 +130,6 @@ class PatientViewSet(GenericViewSet):
         }
         return HTTP.response(200, '', data)
 
-
     @staticmethod
     def update(request, pk=None):
         return HTTP.response(405, '')
