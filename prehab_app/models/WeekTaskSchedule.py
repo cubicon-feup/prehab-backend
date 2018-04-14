@@ -15,6 +15,7 @@ class WeekTaskSchedule(models.Model):
     week_number = models.IntegerField(blank=False, null=False)
     task = models.ForeignKey(Task, on_delete=models.CASCADE, db_column='task_id', related_name='task')
     times_per_week = models.IntegerField(blank=False, null=False, default=1)
+    repetition_number = models.IntegerField(blank=False, null=True, default=None)
 
     objects = ScheduleWeekTaskQuerySet.as_manager()
 

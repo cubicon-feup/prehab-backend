@@ -25,7 +25,7 @@ class DataHelper:
                         "week_number": week_number,
                         "day_number": idx + 1,
                         "task": task_in_week.task,
-                        "expected_repetitions": 1
+                        "expected_repetitions": task_in_week.repetition_number
                     })
             patient_task_schedule_work_load = patient_task_schedule_work_load + reduce(lambda x, y: x + y, week)
 
