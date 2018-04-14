@@ -16,6 +16,7 @@ from prehab_app.models.PatientTaskScheduleStatus import PatientTaskScheduleStatu
 from prehab_app.models.Prehab import Prehab
 from prehab_app.models.PrehabStatus import PrehabStatus
 from prehab_app.models.TaskSchedule import TaskSchedule
+from prehab_app.serializers.Prehab import PrehabSerializer, FullPrehabSerializer
 
 
 class PrehabViewSet(GenericViewSet):
@@ -29,19 +30,18 @@ class PrehabViewSet(GenericViewSet):
 
     @staticmethod
     def retrieve(request, pk=None):
-        return HTTP.response(405, '')
-        # try:
-        #     task = Task.objects.get(id=pk)
-        #
-        # except Task.DoesNotExist:
-        #     return HTTP.response(404, 'Task with id {} does not exist'.format(str(pk)))
-        # except HttpException as e:
-        #     return HTTP.response(e.http_code, e.http_detail)
-        # except Exception as e:
-        #     return HTTP.response(400, 'Some error occurred')
-        #
-        # data = TaskSerializer(task, many=False).data
-        # return HTTP.response(200, '', data)
+        try:
+            prehab = Prehab.objects.get(id=pk)
+
+        except Prehab.DoesNotExist:
+            return HTTP.response(404, 'Prehab with id {} does not exist'.format(str(pk)))
+        except HttpException as e:
+            return HTTP.response(e.http_code, e.http_detail)
+        except Exception as e:
+            return HTTP.response(400, 'Some error occurred')
+
+        data = FullPrehabSerializer(prehab, many=False).data
+        return HTTP.response(200, '', data)
 
     @staticmethod
     def create(request):
