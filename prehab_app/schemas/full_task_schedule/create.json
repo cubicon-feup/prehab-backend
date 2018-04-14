@@ -32,6 +32,9 @@
                                 },
                                 "times_per_week": {
                                     "type": "integer"
+                                },
+                                "repetition_number": {
+                                    "type": "integer"
                                 }
                             },
                             "required": [

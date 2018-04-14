@@ -77,7 +77,8 @@ class FullTaskScheduleViewSet(GenericViewSet):
                             task_schedule=task_schedule,
                             week_number=week_number,
                             task=task,
-                            times_per_week=week_task['times_per_week']
+                            times_per_week=week_task['times_per_week'],
+                            repetition_number=week_task.get('repetition_number', None)
                         )
 
                         schedule_week_task.save()
