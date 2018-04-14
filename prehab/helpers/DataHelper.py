@@ -19,7 +19,7 @@ class DataHelper:
             # Equitively distribute tasks through the week
             for task_in_week in tasks_for_week:
                 # Get Best Indexes
-                indexes = DataHelper._best_index_to_put_tasks(week, task_in_week.times_per_week)
+                indexes = DataHelper._best_indexes_to_put_tasks(week, task_in_week.times_per_week)
                 for idx in indexes:
                     week[idx].append({
                         "week_number": week_number,
@@ -32,7 +32,7 @@ class DataHelper:
         return patient_task_schedule_work_load
 
     @staticmethod
-    def _best_index_to_put_tasks(week, times):
+    def _best_indexes_to_put_tasks(week, times):
         indexes = []
         rate = 7 / times
 
@@ -53,7 +53,7 @@ class DataHelper:
         for time in range(total_times):
             if times == 0:
                 return indexes
-            next_index = rate + next_index
+            next_index = math.ceil(rate) + next_index
             floor = math.floor(next_index) % 7
             ceil = math.ceil(next_index) % 7
 
@@ -63,9 +63,6 @@ class DataHelper:
 
         return indexes
 
-    @staticmethod
-    def flatten_list(list):
-        return lambda l: [item for sublist in list for item in sublist]
     #
     # @staticmethod
     # def patient_task_schedule_work_load(task_schedule):
@@ -83,7 +80,7 @@ class DataHelper:
     #
     #             # Equitively distribute tasks of the same type through the week
     #             for task in tasks_for_week_by_task_type:
-    #                 start_index = DataHelper._best_index_to_put_tasks(week)
+    #                 start_index = DataHelper._best_indexes_to_put_tasks(week)
     #                 task_times_per_week = task.times_per_week
     #                 for
     #                 rate = 7 / task.times_per_week
@@ -102,6 +99,6 @@ class DataHelper:
     #     for task_type, tasks in tasks.items():
     #
     #         for task in tasks:
-    #             day_with_min_tasks = DataHelper._best_index_to_put_tasks(week_work_load)
+    #             day_with_min_tasks = DataHelper._best_indexes_to_put_tasks(week_work_load)
     #
     #     return None
