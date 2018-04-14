@@ -32,6 +32,8 @@ class PrehabViewSet(GenericViewSet):
     def retrieve(request, pk=None):
         try:
             prehab = Prehab.objects.get(id=pk)
+            if request.ROLE_ID != 1 and request.USER_ID not in (prehab.created_by.id, prehab.patient.id):
+                raise HttpException(401, 'You don\'t have permissions to see this Prehab Plan')
 
         except Prehab.DoesNotExist:
             return HTTP.response(404, 'Prehab with id {} does not exist'.format(str(pk)))
