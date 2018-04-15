@@ -1,7 +1,4 @@
-import random
-import string
-#import SchemaValidator
-from datetime import datetime
+# import SchemaValidator
 
 import jwt
 from django.conf import settings
@@ -9,14 +6,7 @@ from rest_framework import viewsets
 
 from prehab.helpers.HttpException import HttpException
 from prehab.helpers.HttpResponseHandler import HTTP
-from prehab.helpers.SchemaValidator import SchemaValidator
-from prehab.permissions import Permission
-from prehab_app.models.ConstraintType import ConstraintType
-from prehab_app.models.Doctor import Doctor
-from prehab_app.models.DoctorPatient import DoctorPatient
-from prehab_app.models.Patient import Patient
-from prehab_app.models.PatientConstraintType import PatientConstraintType
-from prehab_app.models.Role import Role
+from prehab_app.models import Prehab
 from prehab_app.models.User import User
 
 
@@ -30,14 +20,24 @@ class AuthViewSet(viewsets.ModelViewSet):
                 raise HttpException(400, 'You need to send Username and Password.')
 
             # 1. Check if pair username-password is correct
-            login_match = User.objects.match_credentials(request.data['username'], request.data['password'])
-            if len(login_match) == 0:
+            user = User.objects.match_credentials(request.data['username'], request.data['password'])
+            if len(user) == 0:
                 raise HttpException(401, 'Some error occurred with your credentials.')
 
             # 2. Get Relevant Information of the User
-            user = login_match.get()
+            user = user.get()
+
+            # In Case of a Patient - only if platform is MOBILE
+            # In Case of a Doctor - only if platform is WEB
+            if (user.role.id == 3 and request.PLATFORM != 'mobile') or (user.role.id == 2 and request.PLATFORM != 'web'):
+                raise HttpException(403, 'You are not allowed to access here.')
 
             # 3. Get Context Information - TODO
+            prehab_id = None
+            if user.role.id == 3:
+                prehab = Prehab.objects.filter(patient_id=user.id)
+                if prehab.count():
+                    prehab_id = prehab.first().id
 
             # 4. Generate JWT
             jwt_data = {
@@ -56,6 +56,10 @@ class AuthViewSet(viewsets.ModelViewSet):
             'jwt': jwt_encoded,
             'role': user.role.title
         }
+
+        if prehab_id is not None:
+            data['prehab_id'] = prehab_id
+
         return HTTP.response(200, '', data)
 
     @staticmethod
