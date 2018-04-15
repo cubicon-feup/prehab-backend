@@ -11,6 +11,11 @@ class PrehabGlobalMiddleware(object):
         # One-time configuration and initialization.
 
     def __call__(self, request):
+        if 'HTTP_PLATFORM' not in request.META or request.META['HTTP_PLATFORM'] not in ('web', 'mobile'):
+            return HTTP.response(403, 'You don\'t have access')
+
+        request.PLATFORM = request.META['HTTP_PLATFORM']
+
         # Code to be executed for each request before
         # the view (and later middleware) are called.
         if request.path not in ('/api/login/', '/api/login', '/api/user/activate/', '/api/user/activate'):
