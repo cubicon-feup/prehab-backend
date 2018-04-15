@@ -27,29 +27,34 @@ class TestSuit(TestCase):
         self.doctor_user = User.objects.get(id=2)
         self.patient_user = User.objects.get(id=3)
 
-        self.admin_jwt = self.get_jwt_from_login('admin', 'admin')
-        self.doctor_jwt = self.get_jwt_from_login('doctor', 'doctor')
-        self.patient_jwt = self.get_jwt_from_login('patient', 'patient')
+        self.admin_jwt = self.get_jwt_from_login('admin', 'admin', platform='web')
+        self.doctor_jwt = self.get_jwt_from_login('doctor', 'doctor', platform='web')
+        self.patient_jwt = self.get_jwt_from_login('patient', 'patient', platform='mobile')
 
-    def get_jwt_from_login(self, username, password):
-        return self.client.post('/api/login/', {'username': username, 'password': password}).json()['data']['jwt']
+    def get_jwt_from_login(self, username, password, platform='web'):
+        headers = {'HTTP_PLATFORM': platform}
+        url = '/api/login/'
+        body = {'username': username, 'password': password}
 
-    def http_request(self, method, url, body=None, auth_user=None, custom_headers=None, custom_auth=None):
+        return self.client.post(url, json.dumps(body), **headers, format='json',
+                                content_type='application/json').json()['data']['jwt']
+
+    def http_request(self, method, url, body=None, auth_user=None, custom_headers=None, platform='web'):
         if not url.endswith('/'):
             url += '/'
 
-        headers = {}
+        headers = {'HTTP_PLATFORM': platform}
 
         if auth_user in ('admin', 'Admin') or auth_user is None:
-            headers = {'HTTP_JWT': self.admin_jwt}
+            headers = {**headers, 'HTTP_JWT': self.admin_jwt}
         elif auth_user in ('doctor', 'Doctor'):
-            headers = {'HTTP_JWT': self.doctor_jwt}
+            headers = {**headers, 'HTTP_JWT': self.doctor_jwt}
         elif auth_user in ('patient', 'Patient'):
-            headers = {'HTTP_JWT': self.patient_jwt}
+            headers = {**headers, 'HTTP_JWT': self.patient_jwt}
 
-        if custom_auth is not None:
-            jwt = self.get_jwt_from_login(custom_auth['username'], custom_auth['password'])
-            headers = {'HTTP_JWT': jwt}
+        # if custom_auth is not None:
+        #     jwt = self.get_jwt_from_login(custom_auth['username'], custom_auth['password'])
+        #     headers = {'HTTP_JWT': jwt}
 
         if custom_headers is not None:
             headers = {**headers, **custom_headers}
