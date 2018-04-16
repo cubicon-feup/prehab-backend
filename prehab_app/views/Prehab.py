@@ -73,7 +73,7 @@ class PrehabViewSet(GenericViewSet):
 
             # 1.5. Check if Task Schedule Id was created by this specific doctor or a community Task Schedule (created by an admin
             task_schedule = TaskSchedule.objects.get(id=data['task_schedule_id'])
-            if not task_schedule.doctor_can_use(doctor.id):
+            if not task_schedule.doctor_can_use(doctor.id.id):
                 raise HttpException(400, 'You are not the owner of this task schedule')
 
             # 2. Transform General Task Schedule to a Custom Patient Task Schedule
