@@ -3,7 +3,7 @@ from prehab_app.models import Task
 from prehab_app.models.TaskType import TaskType
 
 
-class AuthViewTests(TestSuit):
+class FullTaskViewTests(TestSuit):
     full_task_path_url = '/api/schedule/task/full/'
 
     def test_register_full_task(self):
@@ -209,7 +209,7 @@ class AuthViewTests(TestSuit):
         res = self.http_request('post', self.full_task_path_url, body)
         self.assertEqual(res.status_code, 201)
 
-    def test_retrieve_full_task(self):
+    def test_update_full_task(self):
         ##### Test Update
         res = self.http_request('put', self.full_task_path_url + '1', auth_user='patient')
         self.assertEqual(res.status_code, 405)

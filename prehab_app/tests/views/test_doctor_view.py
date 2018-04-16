@@ -1,7 +1,7 @@
 from prehab_app.tests.TestSuit import TestSuit
 
 
-class AuthViewTests(TestSuit):
+class DoctorViewTests(TestSuit):
     doctor_path_url = '/api/doctor/'
 
     def test_register_doctor(self):
@@ -49,7 +49,7 @@ class AuthViewTests(TestSuit):
         self.assertEqual(res.status_code, 200)
 
         #####Test get
-
+    def test_retrieve_doctor(self):
         # Fail with permission
         res = self.http_request('get', self.doctor_path_url + '2', auth_user='patient')
         self.assertEqual(res.status_code, 401)
@@ -59,7 +59,7 @@ class AuthViewTests(TestSuit):
         res = self.http_request('get', self.doctor_path_url+ '2', auth_user='admin')
         self.assertEqual(res.status_code, 200)
 
-    def test_retrieve_doctor(self):
+    def test_update_doctor(self):
         ##### Test Update
         res = self.http_request('put', self.doctor_path_url + '2', auth_user='patient')
         self.assertEqual(res.status_code, 405)

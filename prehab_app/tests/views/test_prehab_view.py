@@ -4,7 +4,7 @@ from prehab_app.models import Role, User
 from datetime import datetime
 
 
-class AuthViewTests(TestSuit):
+class PrehabViewTests(TestSuit):
     prehab_path_url = '/api/prehab/'
 
     def test_register_prehab(self):
@@ -44,14 +44,14 @@ class AuthViewTests(TestSuit):
         self.assertEqual(res.status_code, 400)
         self.assertEqual(res.json()['details'], 'Patient with id of 1 does not exist.')
 
-    def test_retrieve_prehab(self):
+    def test_update_prehab(self):
         ##### Test Update
-        res = self.http_request('put', self.prehab_path_url + '1', auth_user='patient')
+        res = self.http_request('put', self.prehab_path_url + '0', auth_user='patient')
         self.assertEqual(res.status_code, 405)
 
     def test_delete_prehab(self):
         ##### Test Delete
-        res = self.http_request('delete', self.prehab_path_url + '1', auth_user='patient')
+        res = self.http_request('delete', self.prehab_path_url + '0', auth_user='patient')
         self.assertEqual(res.status_code, 405)
 
 

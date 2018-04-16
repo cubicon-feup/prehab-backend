@@ -23,7 +23,7 @@ class AuthViewTests(TestSuit):
             "height": 1.8,
             "weight": 80,
             "sex": "X",
-            "constraints": [1, 2, 3]
+            "constraints": "test"
         }
         res = self.http_request('post', self.patient_path_url, body)
         self.assertEqual(res.status_code, 400)
@@ -32,8 +32,8 @@ class AuthViewTests(TestSuit):
         body = {
             "email": None,
             "age": "60",
-            "height": 1.8,
-            "weight": 80,
+            "height": "1.8",
+            "weight": "80",
             "sex": "M",
             "constraints": [1, 2, 3]
         }
@@ -46,8 +46,8 @@ class AuthViewTests(TestSuit):
             "age": 60,
             "height": 1.8,
             "weight": 80,
-            "sex": "M",
-            "constraints": [1, 2, 3]
+            "sex": 60,
+            "constraints": "test"
         }
         res = self.http_request('post', self.patient_path_url, body)
         self.assertEqual(res.status_code, 400)
