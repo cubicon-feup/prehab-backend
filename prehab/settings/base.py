@@ -57,7 +57,8 @@ CORS_ALLOW_HEADERS = (
     'pragma',
     'jwt',
     'cache-control',
-    'content-disposition'
+    'content-disposition',
+    'platform'
 )
 CORS_ALLOW_METHODS = (
     'DELETE',
