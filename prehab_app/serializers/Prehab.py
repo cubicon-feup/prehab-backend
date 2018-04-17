@@ -43,6 +43,7 @@ class FullPrehabSerializer(serializers.ModelSerializer):
                 task_schedule[date] = []
 
             task_info = TaskSerializer(task.task, many=False).data
+            task_info['id'] = task.id
             task_info['status'] = task.status.title
             task_schedule[date].append(task_info)
 

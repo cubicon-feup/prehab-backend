@@ -1,0 +1,28 @@
+{
+    "type": "object",
+    "properties": {
+        "prehab_id": {
+            "type": "integer"
+        },
+        "patient_task_schedule_id": {
+            "type": "integer"
+        },
+        "completed": {
+            "type": "boolean"
+        },
+        "difficulties": {
+            "type": "boolean"
+        },
+        "notes": {
+            "type": "string"
+        }
+    },
+    "required": [
+        "prehab_id",
+        "patient_task_schedule_id",
+        "completed",
+        "difficulties"
+    ]
+}
+
+

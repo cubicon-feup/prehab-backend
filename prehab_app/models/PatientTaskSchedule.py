@@ -18,6 +18,7 @@ class PatientTaskSchedule(models.Model):
     expected_repetitions = models.IntegerField(blank=False, null=True)
     actual_repetitions = models.IntegerField(blank=False, null=True)
     status = models.ForeignKey(PatientTaskScheduleStatus, on_delete=models.CASCADE, db_column='status_id')
+    finished_date = models.DateField(blank=False, null=True, default=None)
 
     objects = PatientTaskScheduleQuerySet.as_manager()
 

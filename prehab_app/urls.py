@@ -6,6 +6,7 @@ from prehab_app.views.Auth import AuthViewSet
 from prehab_app.views.Doctor import DoctorViewSet
 from prehab_app.views.FullTaskSchedule import FullTaskScheduleViewSet
 from prehab_app.views.Patient import PatientViewSet
+from prehab_app.views.PatientTaskSchedule import PatientTaskScheduleViewSet
 from prehab_app.views.Prehab import PrehabViewSet
 from prehab_app.views.Task import TaskViewSet
 from prehab_app.views.TaskSchedule import TaskScheduleViewSet
@@ -24,5 +25,6 @@ router.register(r'schedule/task', TaskScheduleViewSet, 'crud-task-schedule')
 urlpatterns = [
     url(r'login/', AuthViewSet.as_view({'post': 'login'}), name='login'),
     url(r'logout/', AuthViewSet.as_view({'post': 'logout'}), name='logout'),
+    url(r'patient/schedule/task/', PatientTaskScheduleViewSet.as_view({'post': 'update'}), name='updateTaskSchedule'),
     path('', include(router.urls))
 ]
