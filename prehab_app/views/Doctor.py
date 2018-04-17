@@ -53,7 +53,7 @@ class DoctorViewSet(GenericViewSet):
     def create(request):
         try:
             # 1. Check schema
-            SchemaValidator.validate_obj_structure(request.data, 'auth/doctor.json')
+            SchemaValidator.validate_obj_structure(request.data, 'doctor/create.json')
 
             # 2. Add new User
             new_user = User(
