@@ -130,7 +130,3 @@ FIXTURE_DIRS = (os.path.join(BASE_DIR, 'fixtures'),)
 
 JWT_ALGORITHM = 'HS256'
 PERMISSIONS = False
-
-# Configure Django App for Heroku.
-import django_heroku
-django_heroku.settings(locals())
