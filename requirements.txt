@@ -24,3 +24,4 @@ urllib3==1.22
 whitenoise==3.3.1
 django-cors-headers
 django-debug-toolbar==1.8
+django_heroku
