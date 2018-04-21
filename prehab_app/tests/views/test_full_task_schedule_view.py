@@ -30,12 +30,11 @@ class FullTaskViewTests(TestSuit):
         self.assertEqual(res.status_code, 400)
         self.assertEqual(res.json()['details'], 'Validation Error. Parameter weeks is a required property')
 
-
         # Send plan with wrong weeks array
         body = {
             "title": "SomeTitle",
             "number_of_weeks": 2,
-            "weeks":[ 1, 2]
+            "weeks": [1, 2]
         }
         res = self.http_request('post', self.full_task_path_url, body)
         self.assertEqual(res.status_code, 400)
@@ -64,9 +63,9 @@ class FullTaskViewTests(TestSuit):
             "weeks":
                 [{
                     "tasks": [{
-                            "task_id": 2,
-                            "times_per_week": 2
-                        }]
+                        "task_id": 2,
+                        "times_per_week": 2
+                    }]
                 }]
         }
         res = self.http_request('post', self.full_task_path_url, body)
@@ -176,8 +175,8 @@ class FullTaskViewTests(TestSuit):
         task = Task(
             title="taskToPass",
             description="This task is for testing only",
-            multimedia_link = "link to pass",
-            task_type = task_type
+            multimedia_link="link to pass",
+            task_type=task_type
         )
         task.save()
 
@@ -189,34 +188,32 @@ class FullTaskViewTests(TestSuit):
                     "week_number": 1,
                     "tasks":
                         [{
-                                "task_id": 1,
-                                "times_per_week": 2
+                            "task_id": 1,
+                            "times_per_week": 2
 
-                            },
+                        },
                             {
                                 "task_id": 1,
                                 "times_per_week": 1
                             }
                         ]},
-                {
-                    "week_number": 2,
-                    "tasks": [{
-                        "task_id": 1,
-                        "times_per_week": 2
+                    {
+                        "week_number": 2,
+                        "tasks": [{
+                            "task_id": 1,
+                            "times_per_week": 2
+                        }]
                     }]
-                }]
         }
         res = self.http_request('post', self.full_task_path_url, body)
         self.assertEqual(res.status_code, 201)
 
     def test_update_full_task(self):
-        ##### Test Update
+        # Test Update
         res = self.http_request('put', self.full_task_path_url + '1', auth_user='patient')
         self.assertEqual(res.status_code, 405)
 
     def test_delete_full_task(self):
-        ##### Test Delete
+        # Test Delete
         res = self.http_request('delete', self.full_task_path_url + '1', auth_user='patient')
         self.assertEqual(res.status_code, 405)
-
-

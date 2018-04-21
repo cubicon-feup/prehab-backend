@@ -49,6 +49,7 @@ class DoctorViewTests(TestSuit):
         self.assertEqual(res.status_code, 200)
 
         #####Test get
+
     def test_retrieve_doctor(self):
         # Fail with permission
         res = self.http_request('get', self.doctor_path_url + '2', auth_user='patient')
@@ -56,7 +57,7 @@ class DoctorViewTests(TestSuit):
         self.assertEqual(res.json()['details'], 'You don\t have permission to access this Doctor Information')
 
         # Test to pass - get
-        res = self.http_request('get', self.doctor_path_url+ '2', auth_user='admin')
+        res = self.http_request('get', self.doctor_path_url + '2', auth_user='admin')
         self.assertEqual(res.status_code, 200)
 
     def test_update_doctor(self):
@@ -68,5 +69,3 @@ class DoctorViewTests(TestSuit):
         ##### Test Delete
         res = self.http_request('delete', self.doctor_path_url + '2', auth_user='patient')
         self.assertEqual(res.status_code, 405)
-
-

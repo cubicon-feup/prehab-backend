@@ -2,7 +2,6 @@ import math
 from functools import reduce
 
 from prehab_app.models import WeekTaskSchedule
-from prehab_app.serializers.TaskSchedule import FullTaskScheduleSerializer
 
 
 class DataHelper:

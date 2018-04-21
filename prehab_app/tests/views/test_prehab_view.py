@@ -53,5 +53,3 @@ class PrehabViewTests(TestSuit):
         ##### Test Delete
         res = self.http_request('delete', self.prehab_path_url + '0', auth_user='patient')
         self.assertEqual(res.status_code, 405)
-
-

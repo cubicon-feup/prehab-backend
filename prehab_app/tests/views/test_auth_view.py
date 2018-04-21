@@ -1,5 +1,4 @@
 from prehab_app.tests.TestSuit import TestSuit
-from prehab_app.views.Auth import AuthViewSet
 
 
 class AuthViewTests(TestSuit):
