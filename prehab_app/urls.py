@@ -16,7 +16,6 @@ router = routers.DefaultRouter()
 
 router.register(r'patient/schedule/task', PatientTaskScheduleViewSet, 'crud-patient-task-schedule')
 router.register(r'task', TaskViewSet, 'crud-task')
-router.register(r'patient/schedule/task/info', PatientTaskInfoViewSet, 'crud-task-patient-task-info')
 router.register(r'patient', PatientViewSet, 'crud-patient')
 router.register(r'doctor', DoctorViewSet, 'crud-doctor')
 router.register(r'user', UserViewSet, 'crud-user')
