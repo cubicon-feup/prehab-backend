@@ -24,7 +24,7 @@ class PrehabViewSet(GenericViewSet):
     def list(self, request):
         if 'active' in request.GET and request.GET.get('active'):
             prehabs = Prehab.objects.filter(status__not_in=4)
-        else
+        else:
             prehabs = Prehab.objects
 
         # In case it's an Admin -> Retrieve ALL PREHABS info

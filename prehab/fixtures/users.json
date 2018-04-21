@@ -37,6 +37,12 @@
     },
     {
         "model": "prehab_app.Doctor",
+        "pk": 1,
+        "fields": {
+        }
+    },
+    {
+        "model": "prehab_app.Doctor",
         "pk": 2,
         "fields": {
         }
