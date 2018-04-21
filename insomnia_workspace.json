@@ -1,461 +1,917 @@
 {
-	"_type": "export",
-	"__export_format": 3,
-	"__export_date": "2018-04-14T16:08:09.399Z",
-	"__export_source": "insomnia.desktop.app:v5.11.7",
-	"resources": [
-		{
-			"_id": "wrk_4174539f82e24900acb5a58600894b0f",
-			"parentId": null,
-			"modified": 1523208757259,
-			"created": 1523208757259,
-			"name": "PREHAB",
-			"description": "",
-			"_type": "workspace"
-		},
-		{
-			"_id": "env_04e99e83884d4c0291636cc9570a023f",
-			"parentId": "wrk_4174539f82e24900acb5a58600894b0f",
-			"modified": 1523208757299,
-			"created": 1523208757299,
-			"name": "Base Environment",
-			"data": {},
-			"color": null,
-			"isPrivate": false,
-			"_type": "environment"
-		},
-		{
-			"_id": "jar_e172b4c74ffa44a0b26cffd2ae258605",
-			"parentId": "wrk_4174539f82e24900acb5a58600894b0f",
-			"modified": 1523208757290,
-			"created": 1523208757290,
-			"name": "Default Jar",
-			"cookies": [],
-			"_type": "cookie_jar"
-		},
-		{
-			"_id": "fld_4fc53984b20c4ab69e5aaa6debabc5e6",
-			"parentId": "wrk_4174539f82e24900acb5a58600894b0f",
-			"modified": 1523541215544,
-			"created": 1523208763784,
-			"name": "auth",
-			"description": "",
-			"environment": {},
-			"metaSortKey": -1523277771672,
-			"_type": "request_group"
-		},
-		{
-			"_id": "fld_bcaa0a239fa64a66b56fa90c451e4f60",
-			"parentId": "wrk_4174539f82e24900acb5a58600894b0f",
-			"modified": 1523371455127,
-			"created": 1523208778345,
-			"name": "Task Schedule",
-			"description": "",
-			"environment": {},
-			"metaSortKey": -1523208778345,
-			"_type": "request_group"
-		},
-		{
-			"_id": "fld_f8f7cf9f45104cc8bd0ba88f2c0d219f",
-			"parentId": "wrk_4174539f82e24900acb5a58600894b0f",
-			"modified": 1523210790458,
-			"created": 1523210790458,
-			"name": "Task",
-			"description": "",
-			"environment": {},
-			"metaSortKey": -1523210790458,
-			"_type": "request_group"
-		},
-		{
-			"_id": "fld_78a5982fd59f4da283208451eaf67003",
-			"parentId": "wrk_4174539f82e24900acb5a58600894b0f",
-			"modified": 1523277771622,
-			"created": 1523277771622,
-			"name": "Patients",
-			"description": "",
-			"environment": {},
-			"metaSortKey": -1523277771622,
-			"_type": "request_group"
-		},
-		{
-			"_id": "fld_2abcbc59cecc4af7a22907def651bf95",
-			"parentId": "wrk_4174539f82e24900acb5a58600894b0f",
-			"modified": 1523371449655,
-			"created": 1523371440336,
-			"name": "Task Schedule - FULL",
-			"description": "",
-			"environment": {},
-			"metaSortKey": -1523208771064.5,
-			"_type": "request_group"
-		},
-		{
-			"_id": "fld_4feaedf0b90c4a19be741dd22b449122",
-			"parentId": "wrk_4174539f82e24900acb5a58600894b0f",
-			"modified": 1523709062531,
-			"created": 1523709062531,
-			"name": "Prehab",
-			"description": "",
-			"environment": {},
-			"metaSortKey": -1523709062531,
-			"_type": "request_group"
-		},
-		{
-			"_id": "req_cc2db35999e347328230e367219c5c37",
-			"parentId": "fld_4fc53984b20c4ab69e5aaa6debabc5e6",
-			"modified": 1523372292978,
-			"created": 1523208879989,
-			"url": "http://ec2-35-176-153-210.eu-west-2.compute.amazonaws.com/api/login/",
-			"name": "Login - PROD",
-			"description": "",
-			"method": "POST",
-			"body": {
-				"mimeType": "application/json",
-				"text": "{\n  \"username\": \"doctor\",\n  \"password\": \"doctor\"\n}"
-			},
-			"parameters": [],
-			"headers": [
-				{
-					"name": "Content-Type",
-					"value": "application/json",
-					"id": "pair_f3739cf92eff450b9f3a22ac44f17055"
-				}
-			],
-			"authentication": {},
-			"metaSortKey": -1523208879990,
-			"settingStoreCookies": true,
-			"settingSendCookies": true,
-			"settingDisableRenderRequestBody": false,
-			"settingEncodeUrl": true,
-			"_type": "request"
-		},
-		{
-			"_id": "req_7607da1c1c404d0487a423ab0318e5cd",
-			"parentId": "fld_4fc53984b20c4ab69e5aaa6debabc5e6",
-			"modified": 1523712911799,
-			"created": 1523372268683,
-			"url": "localhost:8000/api/login/",
-			"name": "Login - LOCAL",
-			"description": "",
-			"method": "POST",
-			"body": {
-				"mimeType": "application/json",
-				"text": "{\n  \"username\": \"doctor\",\n  \"password\": \"doctor\"\n}"
-			},
-			"parameters": [],
-			"headers": [
-				{
-					"name": "Content-Type",
-					"value": "application/json",
-					"id": "pair_f3739cf92eff450b9f3a22ac44f17055"
-				}
-			],
-			"authentication": {},
-			"metaSortKey": -1523208835368.5,
-			"settingStoreCookies": true,
-			"settingSendCookies": true,
-			"settingDisableRenderRequestBody": false,
-			"settingEncodeUrl": true,
-			"_type": "request"
-		},
-		{
-			"_id": "req_45a4f4397c364629aa761f1d04ceea09",
-			"parentId": "fld_bcaa0a239fa64a66b56fa90c451e4f60",
-			"modified": 1523372302646,
-			"created": 1523208790747,
-			"url": "http://ec2-35-176-153-210.eu-west-2.compute.amazonaws.com/api/schedule/task/",
-			"name": "Get All Task Schedules - PROD",
-			"description": "",
-			"method": "GET",
-			"body": {},
-			"parameters": [],
-			"headers": [
-				{
-					"name": "jwt",
-					"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlX2lkIjoyLCJ1c2VyX2lkIjoyfQ.U3EsB2iHjmeWRx1rjMGXpnpUSFKT7vq8Tux1baHKWCA",
-					"id": "pair_2bd0c1e239a141b084db4927c3c559a1"
-				}
-			],
-			"authentication": {},
-			"metaSortKey": -1523208790747,
-			"settingStoreCookies": true,
-			"settingSendCookies": true,
-			"settingDisableRenderRequestBody": false,
-			"settingEncodeUrl": true,
-			"_type": "request"
-		},
-		{
-			"_id": "req_d9a7a3af1b8443c0b999d6cdc890b315",
-			"parentId": "fld_bcaa0a239fa64a66b56fa90c451e4f60",
-			"modified": 1523372316092,
-			"created": 1523372223721,
-			"url": "localhost:8000/api/schedule/task/",
-			"name": "Get All Task Schedules - LOCAL",
-			"description": "",
-			"method": "GET",
-			"body": {},
-			"parameters": [],
-			"headers": [
-				{
-					"name": "jwt",
-					"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJyb2xlX2lkIjoyfQ.DDOxW0RHgpCdU6eJJqZZ-RIwFcC1KR2zziHKf9Z7g04",
-					"id": "pair_2bd0c1e239a141b084db4927c3c559a1"
-				}
-			],
-			"authentication": {},
-			"metaSortKey": -1522985332088.5,
-			"settingStoreCookies": true,
-			"settingSendCookies": true,
-			"settingDisableRenderRequestBody": false,
-			"settingEncodeUrl": true,
-			"_type": "request"
-		},
-		{
-			"_id": "req_e16aa048252645b88e612dae2558e7ff",
-			"parentId": "fld_f8f7cf9f45104cc8bd0ba88f2c0d219f",
-			"modified": 1523541197768,
-			"created": 1523210802010,
-			"url": "localhost:8000/api/task/",
-			"name": "Create  Task",
-			"description": "",
-			"method": "POST",
-			"body": {
-				"mimeType": "application/json",
-				"text": "{\n  \"title\": \"w\",\n  \"task_type_id\": 1,\n  \"description\": \"ll\",\n  \"multimedia_link\": \"ll\"\n}"
-			},
-			"parameters": [],
-			"headers": [
-				{
-					"name": "jwt",
-					"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJyb2xlX2lkIjoxfQ.bKTAurathDXWAaXRS67wKb_P7iqkzIteK78VnWM709M",
-					"id": "pair_2bd0c1e239a141b084db4927c3c559a1"
-				},
-				{
-					"name": "Content-Type",
-					"value": "application/json",
-					"id": "pair_240940ec718c456f9f080961bb47887d"
-				}
-			],
-			"authentication": {},
-			"metaSortKey": -1523210796840,
-			"settingStoreCookies": true,
-			"settingSendCookies": true,
-			"settingDisableRenderRequestBody": false,
-			"settingEncodeUrl": true,
-			"_type": "request"
-		},
-		{
-			"_id": "req_2c69483d62ae4514833f87d08001cd37",
-			"parentId": "fld_f8f7cf9f45104cc8bd0ba88f2c0d219f",
-			"modified": 1523541331729,
-			"created": 1523541196366,
-			"url": "localhost:8000/api/task/4",
-			"name": "Get Task",
-			"description": "",
-			"method": "GET",
-			"body": {
-				"mimeType": "application/json",
-				"text": "{\n  \"title\": \"w\",\n  \"task_type_id\": 1,\n  \"description\": \"ll\",\n  \"multimedia_link\": \"ll\"\n}"
-			},
-			"parameters": [],
-			"headers": [
-				{
-					"name": "jwt",
-					"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJyb2xlX2lkIjoxfQ.bKTAurathDXWAaXRS67wKb_P7iqkzIteK78VnWM709M",
-					"id": "pair_2bd0c1e239a141b084db4927c3c559a1"
-				},
-				{
-					"name": "Content-Type",
-					"value": "application/json",
-					"id": "pair_240940ec718c456f9f080961bb47887d"
-				}
-			],
-			"authentication": {},
-			"metaSortKey": -1523209838415,
-			"settingStoreCookies": true,
-			"settingSendCookies": true,
-			"settingDisableRenderRequestBody": false,
-			"settingEncodeUrl": true,
-			"_type": "request"
-		},
-		{
-			"_id": "req_38eda8731f2b4db084592953d82c9529",
-			"parentId": "fld_78a5982fd59f4da283208451eaf67003",
-			"modified": 1523277834006,
-			"created": 1523277778712,
-			"url": "localhost:8000/api/patient/",
-			"name": "GET all Patients of One Doctor",
-			"description": "",
-			"method": "GET",
-			"body": {},
-			"parameters": [],
-			"headers": [
-				{
-					"name": "jwt",
-					"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJyb2xlX2lkIjoyfQ.DDOxW0RHgpCdU6eJJqZZ-RIwFcC1KR2zziHKf9Z7g04",
-					"id": "pair_2bd0c1e239a141b084db4927c3c559a1"
-				}
-			],
-			"authentication": {},
-			"metaSortKey": -1522619250434.25,
-			"settingStoreCookies": true,
-			"settingSendCookies": true,
-			"settingDisableRenderRequestBody": false,
-			"settingEncodeUrl": true,
-			"_type": "request"
-		},
-		{
-			"_id": "req_b8abea7ddbda4afb956cd3deb0f39b09",
-			"parentId": "fld_78a5982fd59f4da283208451eaf67003",
-			"modified": 1523712167033,
-			"created": 1523712139959,
-			"url": "localhost:8000/api/patient/",
-			"name": "GET all Patients - ADMIN",
-			"description": "",
-			"method": "GET",
-			"body": {},
-			"parameters": [],
-			"headers": [
-				{
-					"name": "jwt",
-					"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJyb2xlX2lkIjoxfQ.bKTAurathDXWAaXRS67wKb_P7iqkzIteK78VnWM709M",
-					"id": "pair_2bd0c1e239a141b084db4927c3c559a1"
-				}
-			],
-			"authentication": {},
-			"metaSortKey": -1522468487785.125,
-			"settingStoreCookies": true,
-			"settingSendCookies": true,
-			"settingDisableRenderRequestBody": false,
-			"settingEncodeUrl": true,
-			"_type": "request"
-		},
-		{
-			"_id": "req_c6c01cedd73f4f77a2d11079cc1135e5",
-			"parentId": "fld_78a5982fd59f4da283208451eaf67003",
-			"modified": 1523712277446,
-			"created": 1523712256290,
-			"url": "localhost:8000/api/patient/",
-			"name": "Create New Patient",
-			"description": "",
-			"method": "POST",
-			"body": {
-				"mimeType": "application/json",
-				"text": "{\n\t\n}"
-			},
-			"parameters": [],
-			"headers": [
-				{
-					"name": "jwt",
-					"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJyb2xlX2lkIjoyfQ.DDOxW0RHgpCdU6eJJqZZ-RIwFcC1KR2zziHKf9Z7g04",
-					"id": "pair_2bd0c1e239a141b084db4927c3c559a1"
-				},
-				{
-					"name": "Content-Type",
-					"value": "application/json",
-					"id": "pair_f6f1a7c0385a44daa2c362fbbd3d5f70"
-				}
-			],
-			"authentication": {},
-			"metaSortKey": -1522468487735.125,
-			"settingStoreCookies": true,
-			"settingSendCookies": true,
-			"settingDisableRenderRequestBody": false,
-			"settingEncodeUrl": true,
-			"_type": "request"
-		},
-		{
-			"_id": "req_b7bbf4fde76e4b618794f15dcae3e4dd",
-			"parentId": "fld_2abcbc59cecc4af7a22907def651bf95",
-			"modified": 1523638069742,
-			"created": 1523371440344,
-			"url": "localhost:8000/api/schedule/task/full/1/",
-			"name": "Get Full Task Schedule (SINGLE)",
-			"description": "",
-			"method": "GET",
-			"body": {},
-			"parameters": [],
-			"headers": [
-				{
-					"name": "jwt",
-					"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJyb2xlX2lkIjoxfQ.bKTAurathDXWAaXRS67wKb_P7iqkzIteK78VnWM709M",
-					"id": "pair_2bd0c1e239a141b084db4927c3c559a1"
-				}
-			],
-			"authentication": {},
-			"metaSortKey": -1523208790747,
-			"settingStoreCookies": true,
-			"settingSendCookies": true,
-			"settingDisableRenderRequestBody": false,
-			"settingEncodeUrl": true,
-			"_type": "request"
-		},
-		{
-			"_id": "req_b245d9c7b4904280abacfc6dcc655a7f",
-			"parentId": "fld_2abcbc59cecc4af7a22907def651bf95",
-			"modified": 1523721996413,
-			"created": 1523371440347,
-			"url": "localhost:8000/api/schedule/task/full/",
-			"name": "Create Full Task Schedule",
-			"description": "",
-			"method": "POST",
-			"body": {
-				"mimeType": "application/json",
-				"text": "{\n  \"title\": \"New Task Schedule\",\n  \"number_of_weeks\": 2,\n  \"weeks\": [\n\t{\n\t\t\"week_number\": 1,\n\t\t\"tasks\": [\n\t\t\t{\n\t\t\t\t\"task_id\": 1,\n\t\t\t\t\"times_per_week\": 5\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"task_id\": 2,\n\t\t\t\t\"times_per_week\": 3\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"task_id\": 3,\n\t\t\t\t\"times_per_week\": 2,\n\t\t\t\t\"repetition_number\": 10\n\t\t\t}\n\t\t]\n\t},\n\t\n\t{\n\t\t\"week_number\": 2,\n\t\t\"tasks\": [\n\t\t\t{\n\t\t\t\t\"task_id\": 1,\n\t\t\t\t\"times_per_week\": 1\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"task_id\": 2,\n\t\t\t\t\"times_per_week\": 12\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"task_id\": 3,\n\t\t\t\t\"times_per_week\": 3,\n\t\t\t\t\"repetition_number\": 20\n\t\t\t}\n\t\t]\n\t}\t\n  ]\n}"
-			},
-			"parameters": [],
-			"headers": [
-				{
-					"name": "jwt",
-					"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJyb2xlX2lkIjoxfQ.bKTAurathDXWAaXRS67wKb_P7iqkzIteK78VnWM709M",
-					"id": "pair_2bd0c1e239a141b084db4927c3c559a1"
-				},
-				{
-					"name": "Content-Type",
-					"value": "application/json",
-					"id": "pair_240940ec718c456f9f080961bb47887d"
-				}
-			],
-			"authentication": {},
-			"metaSortKey": -1522029710121.5,
-			"settingStoreCookies": true,
-			"settingSendCookies": true,
-			"settingDisableRenderRequestBody": false,
-			"settingEncodeUrl": true,
-			"_type": "request"
-		},
-		{
-			"_id": "req_d7feb1686ebd462faa43ec8a9a590872",
-			"parentId": "fld_4feaedf0b90c4a19be741dd22b449122",
-			"modified": 1523722011474,
-			"created": 1523709076274,
-			"url": "localhost:8000/api/prehab/",
-			"name": "Create New Prehab - LOCAL",
-			"description": "",
-			"method": "POST",
-			"body": {
-				"mimeType": "application/json",
-				"text": "{\n\t\"patient_id\": 3,\n\t\"init_date\": \"18-05-2018\",\n\t\"surgery_date\": \"18-06-2018\",\n\t\"task_schedule_id\": 2\n}"
-			},
-			"parameters": [],
-			"headers": [
-				{
-					"name": "jwt",
-					"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJyb2xlX2lkIjoyfQ.DDOxW0RHgpCdU6eJJqZZ-RIwFcC1KR2zziHKf9Z7g04",
-					"id": "pair_9e989b86c5004d36a6496bf1937e6d97"
-				},
-				{
-					"name": "Content-Type",
-					"value": "application/json",
-					"id": "pair_a04b5719867b495faa6499cbb719b52d"
-				}
-			],
-			"authentication": {},
-			"metaSortKey": -1523709076274,
-			"settingStoreCookies": true,
-			"settingSendCookies": true,
-			"settingDisableRenderRequestBody": false,
-			"settingEncodeUrl": true,
-			"_type": "request"
-		}
-	]
+    "_type": "export",
+    "__export_format": 3,
+    "__export_date": "2018-04-21T18:48:46.951Z",
+    "__export_source": "insomnia.desktop.app:v5.11.7",
+    "resources": [
+        {
+            "_id": "wrk_4174539f82e24900acb5a58600894b0f",
+            "parentId": null,
+            "modified": 1523208757259,
+            "created": 1523208757259,
+            "name": "PREHAB",
+            "description": "",
+            "_type": "workspace"
+        },
+        {
+            "_id": "env_04e99e83884d4c0291636cc9570a023f",
+            "parentId": "wrk_4174539f82e24900acb5a58600894b0f",
+            "modified": 1523208757299,
+            "created": 1523208757299,
+            "name": "Base Environment",
+            "data": {},
+            "color": null,
+            "isPrivate": false,
+            "_type": "environment"
+        },
+        {
+            "_id": "jar_e172b4c74ffa44a0b26cffd2ae258605",
+            "parentId": "wrk_4174539f82e24900acb5a58600894b0f",
+            "modified": 1523208757290,
+            "created": 1523208757290,
+            "name": "Default Jar",
+            "cookies": [],
+            "_type": "cookie_jar"
+        },
+        {
+            "_id": "fld_4fc53984b20c4ab69e5aaa6debabc5e6",
+            "parentId": "wrk_4174539f82e24900acb5a58600894b0f",
+            "modified": 1523541215544,
+            "created": 1523208763784,
+            "name": "auth",
+            "description": "",
+            "environment": {},
+            "metaSortKey": -1523277771672,
+            "_type": "request_group"
+        },
+        {
+            "_id": "fld_bcaa0a239fa64a66b56fa90c451e4f60",
+            "parentId": "wrk_4174539f82e24900acb5a58600894b0f",
+            "modified": 1523371455127,
+            "created": 1523208778345,
+            "name": "Task Schedule",
+            "description": "",
+            "environment": {},
+            "metaSortKey": -1523208778345,
+            "_type": "request_group"
+        },
+        {
+            "_id": "fld_f8f7cf9f45104cc8bd0ba88f2c0d219f",
+            "parentId": "wrk_4174539f82e24900acb5a58600894b0f",
+            "modified": 1523210790458,
+            "created": 1523210790458,
+            "name": "Task",
+            "description": "",
+            "environment": {},
+            "metaSortKey": -1523210790458,
+            "_type": "request_group"
+        },
+        {
+            "_id": "fld_78a5982fd59f4da283208451eaf67003",
+            "parentId": "wrk_4174539f82e24900acb5a58600894b0f",
+            "modified": 1523277771622,
+            "created": 1523277771622,
+            "name": "Patients",
+            "description": "",
+            "environment": {},
+            "metaSortKey": -1523277771622,
+            "_type": "request_group"
+        },
+        {
+            "_id": "fld_2abcbc59cecc4af7a22907def651bf95",
+            "parentId": "wrk_4174539f82e24900acb5a58600894b0f",
+            "modified": 1523371449655,
+            "created": 1523371440336,
+            "name": "Task Schedule - FULL",
+            "description": "",
+            "environment": {},
+            "metaSortKey": -1523208771064.5,
+            "_type": "request_group"
+        },
+        {
+            "_id": "fld_4feaedf0b90c4a19be741dd22b449122",
+            "parentId": "wrk_4174539f82e24900acb5a58600894b0f",
+            "modified": 1523709062531,
+            "created": 1523709062531,
+            "name": "Prehab",
+            "description": "",
+            "environment": {},
+            "metaSortKey": -1523709062531,
+            "_type": "request_group"
+        },
+        {
+            "_id": "fld_588d0cb3d75e44c7b7bd73c24de108e9",
+            "parentId": "wrk_4174539f82e24900acb5a58600894b0f",
+            "modified": 1523971698439,
+            "created": 1523971698439,
+            "name": "PatientTaskSchedule",
+            "description": "",
+            "environment": {},
+            "metaSortKey": -1523971698439,
+            "_type": "request_group"
+        },
+        {
+            "_id": "fld_55a963fe2f994d0eb7a44c134bff7986",
+            "parentId": "wrk_4174539f82e24900acb5a58600894b0f",
+            "modified": 1524322247141,
+            "created": 1524322247141,
+            "name": "Patient Task Info",
+            "description": "",
+            "environment": {},
+            "metaSortKey": -1524322247141,
+            "_type": "request_group"
+        },
+        {
+            "_id": "req_cc2db35999e347328230e367219c5c37",
+            "parentId": "fld_4fc53984b20c4ab69e5aaa6debabc5e6",
+            "modified": 1523971229639,
+            "created": 1523208879989,
+            "url": "ec2-18-130-0-119.eu-west-2.compute.amazonaws.com/api/login/",
+            "name": "Login Doctor - PROD",
+            "description": "",
+            "method": "POST",
+            "body": {
+                "mimeType": "application/json",
+                "text": "{\n  \"username\": \"doctor\",\n  \"password\": \"doctor\"\n}"
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "id": "pair_f3739cf92eff450b9f3a22ac44f17055"
+                },
+                {
+                    "name": "platform",
+                    "value": "web",
+                    "id": "pair_2e6a778cae40418ab15afa34d17db363"
+                }
+            ],
+            "authentication": {},
+            "metaSortKey": -1523208879990,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "_type": "request"
+        },
+        {
+            "_id": "req_7607da1c1c404d0487a423ab0318e5cd",
+            "parentId": "fld_4fc53984b20c4ab69e5aaa6debabc5e6",
+            "modified": 1523867309083,
+            "created": 1523372268683,
+            "url": "localhost:8000/api/login/",
+            "name": "Login - LOCAL",
+            "description": "",
+            "method": "POST",
+            "body": {
+                "mimeType": "application/json",
+                "text": "{\n  \"username\": \"doctor\",\n  \"password\": \"doctor\"\n}"
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "id": "pair_f3739cf92eff450b9f3a22ac44f17055"
+                },
+                {
+                    "name": "platform",
+                    "value": "web",
+                    "id": "pair_c3191a3730874e358865cb95298bcd03"
+                },
+                {
+                    "name": "",
+                    "value": "",
+                    "id": "pair_15d8b98ae4174bc0bec263da2d39f998"
+                }
+            ],
+            "authentication": {},
+            "metaSortKey": -1523208835368.5,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "_type": "request"
+        },
+        {
+            "_id": "req_de43520465cb4a8b8c624b5e0652a381",
+            "parentId": "fld_4fc53984b20c4ab69e5aaa6debabc5e6",
+            "modified": 1523971252824,
+            "created": 1523971231823,
+            "url": "ec2-18-130-0-119.eu-west-2.compute.amazonaws.com/api/login/",
+            "name": "Login Patient - PROD",
+            "description": "",
+            "method": "POST",
+            "body": {
+                "mimeType": "application/json",
+                "text": "{\n  \"username\": \"patient\",\n  \"password\": \"patient\"\n}"
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "id": "pair_f3739cf92eff450b9f3a22ac44f17055"
+                },
+                {
+                    "name": "platform",
+                    "value": "mobile",
+                    "id": "pair_2e6a778cae40418ab15afa34d17db363"
+                },
+                {
+                    "name": "",
+                    "value": "",
+                    "id": "pair_767ccdf67d3e4a0da6a9fa552a86961b"
+                }
+            ],
+            "authentication": {},
+            "metaSortKey": -1523208857679.25,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "_type": "request"
+        },
+        {
+            "_id": "req_d9a7a3af1b8443c0b999d6cdc890b315",
+            "parentId": "fld_bcaa0a239fa64a66b56fa90c451e4f60",
+            "modified": 1524323568745,
+            "created": 1523372223721,
+            "url": "localhost:8000/api/schedule/task/",
+            "name": "Get All Task Schedules - LOCAL",
+            "description": "",
+            "method": "GET",
+            "body": {},
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "jwt",
+                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlX2lkIjoyLCJ1c2VyX2lkIjoyfQ.U3EsB2iHjmeWRx1rjMGXpnpUSFKT7vq8Tux1baHKWCA",
+                    "id": "pair_2bd0c1e239a141b084db4927c3c559a1"
+                }
+            ],
+            "authentication": {},
+            "metaSortKey": -1522985332088.5,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "_type": "request"
+        },
+        {
+            "_id": "req_e16aa048252645b88e612dae2558e7ff",
+            "parentId": "fld_f8f7cf9f45104cc8bd0ba88f2c0d219f",
+            "modified": 1523541197768,
+            "created": 1523210802010,
+            "url": "localhost:8000/api/task/",
+            "name": "Create  Task",
+            "description": "",
+            "method": "POST",
+            "body": {
+                "mimeType": "application/json",
+                "text": "{\n  \"title\": \"w\",\n  \"task_type_id\": 1,\n  \"description\": \"ll\",\n  \"multimedia_link\": \"ll\"\n}"
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "jwt",
+                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJyb2xlX2lkIjoxfQ.bKTAurathDXWAaXRS67wKb_P7iqkzIteK78VnWM709M",
+                    "id": "pair_2bd0c1e239a141b084db4927c3c559a1"
+                },
+                {
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "id": "pair_240940ec718c456f9f080961bb47887d"
+                }
+            ],
+            "authentication": {},
+            "metaSortKey": -1523210796840,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "_type": "request"
+        },
+        {
+            "_id": "req_2c69483d62ae4514833f87d08001cd37",
+            "parentId": "fld_f8f7cf9f45104cc8bd0ba88f2c0d219f",
+            "modified": 1523541331729,
+            "created": 1523541196366,
+            "url": "localhost:8000/api/task/4",
+            "name": "Get Task",
+            "description": "",
+            "method": "GET",
+            "body": {
+                "mimeType": "application/json",
+                "text": "{\n  \"title\": \"w\",\n  \"task_type_id\": 1,\n  \"description\": \"ll\",\n  \"multimedia_link\": \"ll\"\n}"
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "jwt",
+                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJyb2xlX2lkIjoxfQ.bKTAurathDXWAaXRS67wKb_P7iqkzIteK78VnWM709M",
+                    "id": "pair_2bd0c1e239a141b084db4927c3c559a1"
+                },
+                {
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "id": "pair_240940ec718c456f9f080961bb47887d"
+                }
+            ],
+            "authentication": {},
+            "metaSortKey": -1523209838415,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "_type": "request"
+        },
+        {
+            "_id": "req_38eda8731f2b4db084592953d82c9529",
+            "parentId": "fld_78a5982fd59f4da283208451eaf67003",
+            "modified": 1524318441681,
+            "created": 1523277778712,
+            "url": "localhost:8000/api/patient/",
+            "name": "GET all Patients of One Doctor",
+            "description": "",
+            "method": "GET",
+            "body": {},
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "jwt",
+                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJyb2xlX2lkIjoyfQ.DDOxW0RHgpCdU6eJJqZZ-RIwFcC1KR2zziHKf9Z7g04",
+                    "id": "pair_2bd0c1e239a141b084db4927c3c559a1"
+                },
+                {
+                    "name": "simulate",
+                    "value": "doctor",
+                    "id": "pair_2510e6722f414e4d9987febedc751485"
+                }
+            ],
+            "authentication": {},
+            "metaSortKey": -1522619250434.25,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "_type": "request"
+        },
+        {
+            "_id": "req_b8abea7ddbda4afb956cd3deb0f39b09",
+            "parentId": "fld_78a5982fd59f4da283208451eaf67003",
+            "modified": 1524318449200,
+            "created": 1523712139959,
+            "url": "localhost:8000/api/patient/",
+            "name": "GET all Patients - ADMIN",
+            "description": "",
+            "method": "GET",
+            "body": {},
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "jwt",
+                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJyb2xlX2lkIjoxfQ.bKTAurathDXWAaXRS67wKb_P7iqkzIteK78VnWM709M",
+                    "id": "pair_2bd0c1e239a141b084db4927c3c559a1"
+                },
+                {
+                    "name": "simulate",
+                    "value": "admin",
+                    "id": "pair_b5cf5824e49146198f30613ed9992a54"
+                }
+            ],
+            "authentication": {},
+            "metaSortKey": -1522468487785.125,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "_type": "request"
+        },
+        {
+            "_id": "req_c6c01cedd73f4f77a2d11079cc1135e5",
+            "parentId": "fld_78a5982fd59f4da283208451eaf67003",
+            "modified": 1524143217181,
+            "created": 1523712256290,
+            "url": "localhost:8000/api/patient/",
+            "name": "Create New Patient",
+            "description": "",
+            "method": "POST",
+            "body": {
+                "mimeType": "application/json",
+                "text": "{\n\t\n}"
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "jwt",
+                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJyb2xlX2lkIjoyfQ.DDOxW0RHgpCdU6eJJqZZ-RIwFcC1KR2zziHKf9Z7g04",
+                    "id": "pair_2bd0c1e239a141b084db4927c3c559a1"
+                },
+                {
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "id": "pair_f6f1a7c0385a44daa2c362fbbd3d5f70"
+                }
+            ],
+            "authentication": {},
+            "metaSortKey": -1522468487735.125,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "_type": "request"
+        },
+        {
+            "_id": "req_b7bbf4fde76e4b618794f15dcae3e4dd",
+            "parentId": "fld_2abcbc59cecc4af7a22907def651bf95",
+            "modified": 1524323685816,
+            "created": 1523371440344,
+            "url": "localhost:8000/api/schedule/task/full/1/",
+            "name": "Get Full Task Schedule (SINGLE)",
+            "description": "",
+            "method": "GET",
+            "body": {},
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "jwt",
+                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJyb2xlX2lkIjoxfQ.bKTAurathDXWAaXRS67wKb_P7iqkzIteK78VnWM709M",
+                    "id": "pair_2bd0c1e239a141b084db4927c3c559a1"
+                },
+                {
+                    "name": "simulate",
+                    "value": "doctor",
+                    "id": "pair_15d240abf1e4455587ebc0dde630bc3f"
+                }
+            ],
+            "authentication": {},
+            "metaSortKey": -1523208790747,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "_type": "request"
+        },
+        {
+            "_id": "req_b245d9c7b4904280abacfc6dcc655a7f",
+            "parentId": "fld_2abcbc59cecc4af7a22907def651bf95",
+            "modified": 1524335963788,
+            "created": 1523371440347,
+            "url": "localhost:8000/api/schedule/task/full/",
+            "name": "Create Full Task Schedule",
+            "description": "",
+            "method": "POST",
+            "body": {
+                "mimeType": "application/json",
+                "text": "{\n  \"title\": \"New Task Schedule\",\n  \"number_of_weeks\": 2,\n  \"weeks\": [\n\t{\n\t\t\"week_number\": 1,\n\t\t\"tasks\": [\n\t\t\t{\n\t\t\t\t\"task_id\": 1,\n\t\t\t\t\"times_per_week\": 5\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"task_id\": 2,\n\t\t\t\t\"times_per_week\": 3\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"task_id\": 3,\n\t\t\t\t\"times_per_week\": 2,\n\t\t\t\t\"repetition_number\": 10\n\t\t\t}\n\t\t]\n\t},\n\t\n\t{\n\t\t\"week_number\": 2,\n\t\t\"tasks\": [\n\t\t\t{\n\t\t\t\t\"task_id\": 1,\n\t\t\t\t\"times_per_week\": 1\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"task_id\": 2,\n\t\t\t\t\"times_per_week\": 12\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"task_id\": 3,\n\t\t\t\t\"times_per_week\": 3,\n\t\t\t\t\"repetition_number\": 20\n\t\t\t}\n\t\t]\n\t}\t\n  ]\n}"
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "jwt",
+                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJyb2xlX2lkIjoyfQ.DDOxW0RHgpCdU6eJJqZZ-RIwFcC1KR2zziHKf9Z7g04",
+                    "id": "pair_2bd0c1e239a141b084db4927c3c559a1"
+                },
+                {
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "id": "pair_240940ec718c456f9f080961bb47887d"
+                },
+                {
+                    "name": "platform",
+                    "value": "web",
+                    "id": "pair_a20559005b4a473fa149e5eb8553225e"
+                },
+                {
+                    "name": "simulate",
+                    "value": "doctor",
+                    "id": "pair_931d616fe9f3415cacc60597b0698522"
+                }
+            ],
+            "authentication": {},
+            "metaSortKey": -1522029710121.5,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "_type": "request"
+        },
+        {
+            "_id": "req_fcce31d9214e4071b1011e8233fadea5",
+            "parentId": "fld_2abcbc59cecc4af7a22907def651bf95",
+            "modified": 1524147112225,
+            "created": 1523866886754,
+            "url": "http://ec2-18-130-0-119.eu-west-2.compute.amazonaws.com/api/schedule/task/full/",
+            "name": "Create Full Task Schedule - PROD",
+            "description": "",
+            "method": "POST",
+            "body": {
+                "mimeType": "application/json",
+                "text": "{\n  \"title\": \"New Task Schedule\",\n  \"number_of_weeks\": 2,\n  \"weeks\": [\n\t{\n\t\t\"week_number\": 1,\n\t\t\"tasks\": [\n\t\t\t{\n\t\t\t\t\"task_id\": 1,\n\t\t\t\t\"times_per_week\": 5\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"task_id\": 2,\n\t\t\t\t\"times_per_week\": 3\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"task_id\": 3,\n\t\t\t\t\"times_per_week\": 2,\n\t\t\t\t\"repetition_number\": 10\n\t\t\t}\n\t\t]\n\t},\n\t\n\t{\n\t\t\"week_number\": 2,\n\t\t\"tasks\": [\n\t\t\t{\n\t\t\t\t\"task_id\": 1,\n\t\t\t\t\"times_per_week\": 1\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"task_id\": 2,\n\t\t\t\t\"times_per_week\": 12\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"task_id\": 3,\n\t\t\t\t\"times_per_week\": 3,\n\t\t\t\t\"repetition_number\": 20\n\t\t\t}\n\t\t]\n\t}\t\n  ]\n}"
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "jwt",
+                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlX2lkIjoyLCJ1c2VyX2lkIjoyfQ.U3EsB2iHjmeWRx1rjMGXpnpUSFKT7vq8Tux1baHKWCA",
+                    "id": "pair_2bd0c1e239a141b084db4927c3c559a1"
+                },
+                {
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "id": "pair_240940ec718c456f9f080961bb47887d"
+                },
+                {
+                    "name": "platform",
+                    "value": "web",
+                    "id": "pair_6b83439b14ad4040b2c1196e345373ba"
+                }
+            ],
+            "authentication": {},
+            "metaSortKey": -1521915739319.5,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "_type": "request"
+        },
+        {
+            "_id": "req_d7feb1686ebd462faa43ec8a9a590872",
+            "parentId": "fld_4feaedf0b90c4a19be741dd22b449122",
+            "modified": 1524309561615,
+            "created": 1523709076274,
+            "url": "localhost:8000/api/prehab/",
+            "name": "Create New Prehab - LOCAL",
+            "description": "",
+            "method": "POST",
+            "body": {
+                "mimeType": "application/json",
+                "text": "{\n\t\"patient_id\": 3,\n\t\"init_date\": \"18-05-2018\",\n\t\"surgery_date\": \"18-06-2018\",\n\t\"task_schedule_id\": 1\n}"
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "jwt",
+                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJyb2xlX2lkIjoyfQ.DDOxW0RHgpCdU6eJJqZZ-RIwFcC1KR2zziHKf9Z7g04",
+                    "id": "pair_9e989b86c5004d36a6496bf1937e6d97"
+                },
+                {
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "id": "pair_a04b5719867b495faa6499cbb719b52d"
+                },
+                {
+                    "name": "platform",
+                    "value": "web",
+                    "id": "pair_c3c703137f2f4fe08316001c64eab0b6"
+                }
+            ],
+            "authentication": {},
+            "metaSortKey": -1523709076274,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "_type": "request"
+        },
+        {
+            "_id": "req_333ed62b0cf74ced89a11543575ab50b",
+            "parentId": "fld_4feaedf0b90c4a19be741dd22b449122",
+            "modified": 1523971289367,
+            "created": 1523722917768,
+            "url": "localhost:8000/api/prehab/1",
+            "name": "GET Prehab (SINGLE)  - LOCAL",
+            "description": "",
+            "method": "GET",
+            "body": {
+                "mimeType": "application/json",
+                "text": "{\n\t\"patient_id\": 3,\n\t\"init_date\": \"18-05-2018\",\n\t\"surgery_date\": \"18-06-2018\",\n\t\"task_schedule_id\": 2\n}"
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "jwt",
+                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJyb2xlX2lkIjoyfQ.DDOxW0RHgpCdU6eJJqZZ-RIwFcC1KR2zziHKf9Z7g04",
+                    "id": "pair_9e989b86c5004d36a6496bf1937e6d97"
+                },
+                {
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "id": "pair_a04b5719867b495faa6499cbb719b52d"
+                },
+                {
+                    "name": "platform",
+                    "value": "web",
+                    "id": "pair_d6399870f8a3491f8bc551dbb314f569"
+                }
+            ],
+            "authentication": {},
+            "metaSortKey": -1523459936557,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "_type": "request"
+        },
+        {
+            "_id": "req_bd276affacf04250aca2a65952d209f3",
+            "parentId": "fld_4feaedf0b90c4a19be741dd22b449122",
+            "modified": 1524147100813,
+            "created": 1523866925963,
+            "url": "http://ec2-18-130-0-119.eu-west-2.compute.amazonaws.com/api/prehab/",
+            "name": "Create New Prehab - PROD",
+            "description": "",
+            "method": "POST",
+            "body": {
+                "mimeType": "application/json",
+                "text": "{\n\t\"patient_id\": 3,\n\t\"init_date\": \"18-05-2018\",\n\t\"surgery_date\": \"18-06-2018\",\n\t\"task_schedule_id\": 1\n}"
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "jwt",
+                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlX2lkIjoyLCJ1c2VyX2lkIjoyfQ.U3EsB2iHjmeWRx1rjMGXpnpUSFKT7vq8Tux1baHKWCA",
+                    "id": "pair_9e989b86c5004d36a6496bf1937e6d97"
+                },
+                {
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "id": "pair_a04b5719867b495faa6499cbb719b52d"
+                },
+                {
+                    "name": "platform",
+                    "value": "web",
+                    "id": "pair_af72961cd35e4f0cb0cf7c78ff6d6fed"
+                }
+            ],
+            "authentication": {},
+            "metaSortKey": -1523584506415.5,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "_type": "request"
+        },
+        {
+            "_id": "req_0d63a81829d6415d9b945109da502d5e",
+            "parentId": "fld_4feaedf0b90c4a19be741dd22b449122",
+            "modified": 1523867845092,
+            "created": 1523866979677,
+            "url": "http://ec2-35-176-153-210.eu-west-2.compute.amazonaws.com/api/prehab/1",
+            "name": "GET Prehab (SINGLE)  - PROD",
+            "description": "",
+            "method": "GET",
+            "body": {
+                "mimeType": "application/json",
+                "text": "{\n\t\"patient_id\": 3,\n\t\"init_date\": \"18-05-2018\",\n\t\"surgery_date\": \"18-06-2018\",\n\t\"task_schedule_id\": 2\n}"
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "jwt",
+                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlX2lkIjoyLCJ1c2VyX2lkIjoyfQ.U3EsB2iHjmeWRx1rjMGXpnpUSFKT7vq8Tux1baHKWCA",
+                    "id": "pair_9e989b86c5004d36a6496bf1937e6d97"
+                },
+                {
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "id": "pair_a04b5719867b495faa6499cbb719b52d"
+                },
+                {
+                    "name": "platform",
+                    "value": "web",
+                    "id": "pair_9d1c8eb03b0942e6873a239f43c8007f"
+                }
+            ],
+            "authentication": {},
+            "metaSortKey": -1523335366698.5,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "_type": "request"
+        },
+        {
+            "_id": "req_6876eaa9750745ff97d1b75950c12d65",
+            "parentId": "fld_4feaedf0b90c4a19be741dd22b449122",
+            "modified": 1524304452448,
+            "created": 1524304165595,
+            "url": "localhost:8000/api/prehab/",
+            "name": "GET Prehab (ALL)",
+            "description": "",
+            "method": "GET",
+            "body": {
+                "mimeType": "application/json",
+                "text": "{\n\t\"patient_id\": 3,\n\t\"init_date\": \"18-05-2018\",\n\t\"surgery_date\": \"18-06-2018\",\n\t\"task_schedule_id\": 2\n}"
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "jwt",
+                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlX2lkIjoyLCJ1c2VyX2lkIjoyfQ.U3EsB2iHjmeWRx1rjMGXpnpUSFKT7vq8Tux1baHKWCA",
+                    "id": "pair_9e989b86c5004d36a6496bf1937e6d97"
+                },
+                {
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "id": "pair_a04b5719867b495faa6499cbb719b52d"
+                },
+                {
+                    "name": "platform",
+                    "value": "web",
+                    "id": "pair_9d1c8eb03b0942e6873a239f43c8007f"
+                },
+                {
+                    "name": "simulate",
+                    "value": "admin",
+                    "id": "pair_b821533639ac4597a21fc15933107524"
+                }
+            ],
+            "authentication": {},
+            "metaSortKey": -1523273081769.25,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "_type": "request"
+        },
+        {
+            "_id": "req_43e456058e9542e2a4bfc9bc9719aae8",
+            "parentId": "fld_588d0cb3d75e44c7b7bd73c24de108e9",
+            "modified": 1524336199902,
+            "created": 1523971732150,
+            "url": "localhost:8000/api/patient/schedule/task/done/",
+            "name": "Mark as Done by Patient",
+            "description": "",
+            "method": "PUT",
+            "body": {
+                "mimeType": "application/json",
+                "text": "{\n\t\"prehab_id\": 1,\n\t\"patient_task_schedule_id\": 26,\n\t\"completed\": true,\n\t\"difficulties\": true,\n\t\"notes\": \"Doi me as costas\"\n}"
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "jwt",
+                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJyb2xlX2lkIjoyfQ.DDOxW0RHgpCdU6eJJqZZ-RIwFcC1KR2zziHKf9Z7g04",
+                    "id": "pair_4697461f889641c0a86713b09e146c73"
+                },
+                {
+                    "name": "platform",
+                    "value": "mobile",
+                    "id": "pair_5950608b187747248018217eb6a44cff"
+                },
+                {
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "id": "pair_dee6ca976c02462380359efd4047bc44"
+                },
+                {
+                    "name": "simulate",
+                    "value": "patient",
+                    "id": "pair_8efcd4db8ffd467c82301786d853d994"
+                }
+            ],
+            "authentication": {},
+            "metaSortKey": -1523971732150,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "_type": "request"
+        },
+        {
+            "_id": "req_7858cf289e694aa59ea1e823c4c6ce97",
+            "parentId": "fld_588d0cb3d75e44c7b7bd73c24de108e9",
+            "modified": 1524331666114,
+            "created": 1524322260196,
+            "url": "localhost:8000/api/patient/schedule/task/",
+            "name": "GET patient task schedules (ALL)",
+            "description": "",
+            "method": "GET",
+            "body": {
+                "mimeType": "application/json",
+                "text": "{\n\t\"patient_id\": 3,\n\t\"init_date\": \"18-05-2018\",\n\t\"surgery_date\": \"18-06-2018\",\n\t\"task_schedule_id\": 2\n}"
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "jwt",
+                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlX2lkIjoyLCJ1c2VyX2lkIjoyfQ.U3EsB2iHjmeWRx1rjMGXpnpUSFKT7vq8Tux1baHKWCA",
+                    "id": "pair_9e989b86c5004d36a6496bf1937e6d97"
+                },
+                {
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "id": "pair_a04b5719867b495faa6499cbb719b52d"
+                },
+                {
+                    "name": "platform",
+                    "value": "web",
+                    "id": "pair_9d1c8eb03b0942e6873a239f43c8007f"
+                },
+                {
+                    "name": "simulate",
+                    "value": "doctor",
+                    "id": "pair_b821533639ac4597a21fc15933107524"
+                }
+            ],
+            "authentication": {},
+            "metaSortKey": -1523971732200,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "_type": "request"
+        },
+        {
+            "_id": "req_b3b04be1c2a24f358153aede9b389e47",
+            "parentId": "fld_588d0cb3d75e44c7b7bd73c24de108e9",
+            "modified": 1524336381801,
+            "created": 1524331622175,
+            "url": "localhost:8000/api/patient/schedule/task/2",
+            "name": "GET patient task schedule (SINGLE)",
+            "description": "",
+            "method": "GET",
+            "body": {
+                "mimeType": "application/json",
+                "text": ""
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "jwt",
+                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlX2lkIjoyLCJ1c2VyX2lkIjoyfQ.U3EsB2iHjmeWRx1rjMGXpnpUSFKT7vq8Tux1baHKWCA",
+                    "id": "pair_9e989b86c5004d36a6496bf1937e6d97"
+                },
+                {
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "id": "pair_a04b5719867b495faa6499cbb719b52d"
+                },
+                {
+                    "name": "platform",
+                    "value": "web",
+                    "id": "pair_9d1c8eb03b0942e6873a239f43c8007f"
+                },
+                {
+                    "name": "simulate",
+                    "value": "doctor",
+                    "id": "pair_b821533639ac4597a21fc15933107524"
+                }
+            ],
+            "authentication": {},
+            "metaSortKey": -1523971732175,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "_type": "request"
+        },
+        {
+            "_id": "req_25fce0a3801f47b5a64a7a09d2bc937d",
+            "parentId": "fld_588d0cb3d75e44c7b7bd73c24de108e9",
+            "modified": 1524336458285,
+            "created": 1524335906854,
+            "url": "localhost:8000/api/patient/schedule/task/2/",
+            "name": "Mark as seen by Doctor",
+            "description": "",
+            "method": "PUT",
+            "body": {
+                "mimeType": "application/json",
+                "text": "{\n\t\"seen\": true,\n\t\"doctor_notes\": \"Too bad\"\n}"
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "jwt",
+                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJyb2xlX2lkIjoyfQ.DDOxW0RHgpCdU6eJJqZZ-RIwFcC1KR2zziHKf9Z7g04",
+                    "id": "pair_4697461f889641c0a86713b09e146c73"
+                },
+                {
+                    "name": "platform",
+                    "value": "mobile",
+                    "id": "pair_5950608b187747248018217eb6a44cff"
+                },
+                {
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "id": "pair_dee6ca976c02462380359efd4047bc44"
+                },
+                {
+                    "name": "simulate",
+                    "value": "doctor",
+                    "id": "pair_8efcd4db8ffd467c82301786d853d994"
+                }
+            ],
+            "authentication": {},
+            "metaSortKey": -1523922346383,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "_type": "request"
+        }
+    ]
 }

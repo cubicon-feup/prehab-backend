@@ -100,14 +100,14 @@ class FullTaskViewTests(TestSuit):
                         },
                             {
                                 "task_id": 2,
-                            }
+                        }
                         ]},
                     {
                         "week_number": 2,
                         "tasks": [{
                             "times_per_week": 2
                         }]
-                    }]
+                }]
         }
         res = self.http_request('post', self.full_task_path_url, body)
         self.assertEqual(res.status_code, 400)
@@ -127,14 +127,14 @@ class FullTaskViewTests(TestSuit):
                         },
                             {
                                 "task_id": 2,
-                            }
+                        }
                         ]},
                     {
                         "week_number": 2,
                         "tasks": [{
                             "task_id": 2,
                         }]
-                    }]
+                }]
         }
         res = self.http_request('post', self.full_task_path_url, body)
         self.assertEqual(res.status_code, 400)
@@ -156,7 +156,7 @@ class FullTaskViewTests(TestSuit):
                             {
                                 "task_id": 2,
                                 "times_per_week": 1
-                            }
+                        }
                         ]},
                     {
                         "week_number": 2,
@@ -164,7 +164,7 @@ class FullTaskViewTests(TestSuit):
                             "task_id": 2,
                             "times_per_week": 2
                         }]
-                    }]
+                }]
         }
         res = self.http_request('post', self.full_task_path_url, body)
         self.assertEqual(res.status_code, 404)
@@ -195,7 +195,7 @@ class FullTaskViewTests(TestSuit):
                             {
                                 "task_id": 1,
                                 "times_per_week": 1
-                            }
+                        }
                         ]},
                     {
                         "week_number": 2,
@@ -203,7 +203,7 @@ class FullTaskViewTests(TestSuit):
                             "task_id": 1,
                             "times_per_week": 2
                         }]
-                    }]
+                }]
         }
         res = self.http_request('post', self.full_task_path_url, body)
         self.assertEqual(res.status_code, 201)

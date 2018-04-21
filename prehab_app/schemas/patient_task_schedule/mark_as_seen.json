@@ -1,0 +1,15 @@
+{
+    "type": "object",
+    "properties": {
+        "seen": {
+            "type": "boolean"
+        },
+        "doctor_notes": {
+            "type": "string"
+        }
+    },
+    "required": [
+        "seen",
+        "doctor_notes"
+    ]
+}

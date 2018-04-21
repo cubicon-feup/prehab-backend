@@ -5,7 +5,6 @@ from rest_framework import routers
 from prehab_app.views.Auth import AuthViewSet
 from prehab_app.views.Doctor import DoctorViewSet
 from prehab_app.views.FullTaskSchedule import FullTaskScheduleViewSet
-from prehab_app.views.PatientTaskInfo import PatientTaskInfoViewSet
 from prehab_app.views.Patient import PatientViewSet
 from prehab_app.views.PatientTaskSchedule import PatientTaskScheduleViewSet
 from prehab_app.views.Prehab import PrehabViewSet
@@ -15,6 +14,7 @@ from prehab_app.views.User import UserViewSet
 
 router = routers.DefaultRouter()
 
+router.register(r'patient/schedule/task', PatientTaskScheduleViewSet, 'crud-patient-task-schedule')
 router.register(r'task', TaskViewSet, 'crud-task')
 router.register(r'patient/schedule/task/info', PatientTaskInfoViewSet, 'crud-task-patient-task-info')
 router.register(r'patient', PatientViewSet, 'crud-patient')
@@ -27,7 +27,6 @@ router.register(r'schedule/task', TaskScheduleViewSet, 'crud-task-schedule')
 urlpatterns = [
     url(r'login/', AuthViewSet.as_view({'post': 'login'}), name='login'),
     url(r'logout/', AuthViewSet.as_view({'post': 'logout'}), name='logout'),
+    url(r'patient/schedule/task/done', PatientTaskScheduleViewSet.as_view({'put': 'mark_as_done'}), name='updateTaskSchedule'),
     path('', include(router.urls)),
-    url(r'patient/schedule/task/', PatientTaskScheduleViewSet.as_view({'post': 'update'}), name='updateTaskSchedule'),
-
 ]

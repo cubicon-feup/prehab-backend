@@ -61,11 +61,11 @@ class DoctorViewTests(TestSuit):
         self.assertEqual(res.status_code, 200)
 
     def test_update_doctor(self):
-        ##### Test Update
+        # Test Update
         res = self.http_request('put', self.doctor_path_url + '2', auth_user='patient')
         self.assertEqual(res.status_code, 405)
 
     def test_delete_doctor(self):
-        ##### Test Delete
+        # Test Delete
         res = self.http_request('delete', self.doctor_path_url + '2', auth_user='patient')
         self.assertEqual(res.status_code, 405)

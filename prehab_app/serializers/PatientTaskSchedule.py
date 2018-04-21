@@ -24,3 +24,10 @@ class PatientTaskScheduleSerializer(serializers.ModelSerializer):
     class Meta:
         model = PatientTaskSchedule
         fields = ('week_number', 'day_number', 'expected_repetitions', 'status', 'task')
+
+
+class SimplePatientTaskScheduleSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PatientTaskSchedule
+        fields = '__all__'
