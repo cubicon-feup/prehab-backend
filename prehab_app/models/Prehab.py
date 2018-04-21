@@ -1,6 +1,7 @@
 from django.db import models
 
-from prehab_app.models import Patient, Doctor
+from prehab_app.models.Patient import Patient
+from prehab_app.models.User import User
 from prehab_app.models.PrehabStatus import PrehabStatus
 
 
@@ -17,7 +18,7 @@ class Prehab(models.Model):
     surgery_date = models.DateField(blank=False, null=False)
     number_of_weeks = models.IntegerField(blank=False, null=False)
     status = models.ForeignKey(PrehabStatus, on_delete=models.CASCADE, db_column='status_id')
-    created_by = models.ForeignKey(Doctor, on_delete=models.CASCADE, db_column='created_by')
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, db_column='created_by')
 
     objects = PrehabQuerySet.as_manager()
 

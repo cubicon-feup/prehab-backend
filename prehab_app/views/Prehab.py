@@ -22,7 +22,27 @@ from prehab_app.serializers.Prehab import PrehabSerializer, FullPrehabSerializer
 class PrehabViewSet(GenericViewSet):
 
     def list(self, request):
-        return HTTP.response(405, '')
+        if 'active' in request.GET and request.GET.get('active'):
+            prehabs = Prehab.objects.filter(status__not_in=4)
+        else:
+            prehabs = Prehab.objects
+
+        # In case it's an Admin -> Retrieve ALL PREHABS info
+        if request.ROLE_ID == 1:
+            prehabs = prehabs.all()
+        # In case it's a Doctor -> Retrieve ALL plans created by him
+        elif request.ROLE_ID == 2:
+            prehabs = prehabs.filter(created_by=request.USER_ID).all()
+        # In case it's a Patient -> Retrieve his plan
+        elif request.ROLE_ID == 3:
+            prehabs = prehabs.filter(patient_id=request.USER_ID).all()
+        else:
+            raise HttpException(400, 'Some error occurred')
+
+        queryset = self.paginate_queryset(prehabs)
+        data = PrehabSerializer(queryset, many=True).data
+
+        return HTTP.response(200, '', data=data, paginator=self.paginator)
         # queryset = self.paginate_queryset(Task.objects.all())
         # data = PrehabViewSet(queryset, many=True).data
         #

@@ -1,22 +1,14 @@
 import datetime
 
-from django.db import transaction
 from rest_framework.viewsets import GenericViewSet
 
-from prehab.helpers.DataHelper import DataHelper
 from prehab.helpers.HttpException import HttpException
 from prehab.helpers.HttpResponseHandler import HTTP
 from prehab.helpers.SchemaValidator import SchemaValidator
 from prehab.permissions import Permission
-from prehab_app.models import TaskScheduleStatus, Task, PatientTaskSchedule
-from prehab_app.models.Doctor import Doctor
-from prehab_app.models.DoctorPatient import DoctorPatient
-from prehab_app.models.Patient import Patient
+from prehab_app.models import PatientTaskSchedule
 from prehab_app.models.PatientTaskScheduleStatus import PatientTaskScheduleStatus
 from prehab_app.models.Prehab import Prehab
-from prehab_app.models.PrehabStatus import PrehabStatus
-from prehab_app.models.TaskSchedule import TaskSchedule
-from prehab_app.serializers.Prehab import PrehabSerializer, FullPrehabSerializer
 
 
 class PatientTaskScheduleViewSet(GenericViewSet):
