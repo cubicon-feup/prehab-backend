@@ -6,15 +6,102 @@ from prehab.helpers.HttpException import HttpException
 from prehab.helpers.HttpResponseHandler import HTTP
 from prehab.helpers.SchemaValidator import SchemaValidator
 from prehab.permissions import Permission
-from prehab_app.models import PatientTaskSchedule
+from prehab_app.models.PatientTaskSchedule import PatientTaskSchedule
 from prehab_app.models.PatientTaskScheduleStatus import PatientTaskScheduleStatus
 from prehab_app.models.Prehab import Prehab
+from prehab_app.serializers.PatientTaskSchedule import PatientTaskScheduleSerializer, SimplePatientTaskScheduleSerializer
 
 
 class PatientTaskScheduleViewSet(GenericViewSet):
 
+    def list(self, request):
+        """
+        Query Parameters: patient_id
+        :param request:
+        :return:
+        """
+        try:
+            if 'patient_id' in request.GET and request.GET.get('patient_id'):
+                patient_task_schedule = PatientTaskSchedule.objects.filter(patient=request.GET['patient_id'])
+            else:
+                patient_task_schedule = PatientTaskSchedule.objects
+
+            # In case it's an Admin -> Retrieve ALL PREHABS info
+            if request.ROLE_ID == 1:
+                patient_task_schedule = patient_task_schedule.all()
+            # In case it's a Doctor -> Retrieve ALL plans created by him
+            elif request.ROLE_ID == 2:
+                patient_task_schedule = patient_task_schedule.filter(prehab__created_by_id=request.USER_ID).all()
+            # In case it's a Patient -> Retrieve his plan
+            elif request.ROLE_ID == 3:
+                patient_task_schedule = patient_task_schedule.filter(prehab__patient_id=request.USER_ID).all()
+            else:
+                raise HttpException(400, 'Some error occurred')
+
+            queryset = self.paginate_queryset(patient_task_schedule)
+            data = SimplePatientTaskScheduleSerializer(queryset, many=True).data
+
+        except HttpException as e:
+            return HTTP.response(e.http_code, e.http_detail)
+        except Exception as e:
+            return HTTP.response(400, 'Some error occurred')
+
+        return HTTP.response(200, '', data=data, paginator=self.paginator)
+
     @staticmethod
-    def update(request):
+    def retrieve(request, pk=None):
+        try:
+            patient_task_schedule = PatientTaskSchedule.objects.get(pk=pk)
+
+            # In case it's a Doctor -> check if he/she has permission
+            if request.ROLE_ID == 2 and request.USER_ID == patient_task_schedule.doctor.id:
+                raise HttpException(401, 'You don\t have permission to access this')
+            # In case it's a Patient -> check if it's own information
+            elif request.ROLE_ID == 3 and request.USER_ID == patient_task_schedule.patient.id:
+                raise HttpException(401, 'You don\t have permission to access this')
+
+            data = SimplePatientTaskScheduleSerializer(patient_task_schedule, many=False).data
+
+        except PatientTaskSchedule.DoesNotExist:
+            return HTTP.response(404, 'Patient with id {} does not exist'.format(str(pk)))
+        except HttpException as e:
+            return HTTP.response(e.http_code, e.http_detail)
+        except Exception as e:
+            return HTTP.response(400, 'Some error occurred')
+
+        return HTTP.response(200, '', data)
+
+    @staticmethod
+    def create(request):
+        return HTTP.response(405, '')
+
+    @staticmethod
+    def update(request, pk=None):
+        try:
+            # 1. Check schema
+            SchemaValidator.validate_obj_structure(request.data, 'patient_task_info/update.json')
+
+            patient_task_schedule = PatientTaskSchedule.objects.get(pk=pk)
+
+            # In case it's a Doctor -> check if he/she has permission
+            if request.ROLE_ID != 2 or request.ROLE_ID == 2 and request.USER_ID == patient_task_schedule.doctor.id:
+                raise HttpException(401, 'You don\t have permission to access this')
+
+            patient_task_schedule.seen_by_doctor = request.data['seen']
+            patient_task_schedule.doctor_notes = request.data['doctor_notes']
+            patient_task_schedule.save()
+
+        except PatientTaskSchedule.DoesNotExist:
+            return HTTP.response(404, 'Patient Task with id {} does not exist'.format(str(pk)))
+        except HttpException as e:
+            return HTTP.response(e.http_code, e.http_detail)
+        except Exception as e:
+            return HTTP.response(400, 'Some error occurred')
+
+        return HTTP.response(200, '')
+
+    @staticmethod
+    def mark_as_done(request):
         try:
             data = request.data
 
@@ -30,11 +117,13 @@ class PatientTaskScheduleViewSet(GenericViewSet):
             prehab = Prehab.objects.get(pk=data['prehab_id'])
 
             # 1.4. Check if patient is prehab's owner
-            if prehab.patient.id != request.USER_ID:
+            if prehab.patient.user.id != request.USER_ID:
                 raise HttpException(400, 'You can\'t update this Prehab Plan')
 
             # 1.5. Check if Patient Task Schedule is valid
             patient_task_schedule = PatientTaskSchedule.objects.get(pk=data['patient_task_schedule_id'])
+            if patient_task_schedule.status.id > 2:
+                raise HttpException(400, 'This activity was mark as done already.')
 
             # 1.6. Check if Patient Task Schedule is included in the given prehab
             if patient_task_schedule.prehab.id != prehab.id:
@@ -52,7 +141,11 @@ class PatientTaskScheduleViewSet(GenericViewSet):
             patient_task_schedule.finished_date = datetime.datetime.now()
             patient_task_schedule.save()
 
-            # 3. Report Difficulties - TODO
+            # 3. Report Difficulties
+            patient_task_schedule.was_difficult = data['difficulties']
+            patient_task_schedule.patient_notes = data['notes']
+            patient_task_schedule.seen_by_doctor = False
+            patient_task_schedule.save()
 
         except PatientTaskSchedule.DoesNotExist as e:
             return HTTP.response(400, 'Prehab with id of {} does not exist.'.format(request.data['prehab_id']))
@@ -63,4 +156,8 @@ class PatientTaskScheduleViewSet(GenericViewSet):
         except Exception as e:
             return HTTP.response(400, str(e))
 
-        return HTTP.response(201, '')
+        return HTTP.response(200, 'Updated With Success')
+
+    @staticmethod
+    def destroy(request, pk=None):
+        return HTTP.response(405, '')

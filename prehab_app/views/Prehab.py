@@ -54,7 +54,7 @@ class PrehabViewSet(GenericViewSet):
     def retrieve(request, pk=None):
         try:
             prehab = Prehab.objects.get(pk=pk)
-            if request.ROLE_ID != 1 and request.USER_ID not in (prehab.created_by.id.id, prehab.patient.id.id):
+            if request.ROLE_ID != 1 and request.USER_ID not in (prehab.created_by.user.id, prehab.patient.user.id):
                 raise HttpException(401, 'You don\'t have permissions to see this Prehab Plan')
 
         except Prehab.DoesNotExist:
@@ -95,7 +95,7 @@ class PrehabViewSet(GenericViewSet):
 
             # 1.5. Check if Task Schedule Id was created by this specific doctor or a community Task Schedule (created by an admin
             task_schedule = TaskSchedule.objects.get(pk=data['task_schedule_id'])
-            if not task_schedule.doctor_can_use(doctor.id.id):
+            if not task_schedule.doctor_can_use(doctor.user.id):
                 raise HttpException(400, 'You are not the owner of this task schedule')
 
             # 2. Transform General Task Schedule to a Custom Patient Task Schedule
