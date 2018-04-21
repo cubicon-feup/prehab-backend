@@ -29,7 +29,7 @@ class TaskScheduleViewSet(GenericViewSet):
 
     @staticmethod
     def retrieve(request, pk=None):
-        queryset = TaskSchedule.objects.filter(id=pk)
+        queryset = TaskSchedule.objects.filter(pk=pk)
         if len(queryset) == 0:
             return HTTP.response(404, '')
 

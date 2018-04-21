@@ -24,7 +24,7 @@ class PatientViewSet(GenericViewSet):
             # In case it's a Doctor -> Retrieve ALL his/her patients info
             elif request.ROLE_ID == 2:
                 patients_ids = list(DoctorPatient.objects.filter(doctor_id=request.USER_ID).values_list('patient_id', flat=True))
-                queryset = self.paginate_queryset(Patient.objects.filter(id__in=patients_ids))
+                queryset = self.paginate_queryset(Patient.objects.filter(pk__in=patients_ids))
             # In case it's a Patient -> Retrieve info about that specific patient
             elif request.ROLE_ID == 3:
                 return PatientViewSet.retrieve(request, request.USER_ID)

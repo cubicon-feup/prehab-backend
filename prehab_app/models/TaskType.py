@@ -4,7 +4,7 @@ from django.db import models
 class TaskTypeQuerySet(models.QuerySet):
 
     def task_type(self, task_type_id):
-        return self.filter(id=task_type_id)
+        return self.filter(pk=task_type_id)
 
 
 class TaskType(models.Model):
