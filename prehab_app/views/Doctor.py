@@ -16,11 +16,15 @@ class DoctorViewSet(GenericViewSet):
 
     def list(self, request):
         try:
-            # In case it's an Admin and Doctors(need confirmation[security reasons]) -> Retrieve ALL doctors info
-            if request.ROLE_ID == 1 and request.ROLE_ID == 2:
-                queryset = self.paginate_queryset(Doctor.objects.all())
+            # In case it's an Admin -> Retrieve ALL doctors info
+            if request.ROLE_ID == 1 or request.ROLE_ID == 2:
+                doctors = self.paginate_queryset(Doctor.objects.all())
+
             else:
                 raise HttpException(400, 'Some error occurred')
+
+            queryset = self.paginate_queryset(doctors)
+
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
@@ -33,11 +37,11 @@ class DoctorViewSet(GenericViewSet):
     @staticmethod
     def retrieve(request, pk=None):
         try:
-            doctor = Doctor.objects.get(id=pk)
             # In case it's not Admin -> fails
-            if request.ROLE_ID != 1:
+            if request.ROLE_ID != 1 or request.USER_ID != pk:
                 raise HttpException(401, 'You don\t have permission to access this Doctor Information')
 
+            doctor = Doctor.objects.get(id=pk)
             data = DoctorSerializer(doctor, many=False).data
 
         except Doctor.DoesNotExist:

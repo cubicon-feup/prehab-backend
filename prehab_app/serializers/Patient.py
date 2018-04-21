@@ -1,6 +1,22 @@
 from rest_framework import serializers
 
 from prehab_app.models.Patient import Patient
+from prehab_app.serializers.Prehab import PrehabSerializer
+
+
+class PatientWithPrehabSerializer(serializers.ModelSerializer):
+    prehab_patient = PrehabSerializer(many=True, read_only=True)
+
+    def to_representation(self, obj):
+        data = super(PatientWithPrehabSerializer, self).to_representation(obj)  # the original data
+        data['prehab'] = [prehab for prehab in data['prehab_patient'] if prehab['status'] < 4]
+        data['prehab'] = data['prehab'][0] if len(data['prehab']) > 0 else {}
+        del data['prehab_patient']
+        return data
+
+    class Meta:
+        model = Patient
+        fields = '__all__'
 
 
 class PatientSerializer(serializers.ModelSerializer):

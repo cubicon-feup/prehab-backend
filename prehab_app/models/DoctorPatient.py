@@ -12,8 +12,8 @@ class DoctorPatientQuerySet(models.QuerySet):
 
 class DoctorPatient(models.Model):
     id = models.AutoField(primary_key=True)
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, db_column='doctor_id')
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, db_column='patient_id')
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, db_column='doctor_id', related_name='doctor')
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, db_column='patient_id', related_name='patient')
 
     objects = DoctorPatientQuerySet.as_manager()
 
