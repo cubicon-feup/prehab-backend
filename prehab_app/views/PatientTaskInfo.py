@@ -3,13 +3,12 @@ from rest_framework.viewsets import GenericViewSet
 from prehab.helpers.HttpException import HttpException
 from prehab.helpers.HttpResponseHandler import HTTP
 from prehab.helpers.SchemaValidator import SchemaValidator
-from prehab_app.models.Notification import Notification
 from prehab_app.models.Patient import Patient
-from prehab_app.serializers.Notification import NotificationSerializer
-from prehab_app.serializers.Patient import PatientSerializer
+from prehab_app.models.PatientTaskInfo import PatientTaskInfo
+from prehab_app.serializers.PatientTaskInfo import PatientTaskInfoSerializer
 
 
-class NotificationViewSet(GenericViewSet):
+class PatientTaskInfoViewSet(GenericViewSet):
 
     def list(self, request):
         """
@@ -19,19 +18,19 @@ class NotificationViewSet(GenericViewSet):
         """
         try:
             if 'patient_id' in request.GET and request.GET.get('patient_id'):
-                notifications = Notification.objects.filter(patient=request.GET['patient_id'])
+                patient_task_info = PatientTaskInfo.objects.filter(patient=request.GET['patient_id'])
             else:
-                notifications = Notification.objects
+                patient_task_info = PatientTaskInfo.objects
 
             # In case it's an Admin -> Retrieve ALL PREHABS info
             if request.ROLE_ID == 1:
-                notifications = notifications.all()
+                patient_task_info = patient_task_info.all()
             # In case it's a Doctor -> Retrieve ALL plans created by him
             elif request.ROLE_ID == 2:
-                notifications = notifications.filter(created_by=request.USER_ID).all()
+                patient_task_info = patient_task_info.filter(doctor=request.USER_ID).all()
             # In case it's a Patient -> Retrieve his plan
             elif request.ROLE_ID == 3:
-                notifications = notifications.filter(patient=request.USER_ID).all()
+                patient_task_info = patient_task_info.filter(patient=request.USER_ID).all()
             else:
                 raise HttpException(400, 'Some error occurred')
 
@@ -40,24 +39,24 @@ class NotificationViewSet(GenericViewSet):
         except Exception as e:
             return HTTP.response(400, 'Some error occurred')
 
-        queryset = self.paginate_queryset(notifications)
-        data = NotificationSerializer(queryset, many=True).data
+        queryset = self.paginate_queryset(patient_task_info)
+        data = PatientTaskInfoSerializer(queryset, many=True).data
 
         return HTTP.response(200, '', data=data, paginator=self.paginator)
 
     @staticmethod
     def retrieve(request, pk=None):
         try:
-            notification = Notification.objects.get(pk=pk)
+            patient_task_info = PatientTaskInfo.objects.get(pk=pk)
 
             # In case it's a Doctor -> check if he/she has permission
-            if request.ROLE_ID == 2 and request.USER_ID == notification.doctor.id:
+            if request.ROLE_ID == 2 and request.USER_ID == patient_task_info.doctor.id:
                 raise HttpException(401, 'You don\t have permission to access this')
             # In case it's a Patient -> check if it's own information
-            elif request.ROLE_ID == 3 and request.USER_ID == notification.patient.id:
+            elif request.ROLE_ID == 3 and request.USER_ID == patient_task_info.patient.id:
                 raise HttpException(401, 'You don\t have permission to access this')
 
-            data = PatientSerializer(notification, many=False).data
+            data = PatientTaskInfoSerializer(patient_task_info, many=False).data
 
         except Patient.DoesNotExist:
             return HTTP.response(404, 'Patient with id {} does not exist'.format(str(pk)))
@@ -76,20 +75,20 @@ class NotificationViewSet(GenericViewSet):
     def update(request, pk=None):
         try:
             # 1. Check schema
-            SchemaValidator.validate_obj_structure(request.data, 'notification/update.json')
+            SchemaValidator.validate_obj_structure(request.data, 'patient_task_info/update.json')
 
-            notification = Notification.objects.get(pk=pk)
+            patient_task_info = PatientTaskInfo.objects.get(pk=pk)
 
             # In case it's a Doctor -> check if he/she has permission
-            if request.ROLE_ID != 2 or request.ROLE_ID == 2 and request.USER_ID == notification.doctor.id:
+            if request.ROLE_ID != 2 or request.ROLE_ID == 2 and request.USER_ID == patient_task_info.doctor.id:
                 raise HttpException(401, 'You don\t have permission to access this')
 
-            notification.seen = request.data['seen']
-            notification.doctor_notes = request.data['doctor_notes']
-            notification.save()
+            patient_task_info.seen_by_doctor = request.data['seen']
+            patient_task_info.doctor_notes = request.data['doctor_notes']
+            patient_task_info.save()
 
-        except Patient.DoesNotExist:
-            return HTTP.response(404, 'Patient with id {} does not exist'.format(str(pk)))
+        except PatientTaskInfo.DoesNotExist:
+            return HTTP.response(404, 'Patient Task with id {} does not exist'.format(str(pk)))
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
