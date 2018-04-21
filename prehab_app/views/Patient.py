@@ -104,10 +104,12 @@ class PatientViewSet(GenericViewSet):
             new_patient.save()
 
             # 4. Create Doctor Patient Association
-            DoctorPatient(
+            relation = DoctorPatient(
                 patient=new_patient,
                 doctor=doctor
             )
+
+            relation.save()
 
             # 5. Associate Constraints
             for constraint_id in data['constraints']:
