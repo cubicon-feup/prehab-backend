@@ -16,6 +16,7 @@ router = routers.DefaultRouter()
 
 router.register(r'patient/schedule/task', PatientTaskScheduleViewSet, 'crud-patient-task-schedule')
 router.register(r'task', TaskViewSet, 'crud-task')
+router.register(r'patient/schedule/task/info', PatientTaskInfoViewSet, 'crud-task-patient-task-info')
 router.register(r'patient', PatientViewSet, 'crud-patient')
 router.register(r'doctor', DoctorViewSet, 'crud-doctor')
 router.register(r'user', UserViewSet, 'crud-user')
@@ -28,5 +29,4 @@ urlpatterns = [
     url(r'logout/', AuthViewSet.as_view({'post': 'logout'}), name='logout'),
     url(r'patient/schedule/task/done', PatientTaskScheduleViewSet.as_view({'put': 'mark_as_done'}), name='updateTaskSchedule'),
     path('', include(router.urls)),
-
 ]
