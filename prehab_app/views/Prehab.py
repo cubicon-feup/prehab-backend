@@ -53,7 +53,7 @@ class PrehabViewSet(GenericViewSet):
     @staticmethod
     def retrieve(request, pk=None):
         try:
-            prehab = Prehab.objects.get(id=pk)
+            prehab = Prehab.objects.get(pk=pk)
             if request.ROLE_ID != 1 and request.USER_ID not in (prehab.created_by.id.id, prehab.patient.id.id):
                 raise HttpException(401, 'You don\'t have permissions to see this Prehab Plan')
 
@@ -82,8 +82,8 @@ class PrehabViewSet(GenericViewSet):
 
             # 1.3. Check if patient_id is one of this doctor patients
             patient_id = data['patient_id']
-            patient = Patient.objects.get(id=patient_id)
-            doctor = Doctor.objects.get(id=request.USER_ID)
+            patient = Patient.objects.get(pk=patient_id)
+            doctor = Doctor.objects.get(pk=request.USER_ID)
             if not DoctorPatient.objects.is_a_match(request.USER_ID, patient_id):
                 raise HttpException(400, 'Patient {} is not from Doctor {}.'.format(patient_id, request.USER_ID))
 
@@ -94,7 +94,7 @@ class PrehabViewSet(GenericViewSet):
                 raise HttpException(400, 'Surgery Date must be after prehab init.')
 
             # 1.5. Check if Task Schedule Id was created by this specific doctor or a community Task Schedule (created by an admin
-            task_schedule = TaskSchedule.objects.get(id=data['task_schedule_id'])
+            task_schedule = TaskSchedule.objects.get(pk=data['task_schedule_id'])
             if not task_schedule.doctor_can_use(doctor.id.id):
                 raise HttpException(400, 'You are not the owner of this task schedule')
 

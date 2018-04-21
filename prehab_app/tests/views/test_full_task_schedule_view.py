@@ -171,7 +171,7 @@ class FullTaskViewTests(TestSuit):
         self.assertEqual(res.json()['details'], 'Task with id 2 does not exist.')
 
         # Test to pass
-        task_type = TaskType.objects.get(id=1)
+        task_type = TaskType.objects.get(pk=1)
         task = Task(
             title="taskToPass",
             description="This task is for testing only",

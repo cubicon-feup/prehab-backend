@@ -19,13 +19,13 @@ class TestSuit(TestCase):
     def setUp(self):
         self.client = Client()
 
-        self.admin_role = Role.objects.get(id=1)
-        self.doctor_role = Role.objects.get(id=2)
-        self.patient_role = Role.objects.get(id=3)
+        self.admin_role = Role.objects.get(pk=1)
+        self.doctor_role = Role.objects.get(pk=2)
+        self.patient_role = Role.objects.get(pk=3)
 
-        self.admin_user = User.objects.get(id=1)
-        self.doctor_user = User.objects.get(id=2)
-        self.patient_user = User.objects.get(id=3)
+        self.admin_user = User.objects.get(pk=1)
+        self.doctor_user = User.objects.get(pk=2)
+        self.patient_user = User.objects.get(pk=3)
 
         self.admin_jwt = self.get_jwt_from_login('admin', 'admin', platform='web')
         self.doctor_jwt = self.get_jwt_from_login('doctor', 'doctor', platform='web')

@@ -43,7 +43,7 @@ class PatientViewSet(GenericViewSet):
     @staticmethod
     def retrieve(request, pk=None):
         try:
-            patient = Patient.objects.get(id=pk)
+            patient = Patient.objects.get(pk=pk)
 
             # In case it's a Doctor -> check if he/she has permission
             if request.ROLE_ID == 2 and request.USER_ID not in patient.which_doctor():
@@ -90,11 +90,11 @@ class PatientViewSet(GenericViewSet):
             patient_tag = "HSJ{}{}".format(datetime.now().year, str(new_user.id).zfill(4))
             new_user.username = patient_tag
             new_user.save()
-            doctor = Doctor.objects.get(id=request.USER_ID)
+            doctor = Doctor.objects.get(pk=request.USER_ID)
 
             # 3. Add new Patient
             new_patient = Patient(
-                id=new_user,
+                user=new_user,
                 patient_tag=patient_tag,
                 age=data['age'],
                 height=data['height'],
@@ -113,7 +113,7 @@ class PatientViewSet(GenericViewSet):
 
             # 5. Associate Constraints
             for constraint_id in data['constraints']:
-                constraint_type = ConstraintType.objects.get(id=constraint_id)
+                constraint_type = ConstraintType.objects.get(pk=constraint_id)
                 PatientConstraintType(
                     patient=new_patient,
                     constraint_type=constraint_type

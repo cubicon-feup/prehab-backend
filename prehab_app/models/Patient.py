@@ -9,11 +9,7 @@ class PatientQuerySet(models.QuerySet):
 
 class Patient(models.Model):
     # id = models.OneToOneField(User, on_delete=models.CASCADE, db_column='id', primary_key=True)
-    id = models.OneToOneField(
-        User,
-        on_delete=models.CASCADE,
-        primary_key=True,
-    )
+    user = models.OneToOneField(User, on_delete=models.CASCADE, db_column='id', primary_key=True)
     patient_tag = models.CharField(max_length=16, blank=False, null=False)
     age = models.IntegerField(blank=False, null=False)
     height = models.FloatField(blank=False, null=False)
@@ -26,7 +22,7 @@ class Patient(models.Model):
         # app_label = 'Patient'
         # managed = False
         db_table = 'patient'
-        ordering = ['-id']
+        ordering = ['-user_id']
 
     def __str__(self):
         return self.patient_tag

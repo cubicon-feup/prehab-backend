@@ -27,14 +27,14 @@ class PatientTaskScheduleViewSet(GenericViewSet):
             SchemaValidator.validate_obj_structure(data, 'patient_task_schedule/update.json')
 
             # 1.3. Check if prehab is valid
-            prehab = Prehab.objects.get(id=data['prehab_id'])
+            prehab = Prehab.objects.get(pk=data['prehab_id'])
 
             # 1.4. Check if patient is prehab's owner
             if prehab.patient.id != request.USER_ID:
                 raise HttpException(400, 'You can\'t update this Prehab Plan')
 
             # 1.5. Check if Patient Task Schedule is valid
-            patient_task_schedule = PatientTaskSchedule.objects.get(id=data['patient_task_schedule_id'])
+            patient_task_schedule = PatientTaskSchedule.objects.get(pk=data['patient_task_schedule_id'])
 
             # 1.6. Check if Patient Task Schedule is included in the given prehab
             if patient_task_schedule.prehab.id != prehab.id:
@@ -43,11 +43,11 @@ class PatientTaskScheduleViewSet(GenericViewSet):
             # 2. Update This specific Task in PatientTaskSchedule
             # 2.1. Task completed with success
             if data['completed']:
-                patient_task_schedule.status = PatientTaskScheduleStatus.objects.get(id=3)
+                patient_task_schedule.status = PatientTaskScheduleStatus.objects.get(pk=3)
 
             # 2.2. Task not completed
             else:
-                patient_task_schedule.status = PatientTaskScheduleStatus.objects.get(id=4)
+                patient_task_schedule.status = PatientTaskScheduleStatus.objects.get(pk=4)
 
             patient_task_schedule.finished_date = datetime.datetime.now()
             patient_task_schedule.save()

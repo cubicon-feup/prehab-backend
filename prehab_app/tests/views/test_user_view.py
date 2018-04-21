@@ -11,7 +11,7 @@ class UserViewTests(TestSuit):
             email="user@email.pt",
             phone="123456789",
             username="username",
-            role=Role.objects.get(id=1),
+            role=Role.objects.get(pk=1),
             activation_code='12345',
             is_active=False
         )
@@ -53,7 +53,7 @@ class UserViewTests(TestSuit):
         }
         self.assertIsNone(user.password)
         res = self.http_request('post', self.url_path + 'activate/', body)
-        user = User.objects.get(id=user.id)
+        user = User.objects.get(pk=user.id)
         self.assertEqual(res.status_code, 200)
         self.assertTrue(user.is_active, True)
         self.assertTrue(user.password, 'password')

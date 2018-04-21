@@ -48,7 +48,7 @@ class DoctorViewTests(TestSuit):
         res = self.http_request('post', self.doctor_path_url, body)
         self.assertEqual(res.status_code, 200)
 
-        #####Test get
+        # Test get
 
     def test_retrieve_doctor(self):
         # Fail with permission

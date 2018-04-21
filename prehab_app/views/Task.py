@@ -20,7 +20,7 @@ class TaskViewSet(GenericViewSet):
     @staticmethod
     def retrieve(request, pk=None):
         try:
-            task = Task.objects.get(id=pk)
+            task = Task.objects.get(pk=pk)
 
         except Task.DoesNotExist:
             return HTTP.response(404, 'Task with id {} does not exist'.format(str(pk)))

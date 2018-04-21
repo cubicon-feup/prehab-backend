@@ -48,7 +48,7 @@ class NotificationViewSet(GenericViewSet):
     @staticmethod
     def retrieve(request, pk=None):
         try:
-            notification = Notification.objects.get(id=pk)
+            notification = Notification.objects.get(pk=pk)
 
             # In case it's a Doctor -> check if he/she has permission
             if request.ROLE_ID == 2 and request.USER_ID == notification.doctor.id:
@@ -78,7 +78,7 @@ class NotificationViewSet(GenericViewSet):
             # 1. Check schema
             SchemaValidator.validate_obj_structure(request.data, 'notification/update.json')
 
-            notification = Notification.objects.get(id=pk)
+            notification = Notification.objects.get(pk=pk)
 
             # In case it's a Doctor -> check if he/she has permission
             if request.ROLE_ID != 2 or request.ROLE_ID == 2 and request.USER_ID == notification.doctor.id:

@@ -72,7 +72,7 @@ class DoctorViewSet(GenericViewSet):
 
             # 3 Create new Doctor
             doctor = Doctor(
-                id=new_user,
+                user=new_user,
                 department=request.data['department'] if 'department' in request.data else None
             )
             doctor.save()

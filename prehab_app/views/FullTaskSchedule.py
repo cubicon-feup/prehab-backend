@@ -23,7 +23,7 @@ class FullTaskScheduleViewSet(GenericViewSet):
                 raise HttpException(401)
 
             # Check if Task Schedule exists and if it's the owner requesting it
-            task_schedule = TaskSchedule.objects.get(id=pk)
+            task_schedule = TaskSchedule.objects.get(pk=pk)
 
             if request.ROLE_ID == 2 and not task_schedule.objects.created_by != request.USER_ID:
                 raise HttpException(401, '')
@@ -55,7 +55,7 @@ class FullTaskScheduleViewSet(GenericViewSet):
                 task_schedule = TaskSchedule(
                     title=request.data['title'],
                     number_of_weeks=request.data['number_of_weeks'],
-                    created_by=User.objects.get(id=request.USER_ID),
+                    created_by=User.objects.get(pk=request.USER_ID),
                     is_active=True
                 )
 
@@ -69,7 +69,7 @@ class FullTaskScheduleViewSet(GenericViewSet):
 
                     for week_task in week['tasks']:
                         try:
-                            task = Task.objects.get(id=week_task['task_id'])
+                            task = Task.objects.get(pk=week_task['task_id'])
                         except Task.DoesNotExist:
                             raise HttpException(404, 'Task with id {} does not exist.'.format(str(week_task['task_id'])))
 
