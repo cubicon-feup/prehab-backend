@@ -8,7 +8,7 @@ class DoctorQuerySet(models.QuerySet):
 
 
 class Doctor(models.Model):
-    id = models.OneToOneField(User, on_delete=models.CASCADE, db_column='id', primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, db_column='id', primary_key=True)
     department = models.CharField(max_length=64, blank=False, null=True)
     # patients = models.ManyToManyField(Patient)
 
@@ -18,4 +18,4 @@ class Doctor(models.Model):
         # app_label = 'Doctor'
         # managed = False
         db_table = 'doctor'
-        ordering = ['-id']
+        ordering = ['-user_id']

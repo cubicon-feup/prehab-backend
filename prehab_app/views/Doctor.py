@@ -9,20 +9,18 @@ from prehab.helpers.SchemaValidator import SchemaValidator
 from prehab_app.models import Role
 from prehab_app.models.Doctor import Doctor
 from prehab_app.models.User import User
-from prehab_app.serializers.Doctor import DoctorSerializer
+from prehab_app.serializers.Doctor import DoctorSerializer, FullDoctorSerializer
 
 
 class DoctorViewSet(GenericViewSet):
 
     def list(self, request):
         try:
-            # In case it's an Admin -> Retrieve ALL doctors info
-            if request.ROLE_ID == 1 or request.ROLE_ID == 2:
-                doctors = self.paginate_queryset(Doctor.objects.all())
-
-            else:
+            # In case it's a patient -> don't allow it
+            if request.ROLE_ID == 3:
                 raise HttpException(400, 'Some error occurred')
 
+            doctors = self.paginate_queryset(Doctor.objects.all())
             queryset = self.paginate_queryset(doctors)
 
         except HttpException as e:
@@ -38,11 +36,11 @@ class DoctorViewSet(GenericViewSet):
     def retrieve(request, pk=None):
         try:
             # In case it's not Admin -> fails
-            if request.ROLE_ID != 1 or request.USER_ID != pk:
+            if request.ROLE_ID != 1 and request.USER_ID != pk:
                 raise HttpException(401, 'You don\t have permission to access this Doctor Information')
 
-            doctor = Doctor.objects.get(id=pk)
-            data = DoctorSerializer(doctor, many=False).data
+            doctor = Doctor.objects.get(user_id=pk)
+            data = FullDoctorSerializer(doctor, many=False).data
 
         except Doctor.DoesNotExist:
             return HTTP.response(404, 'Doctor with id {} does not exist'.format(str(pk)))

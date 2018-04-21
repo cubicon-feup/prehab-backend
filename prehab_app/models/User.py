@@ -15,7 +15,7 @@ class User(models.Model):
     phone = models.CharField(max_length=64, blank=False, null=True)
     username = models.CharField(max_length=64, blank=False, null=False)
     password = models.CharField(max_length=64, blank=False, null=True)
-    role = models.ForeignKey(Role, on_delete=models.CASCADE, db_column='role_id')
+    role = models.ForeignKey(Role, on_delete=models.CASCADE, db_column='role_id', related_name='role')
     activation_code = models.CharField(max_length=8, blank=False, null=False)
     is_active = models.BooleanField(blank=False, null=False, default=False)
 
