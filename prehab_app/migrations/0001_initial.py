@@ -43,7 +43,7 @@ class Migration(migrations.Migration):
                 ('doctor_notes', models.CharField(max_length=256, null=True)),
             ],
             options={
-                'db_table': 'notification',
+                'db_table': 'patient_task_info',
                 'ordering': ['-id'],
             },
         ),
@@ -288,12 +288,12 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(db_column='patient_id', on_delete=django.db.models.deletion.CASCADE, to='prehab_app.Patient'),
         ),
         migrations.AddField(
-            model_name='notification',
+            model_name='patient_task_info',
             name='doctor',
             field=models.ForeignKey(db_column='doctor_id', on_delete=django.db.models.deletion.CASCADE, to='prehab_app.Doctor'),
         ),
         migrations.AddField(
-            model_name='notification',
+            model_name='patient_task_info',
             name='patient',
             field=models.ForeignKey(db_column='patient_id', on_delete=django.db.models.deletion.CASCADE, to='prehab_app.Patient'),
         ),
