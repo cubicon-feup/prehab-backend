@@ -9,7 +9,7 @@ from prehab_app.serializers.Notification import NotificationSerializer
 from prehab_app.serializers.Patient import PatientSerializer
 
 
-class PatientViewSet(GenericViewSet):
+class NotificationViewSet(GenericViewSet):
 
     def list(self, request):
         """
