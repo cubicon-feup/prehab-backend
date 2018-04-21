@@ -1,6 +1,6 @@
 # ENVIRONMENT = 'local'
-ENVIRONMENT = 'development'
-# ENVIRONMENT = 'production'
+# ENVIRONMENT = 'development'
+ENVIRONMENT = 'production'
 
 SETTINGS_MODULE = 'prehab.settings.development'
 
