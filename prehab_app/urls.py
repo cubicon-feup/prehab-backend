@@ -26,7 +26,7 @@ router.register(r'schedule/task', TaskScheduleViewSet, 'crud-task-schedule')
 urlpatterns = [
     url(r'login/', AuthViewSet.as_view({'post': 'login'}), name='login'),
     url(r'logout/', AuthViewSet.as_view({'post': 'logout'}), name='logout'),
-    path('', include(router.urls)),
     url(r'patient/schedule/task/done', PatientTaskScheduleViewSet.as_view({'put': 'mark_as_done'}), name='updateTaskSchedule'),
+    path('', include(router.urls)),
 
 ]

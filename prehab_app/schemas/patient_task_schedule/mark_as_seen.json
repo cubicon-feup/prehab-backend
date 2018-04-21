@@ -2,14 +2,10 @@
     "type": "object",
     "properties": {
         "seen": {
-            "type":
-                "boolean"
-
+            "type": "boolean"
         },
         "doctor_notes": {
-            "type":
-                "string"
-
+            "type": "string"
         }
     },
     "required": [

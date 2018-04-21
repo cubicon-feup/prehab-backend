@@ -54,11 +54,11 @@ class PatientTaskScheduleViewSet(GenericViewSet):
             patient_task_schedule = PatientTaskSchedule.objects.get(pk=pk)
 
             # In case it's a Doctor -> check if he/she has permission
-            if request.ROLE_ID == 2 and request.USER_ID == patient_task_schedule.doctor.id:
-                raise HttpException(401, 'You don\t have permission to access this')
+            if request.ROLE_ID == 2 and request.USER_ID != patient_task_schedule.prehab.created_by.user.id:
+                raise HttpException(401, 'You don\'t have permission to access this')
             # In case it's a Patient -> check if it's own information
-            elif request.ROLE_ID == 3 and request.USER_ID == patient_task_schedule.patient.id:
-                raise HttpException(401, 'You don\t have permission to access this')
+            elif request.ROLE_ID == 3 and request.USER_ID != patient_task_schedule.prehab.patient.user.id:
+                raise HttpException(401, 'You don\'t have permission to access this')
 
             data = SimplePatientTaskScheduleSerializer(patient_task_schedule, many=False).data
 
@@ -79,12 +79,12 @@ class PatientTaskScheduleViewSet(GenericViewSet):
     def update(request, pk=None):
         try:
             # 1. Check schema
-            SchemaValidator.validate_obj_structure(request.data, 'patient_task_info/update.json')
+            SchemaValidator.validate_obj_structure(request.data, 'patient_task_schedule/mark_as_seen.json')
 
             patient_task_schedule = PatientTaskSchedule.objects.get(pk=pk)
 
             # In case it's a Doctor -> check if he/she has permission
-            if request.ROLE_ID != 2 or request.ROLE_ID == 2 and request.USER_ID == patient_task_schedule.doctor.id:
+            if request.ROLE_ID != 2 or request.ROLE_ID == 2 and request.USER_ID != patient_task_schedule.prehab.created_by.user.id:
                 raise HttpException(401, 'You don\t have permission to access this')
 
             patient_task_schedule.seen_by_doctor = request.data['seen']
@@ -111,7 +111,7 @@ class PatientTaskScheduleViewSet(GenericViewSet):
                 raise HttpException(401)
 
             # 1.2. Check schema
-            SchemaValidator.validate_obj_structure(data, 'patient_task_schedule/update.json')
+            SchemaValidator.validate_obj_structure(data, 'patient_task_schedule/mark_as_done.json')
 
             # 1.3. Check if prehab is valid
             prehab = Prehab.objects.get(pk=data['prehab_id'])
