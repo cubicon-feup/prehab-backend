@@ -5,12 +5,10 @@ from .Patient import Patient
 from .PatientConstraintType import PatientConstraintType
 from .PatientTaskSchedule import PatientTaskSchedule
 from .Prehab import Prehab
-from .PrehabStatus import PrehabStatus
 from .Role import Role
 from .WeekTaskSchedule import WeekTaskSchedule
 from .Task import Task
 from .TaskSchedule import TaskSchedule
-from .TaskScheduleStatus import TaskScheduleStatus
 from .User import User
 
 __all__ = [
@@ -21,11 +19,9 @@ __all__ = [
     'PatientConstraintType',
     'PatientTaskSchedule',
     'Prehab',
-    'PrehabStatus',
     'Role',
     'WeekTaskSchedule',
     'Task',
     'TaskSchedule',
-    'TaskScheduleStatus',
     'User'
 ]

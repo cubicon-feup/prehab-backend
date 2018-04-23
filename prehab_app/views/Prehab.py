@@ -8,13 +8,11 @@ from prehab.helpers.HttpException import HttpException
 from prehab.helpers.HttpResponseHandler import HTTP
 from prehab.helpers.SchemaValidator import SchemaValidator
 from prehab.permissions import Permission
-from prehab_app.models import TaskScheduleStatus, Task, PatientTaskSchedule
+from prehab_app.models import PatientTaskSchedule
 from prehab_app.models.Doctor import Doctor
 from prehab_app.models.DoctorPatient import DoctorPatient
 from prehab_app.models.Patient import Patient
-from prehab_app.models.PatientTaskScheduleStatus import PatientTaskScheduleStatus
 from prehab_app.models.Prehab import Prehab
-from prehab_app.models.PrehabStatus import PrehabStatus
 from prehab_app.models.TaskSchedule import TaskSchedule
 from prehab_app.serializers.Prehab import PrehabSerializer, FullPrehabSerializer
 
@@ -110,7 +108,7 @@ class PrehabViewSet(GenericViewSet):
                     actual_end_date=None,
                     surgery_date=surgery_date,
                     number_of_weeks=task_schedule.number_of_weeks,
-                    status=PrehabStatus.objects.pending(),
+                    status=Prehab.PENDING,
                     created_by=doctor
                 )
                 prehab.save()
@@ -125,7 +123,7 @@ class PrehabViewSet(GenericViewSet):
                         task=row['task'],
                         expected_repetitions=1,  # row['repetitions'],
                         actual_repetitions=None,
-                        status=PatientTaskScheduleStatus.objects.pending()
+                        status=PatientTaskSchedule.PENDING
                     )
                     patient_task_schedule.save()
 

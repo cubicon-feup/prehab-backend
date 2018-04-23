@@ -1,6 +1,9 @@
 {
     "type": "object",
     "properties": {
+        "patient_task_schedule_id": {
+            "type": "integer"
+        },
         "seen": {
             "type": "boolean"
         },
@@ -9,6 +12,7 @@
         }
     },
     "required": [
+        "patient_task_schedule_id",
         "seen",
         "doctor_notes"
     ]

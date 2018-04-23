@@ -1,6 +1,5 @@
 from django.db import models
 
-from prehab_app.models.PatientTaskScheduleStatus import PatientTaskScheduleStatus
 from prehab_app.models.Prehab import Prehab
 from prehab_app.models.Task import Task
 
@@ -10,6 +9,18 @@ class PatientTaskScheduleQuerySet(models.QuerySet):
 
 
 class PatientTaskSchedule(models.Model):
+    PENDING = 1
+    ONGOING = 2
+    COMPLETED = 3
+    NOT_COMPLETED = 4
+
+    Status = (
+        (PENDING, 'Pending'),
+        (ONGOING, 'Ongoing'),
+        (COMPLETED, 'Completed'),
+        (NOT_COMPLETED, 'Not Completed'),
+    )
+
     id = models.AutoField(primary_key=True)
     prehab = models.ForeignKey(Prehab, on_delete=models.CASCADE, db_column='prehab_id', related_name='patient_task_schedule')
     week_number = models.IntegerField(blank=False, null=False)
@@ -17,7 +28,7 @@ class PatientTaskSchedule(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE, db_column='task_id', related_name='patient_task')
     expected_repetitions = models.IntegerField(blank=False, null=True)
     actual_repetitions = models.IntegerField(blank=False, null=True)
-    status = models.ForeignKey(PatientTaskScheduleStatus, on_delete=models.CASCADE, db_column='status_id')
+    status = models.IntegerField(choices=Status, default=PENDING)
     finished_date = models.DateField(blank=False, null=True, default=None, db_column='finished_date')
 
     was_difficult = models.BooleanField(blank=False, null=False, default=False)

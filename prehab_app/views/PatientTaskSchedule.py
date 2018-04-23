@@ -7,9 +7,8 @@ from prehab.helpers.HttpResponseHandler import HTTP
 from prehab.helpers.SchemaValidator import SchemaValidator
 from prehab.permissions import Permission
 from prehab_app.models.PatientTaskSchedule import PatientTaskSchedule
-from prehab_app.models.PatientTaskScheduleStatus import PatientTaskScheduleStatus
 from prehab_app.models.Prehab import Prehab
-from prehab_app.serializers.PatientTaskSchedule import PatientTaskScheduleSerializer, SimplePatientTaskScheduleSerializer
+from prehab_app.serializers.PatientTaskSchedule import SimplePatientTaskScheduleSerializer
 
 
 class PatientTaskScheduleViewSet(GenericViewSet):
@@ -77,22 +76,37 @@ class PatientTaskScheduleViewSet(GenericViewSet):
 
     @staticmethod
     def update(request, pk=None):
+        return HTTP.response(405, '')
+
+    @staticmethod
+    def seen(request):
         try:
-            # 1. Check schema
-            SchemaValidator.validate_obj_structure(request.data, 'patient_task_schedule/mark_as_seen.json')
+            data = request.data
 
-            patient_task_schedule = PatientTaskSchedule.objects.get(pk=pk)
+            # 1. Validations
+            # 1.1. Only Doctors can mark tas schedule as seen
+            if not Permission.verify(request, ['Doctor']):
+                raise HttpException(401)
 
-            # In case it's a Doctor -> check if he/she has permission
-            if request.ROLE_ID != 2 or request.ROLE_ID == 2 and request.USER_ID != patient_task_schedule.prehab.created_by.user.id:
-                raise HttpException(401, 'You don\t have permission to access this')
+            # 1.2. Check schema
+            SchemaValidator.validate_obj_structure(data, 'patient_task_schedule/mark_as_seen.json')
 
+            # 1.3. Check if Patient Task Schedule is valid
+            patient_task_schedule = PatientTaskSchedule.objects.get(pk=data['patient_task_schedule_id'])
+            if patient_task_schedule.status.id > 2:
+                raise HttpException(400, 'This activity was mark as done already.')
+
+            # 1.4. Check if doctor is prehab's owner
+            if request.ROLE_ID != 2 or request.ROLE_ID == 2 and patient_task_schedule.prehab.doctor.user.id != request.USER_ID:
+                raise HttpException(400, 'You can\'t update this Prehab Plan')
+
+            # 2. Update This specific Task in PatientTaskSchedule
             patient_task_schedule.seen_by_doctor = request.data['seen']
             patient_task_schedule.doctor_notes = request.data['doctor_notes']
             patient_task_schedule.save()
 
         except PatientTaskSchedule.DoesNotExist:
-            return HTTP.response(404, 'Patient Task with id {} does not exist'.format(str(pk)))
+            return HTTP.response(404, 'Patient Task with id {} does not exist'.format(str(request.data['patient_task_schedule_id'])))
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
@@ -113,21 +127,14 @@ class PatientTaskScheduleViewSet(GenericViewSet):
             # 1.2. Check schema
             SchemaValidator.validate_obj_structure(data, 'patient_task_schedule/mark_as_done.json')
 
-            # 1.3. Check if prehab is valid
-            prehab = Prehab.objects.get(pk=data['prehab_id'])
-
-            # 1.4. Check if patient is prehab's owner
-            if prehab.patient.user.id != request.USER_ID:
-                raise HttpException(400, 'You can\'t update this Prehab Plan')
-
-            # 1.5. Check if Patient Task Schedule is valid
+            # 1.3. Check if Patient Task Schedule is valid
             patient_task_schedule = PatientTaskSchedule.objects.get(pk=data['patient_task_schedule_id'])
             if patient_task_schedule.status.id > 2:
                 raise HttpException(400, 'This activity was mark as done already.')
 
-            # 1.6. Check if Patient Task Schedule is included in the given prehab
-            if patient_task_schedule.prehab.id != prehab.id:
-                raise HttpException(400, 'Prehab and Patient Task Schedule does not match.')
+            # 1.4. Check if patient is prehab's owner
+            if patient_task_schedule.prehab.patient.user.id != request.USER_ID:
+                raise HttpException(400, 'You can\'t update this Prehab Plan')
 
             # 2. Update This specific Task in PatientTaskSchedule
             # 2.1. Task completed with success
@@ -144,7 +151,9 @@ class PatientTaskScheduleViewSet(GenericViewSet):
             # 3. Report Difficulties
             patient_task_schedule.was_difficult = data['difficulties']
             patient_task_schedule.patient_notes = data['notes']
-            patient_task_schedule.seen_by_doctor = False
+
+            # Doctor only need to check activities that the patient had difficult
+            patient_task_schedule.seen_by_doctor = False if data['difficulties'] else True
             patient_task_schedule.save()
 
         except PatientTaskSchedule.DoesNotExist as e:
