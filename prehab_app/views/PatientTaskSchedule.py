@@ -93,7 +93,7 @@ class PatientTaskScheduleViewSet(GenericViewSet):
 
             # 1.3. Check if Patient Task Schedule is valid
             patient_task_schedule = PatientTaskSchedule.objects.get(pk=data['patient_task_schedule_id'])
-            if patient_task_schedule.status.id > 2:
+            if patient_task_schedule.status > 2:
                 raise HttpException(400, 'This activity was mark as done already.')
 
             # 1.4. Check if doctor is prehab's owner
@@ -129,7 +129,7 @@ class PatientTaskScheduleViewSet(GenericViewSet):
 
             # 1.3. Check if Patient Task Schedule is valid
             patient_task_schedule = PatientTaskSchedule.objects.get(pk=data['patient_task_schedule_id'])
-            if patient_task_schedule.status.id > 2:
+            if patient_task_schedule.status > 2:
                 raise HttpException(400, 'This activity was mark as done already.')
 
             # 1.4. Check if patient is prehab's owner
