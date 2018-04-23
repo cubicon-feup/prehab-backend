@@ -101,8 +101,8 @@ class PatientTaskScheduleViewSet(GenericViewSet):
                 raise HttpException(400, 'You can\'t update this Prehab Plan')
 
             # 2. Update This specific Task in PatientTaskSchedule
-            patient_task_schedule.seen_by_doctor = request.data['seen']
-            patient_task_schedule.doctor_notes = request.data['doctor_notes']
+            patient_task_schedule.seen_by_doctor = data['seen']
+            patient_task_schedule.doctor_notes = data['doctor_notes'] if 'doctor_notes' in data else ''
             patient_task_schedule.save()
 
         except PatientTaskSchedule.DoesNotExist:
@@ -150,7 +150,7 @@ class PatientTaskScheduleViewSet(GenericViewSet):
 
             # 3. Report Difficulties
             patient_task_schedule.was_difficult = data['difficulties']
-            patient_task_schedule.patient_notes = data['notes']
+            patient_task_schedule.patient_notes = data['notes'] if 'notes' in data else ''
 
             # Doctor only need to check activities that the patient had difficult
             patient_task_schedule.seen_by_doctor = False if data['difficulties'] else True
