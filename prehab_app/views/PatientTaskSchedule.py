@@ -139,11 +139,11 @@ class PatientTaskScheduleViewSet(GenericViewSet):
             # 2. Update This specific Task in PatientTaskSchedule
             # 2.1. Task completed with success
             if data['completed']:
-                patient_task_schedule.status = PatientTaskScheduleStatus.objects.get(pk=3)
+                patient_task_schedule.status = PatientTaskSchedule.COMPLETED
 
             # 2.2. Task not completed
             else:
-                patient_task_schedule.status = PatientTaskScheduleStatus.objects.get(pk=4)
+                patient_task_schedule.status = PatientTaskSchedule.NOT_COMPLETED
 
             patient_task_schedule.finished_date = datetime.datetime.now()
             patient_task_schedule.save()
