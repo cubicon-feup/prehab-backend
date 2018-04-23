@@ -1,5 +1,7 @@
 from rest_framework import serializers
 import datetime
+
+from prehab_app.models import TaskSchedule
 from prehab_app.models.Prehab import Prehab
 from prehab_app.serializers.PatientTaskSchedule import PatientTaskScheduleSerializer
 from prehab_app.serializers.Task import TaskSerializer
@@ -44,7 +46,7 @@ class FullPrehabSerializer(serializers.ModelSerializer):
 
             task_info = TaskSerializer(task.task, many=False).data
             task_info['id'] = task.id
-            task_info['status'] = task.status.title
+            task_info['status'] = task.get_status_name()
             task_schedule[date].append(task_info)
 
         return task_schedule

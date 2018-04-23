@@ -55,6 +55,8 @@ class PrehabViewSet(GenericViewSet):
             if request.ROLE_ID != 1 and request.USER_ID not in (prehab.created_by.user.id, prehab.patient.user.id):
                 raise HttpException(401, 'You don\'t have permissions to see this Prehab Plan')
 
+            data = FullPrehabSerializer(prehab, many=False).data
+
         except Prehab.DoesNotExist:
             return HTTP.response(404, 'Prehab with id {} does not exist'.format(str(pk)))
         except HttpException as e:
@@ -62,7 +64,6 @@ class PrehabViewSet(GenericViewSet):
         except Exception as e:
             return HTTP.response(400, 'Some error occurred')
 
-        data = FullPrehabSerializer(prehab, many=False).data
         return HTTP.response(200, '', data)
 
     @staticmethod

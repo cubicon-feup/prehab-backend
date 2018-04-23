@@ -41,3 +41,6 @@ class PatientTaskSchedule(models.Model):
     class Meta:
         db_table = 'patient_task_schedule'
         ordering = ['-id']
+
+    def get_status_name(self):
+        return self.Status[self.status][1]
