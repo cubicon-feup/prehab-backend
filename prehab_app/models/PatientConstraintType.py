@@ -16,7 +16,5 @@ class PatientConstraintType(models.Model):
     objects = PatientConstraintTypeQuerySet.as_manager()
 
     class Meta:
-        # app_label = 'PatientConstraintType'
-        # managed = False
         db_table = 'patient_constraint_type'
         ordering = ['-id']

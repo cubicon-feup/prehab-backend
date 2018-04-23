@@ -20,7 +20,5 @@ class WeekTaskSchedule(models.Model):
     objects = ScheduleWeekTaskQuerySet.as_manager()
 
     class Meta:
-        # app_label = 'ScheduleWeekTask'
-        # managed = False
         db_table = 'week_task_schedule'
         ordering = ['-id']

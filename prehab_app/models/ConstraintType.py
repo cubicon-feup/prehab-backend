@@ -13,7 +13,5 @@ class ConstraintType(models.Model):
     objects = ConstraintTypeQuerySet.as_manager()
 
     class Meta:
-        # app_label = 'ConstraintType'
-        # managed = False
         db_table = 'constraint_type'
         ordering = ['-id']

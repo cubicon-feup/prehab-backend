@@ -15,7 +15,5 @@ class Doctor(models.Model):
     objects = DoctorQuerySet.as_manager()
 
     class Meta:
-        # app_label = 'Doctor'
-        # managed = False
         db_table = 'doctor'
         ordering = ['-user_id']

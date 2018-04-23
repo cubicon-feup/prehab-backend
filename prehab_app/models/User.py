@@ -22,7 +22,6 @@ class User(models.Model):
     objects = UserQuerySet.as_manager()
 
     class Meta:
-        # app_label = 'User'
         db_table = 'users'
         ordering = ['-id']
 

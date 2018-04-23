@@ -1,10 +1,10 @@
+import os.path
+
 # ENVIRONMENT = 'local'
 ENVIRONMENT = 'development'
 # ENVIRONMENT = 'production'
 
 SETTINGS_MODULE = 'prehab.settings.development'
 
-if ENVIRONMENT == 'development':
-    SETTINGS_MODULE = 'prehab.settings.development'
-if ENVIRONMENT == 'production':
+if os.path.isfile('prehab/settings/production.py'):
     SETTINGS_MODULE = 'prehab.settings.production'

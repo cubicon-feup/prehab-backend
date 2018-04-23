@@ -25,7 +25,5 @@ class PatientTaskInfo(models.Model):
     objects = PatientTaskInfoQuerySet.as_manager()
 
     class Meta:
-        # app_label = 'DoctorPatient'
-        # managed = False
         db_table = 'patient_task_info'
         ordering = ['-id']

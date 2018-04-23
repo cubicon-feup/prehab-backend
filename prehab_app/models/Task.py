@@ -16,7 +16,5 @@ class Task(models.Model):
     objects = TaskQuerySet.as_manager()
 
     class Meta:
-        # app_label = 'Task'
-        # managed = False
         db_table = 'task'
         ordering = ['-id']
