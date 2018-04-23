@@ -43,4 +43,4 @@ class PatientTaskSchedule(models.Model):
         ordering = ['-id']
 
     def get_status_name(self):
-        return self.Status[self.status][1]
+        return self.Status[self.status - 1][1]
