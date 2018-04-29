@@ -1,7 +1,11 @@
 import math
 from functools import reduce
 
+from django.db.models import Count
+
 from prehab_app.models import WeekTaskSchedule
+from prehab_app.models.Meal import Meal
+from prehab_app.models.MealConstraintType import MealConstraintType
 
 
 class DataHelper:
@@ -29,6 +33,15 @@ class DataHelper:
             patient_task_schedule_work_load = patient_task_schedule_work_load + reduce(lambda x, y: x + y, week)
 
         return patient_task_schedule_work_load
+
+    @staticmethod
+    def patient_meal_schedule(number_of_weeks, constraint_types):
+        if len(constraint_types) == 0:
+            available_meals = Meal.objects.all()
+        else:
+            available_meals = MealConstraintType.objects.filter(constraint_type__in=constraint_types).values('meal__id', 'meal__meal_type').annotate(Count('meal')).filter(count=len(constraint_types)).all()
+
+        return available_meals
 
     @staticmethod
     def _best_indexes_to_put_tasks(week, times):

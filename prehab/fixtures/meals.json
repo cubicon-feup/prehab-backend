@@ -1,0 +1,66 @@
+[
+    {
+        "model": "prehab_app.Meal",
+        "pk": 1,
+        "fields": {
+            "title": "Breakfast 1",
+            "description": "This is the breakfast 1",
+            "meal_type": 1,
+            "multimedia_link": ""
+        }
+    },
+    {
+        "model": "prehab_app.Meal",
+        "pk": 2,
+        "fields": {
+            "title": "Breakfast 2",
+            "description": "This is the breakfast 2",
+            "meal_type": 1,
+            "multimedia_link": ""
+        }
+    },
+
+
+    {
+        "model": "prehab_app.Meal",
+        "pk": 3,
+        "fields": {
+            "title": "Snack 1",
+            "description": "This is the snack 1",
+            "meal_type": 2,
+            "multimedia_link": ""
+        }
+    },
+    {
+        "model": "prehab_app.Meal",
+        "pk": 4,
+        "fields": {
+            "title": "Snack 2",
+            "description": "This is the snack 2",
+            "meal_type": 2,
+            "multimedia_link": ""
+        }
+    },
+
+
+    {
+        "model": "prehab_app.Meal",
+        "pk": 5,
+        "fields": {
+            "title": "Big Meal 1",
+            "description": "This is the Big Meal 1",
+            "meal_type": 3,
+            "multimedia_link": ""
+        }
+    },
+    {
+        "model": "prehab_app.Meal",
+        "pk": 6,
+        "fields": {
+            "title": "Big Meal 2",
+            "description": "This is the Big Meal 2",
+            "meal_type": 3,
+            "multimedia_link": ""
+        }
+    }
+]

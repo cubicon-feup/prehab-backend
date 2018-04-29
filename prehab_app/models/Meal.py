@@ -17,7 +17,7 @@ class Meal(models.Model):
         (SNACK, 'Lanche'),
         (FULL_MEAL, 'Refeição Completa')
     )
-    # title = models.CharField(max_length=64, blank=False, null=True)
+    title = models.CharField(max_length=64, blank=False, null=True)
     description = models.CharField(max_length=512, blank=False, null=True)
     multimedia_link = models.CharField(max_length=512, blank=False, null=True)
     meal_type = models.IntegerField(choices=meal_types, default=SNACK)
