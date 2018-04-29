@@ -14,10 +14,17 @@
                 "string",
                 "null"
             ]
+        },
+        "constraint_types": {
+            "type": "array",
+            "items": {
+                "type": "integer"
+            }
         }
     },
     "required": [
         "description",
-        "task_type_id"
+        "task_type_id",
+        "constraint_types"
     ]
 }

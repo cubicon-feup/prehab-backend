@@ -1,10 +1,13 @@
+from django.db import transaction
 from rest_framework.viewsets import GenericViewSet
 
 from prehab.helpers.HttpException import HttpException
 from prehab.helpers.HttpResponseHandler import HTTP
 from prehab.helpers.SchemaValidator import SchemaValidator
+from prehab_app.models import ConstraintType
 from prehab_app.models.Meal import Meal
 from prehab.permissions import Permission
+from prehab_app.models.MealConstraintType import MealConstraintType
 from prehab_app.serializers.Meal import MealSerializer
 
 
@@ -45,14 +48,26 @@ class MealViewSet(GenericViewSet):
             if not any( data['meal_type_id'] in meal_type for meal_type in Meal.meal_types):
                 raise HttpException(400, 'Meal Type does not exist.')
 
-            new_meal = Meal(
-                title=data['title'],
-                description=data.get('description', None),
-                multimedia_link=data.get('multimedia_link', None),
-                meal_type=data['meal_type_id']
-            )
-            new_meal.save()
+            with transaction.atomic():
+                new_meal = Meal(
+                    title=data['title'],
+                    description=data.get('description', None),
+                    multimedia_link=data.get('multimedia_link', None),
+                    meal_type=data['meal_type_id']
+                )
+                new_meal.save()
 
+                # Insert constraint types
+                for constraint_type_id in data['constraint_types']:
+                    constraint_type = ConstraintType.objects.get(pk=constraint_type_id)
+                    meal_constraint_type = MealConstraintType(
+                        meal=new_meal,
+                        constraint_type=constraint_type
+                    )
+                    meal_constraint_type.save()
+
+        except ConstraintType.DoesNotExist:
+            return HTTP.response(404, 'One of the Constraint Types was not found.')
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
