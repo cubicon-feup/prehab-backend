@@ -1,7 +1,5 @@
 from django.db import models
 
-from prehab_app.models.TaskType import TaskType
-
 
 class MealQuerySet(models.QuerySet):
     pass

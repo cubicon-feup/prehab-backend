@@ -1,3 +1,5 @@
+import random
+
 import math
 from functools import reduce
 
@@ -11,7 +13,7 @@ from prehab_app.models.MealConstraintType import MealConstraintType
 class DataHelper:
     @staticmethod
     def patient_task_schedule_work_load(task_schedule):
-        patient_task_schedule_work_load = []  # Each must have: week_number, day_number, task_id, expected_repetitions
+        patient_task_schedule_work_load = []  # Each must have: week_number, day_number, meal_id
         week_task_schedule = WeekTaskSchedule.objects.filter(task_schedule=task_schedule)
 
         # Generate for each week
@@ -36,12 +38,51 @@ class DataHelper:
 
     @staticmethod
     def patient_meal_schedule(number_of_weeks, constraint_types):
-        if len(constraint_types) == 0:
-            available_meals = Meal.objects.all()
-        else:
-            available_meals = MealConstraintType.objects.filter(constraint_type__in=constraint_types).values('meal__id', 'meal__meal_type').annotate(Count('meal')).filter(count=len(constraint_types)).all()
+        patient_meal_schedule = []  # Each must have: week_number, day_number, meal_order, meal_id
+        available_meals = DataHelper._get_available_meals(constraint_types)
 
-        return available_meals
+        breakfasts = available_meals.filter(meal_type=1).all()
+        snacks = available_meals.filter(meal_type=2).all()
+        full_meals = available_meals.filter(meal_type=3).all()
+
+        # Generate for each week
+        for week_number in range(1, number_of_weeks + 1):
+            breakfast_for_week = DataHelper._get_meals(breakfasts, 7)
+            snacks_for_week = DataHelper._get_meals(snacks, 14)
+            full_meals_for_week = DataHelper._get_meals(full_meals, 14)
+            for day_number in range(7):
+                patient_meal_schedule.append({
+                    "week_number": week_number,
+                    "day_number": day_number + 1,
+                    "meal_order": 1,
+                    "meal_id": breakfast_for_week[day_number]
+                })
+                patient_meal_schedule.append({
+                    "week_number": week_number,
+                    "day_number": day_number + 1,
+                    "meal_order": snacks_for_week[day_number*2],
+                    "meal_id": snacks_for_week[day_number*2]
+                })
+                patient_meal_schedule.append({
+                    "week_number": week_number,
+                    "day_number": day_number + 1,
+                    "meal_order": 3,
+                    "meal_id": full_meals_for_week[day_number*2]
+                })
+                patient_meal_schedule.append({
+                    "week_number": week_number,
+                    "day_number": day_number + 1,
+                    "meal_order": 4,
+                    "meal_id": snacks_for_week[day_number*2 + 1]
+                })
+                patient_meal_schedule.append({
+                    "week_number": week_number,
+                    "day_number": day_number + 1,
+                    "meal_order": 5,
+                    "meal_id": full_meals_for_week[day_number*2 + 1]
+                })
+
+        return patient_meal_schedule
 
     @staticmethod
     def _best_indexes_to_put_tasks(week, times):
@@ -75,42 +116,28 @@ class DataHelper:
 
         return indexes
 
-    #
-    # @staticmethod
-    # def patient_task_schedule_work_load(task_schedule):
-    #     # patient_task_schedule_work_load = []  # Each must have: week_number, day_number, task_id, expected_repetitions
-    #     weeks = []
-    #     week_task_schedule = WeekTaskSchedule.objects.filter(task_schedule=task_schedule)
-    #
-    #     # Generate for each week
-    #     for week_number in range(1, task_schedule.number_of_weeks):
-    #         week = []
-    #         tasks_for_week = week_task_schedule.filter(week_number=week_number).all()  # get tasks per week
-    #         task_types = [t.task.task_type.id for t in tasks_for_week]  # get task_types
-    #         for task_type_id in task_types:
-    #             tasks_for_week_by_task_type = [t for t in tasks_for_week if t.task.task_type.id == task_type_id]
-    #
-    #             # Equitively distribute tasks of the same type through the week
-    #             for task in tasks_for_week_by_task_type:
-    #                 start_index = DataHelper._best_indexes_to_put_tasks(week)
-    #                 task_times_per_week = task.times_per_week
-    #                 for
-    #                 rate = 7 / task.times_per_week
-    #                 week[start_index]
-    #             continue
-    #         continue
-    #
-    #     weeks = list()
-    #     full_tasks = FullTaskScheduleSerializer(task_schedule, many=False).data
-    #     for week in full_tasks['weeks']:
-    #         continue
-    #     days_in_week = 7
-    #     week_work_load = {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: []}
-    #
-    #     # for each type of task (Respiratória, Muscular, Resistência)
-    #     for task_type, tasks in tasks.items():
-    #
-    #         for task in tasks:
-    #             day_with_min_tasks = DataHelper._best_indexes_to_put_tasks(week_work_load)
-    #
-    #     return None
+    @staticmethod
+    def _get_available_meals(constraint_types):
+        if len(constraint_types) == 0:
+            available_meals = Meal.objects
+        else:
+            ids = []
+            tmp = {}
+            tmp_available_meals = MealConstraintType.objects.values('meal_id').annotate(total=Count('meal')).all()
+            for available_meal in tmp_available_meals:
+                if available_meal['meal_id'] not in tmp:
+                    tmp[available_meal['meal_id']] = 0
+                tmp[available_meal['meal_id']] = tmp[available_meal['meal_id']] + available_meal['total']
+                if tmp[available_meal['meal_id']] == len(constraint_types):
+                    ids.append(available_meal['meal_id'])
+            available_meals = Meal.objects.filter(id__in=ids)
+
+        return available_meals
+
+    @staticmethod
+    def _get_meals(meals, times):
+        meals_bulk = []
+        for i in range(math.ceil(times/len(meals))):
+            meals_bulk = meals_bulk + list(meals)
+
+        return random.sample(meals_bulk, times)
