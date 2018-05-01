@@ -13,8 +13,8 @@ class FullTaskSerializer(serializers.ModelSerializer):
     def to_representation(self, obj):
         data = super(FullTaskSerializer, self).to_representation(obj)  # the original data
 
-        data['status_id'] = data['status']
-        data['status'] = obj.get_status_detail()
+        data['task_type_id'] = data['task_type']
+        data['task_type'] = obj.get_task_type_display()
 
         return data
 

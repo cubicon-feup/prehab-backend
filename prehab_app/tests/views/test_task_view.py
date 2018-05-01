@@ -49,7 +49,7 @@ class AuthViewTests(TestSuit):
         self.assertEqual(task.count(), 1)
         task = task.get()
         self.assertEqual(task.title, body['title'])
-        self.assertEqual(task.task_type.id, body['task_type_id'])
+        self.assertEqual(task.task_type, body['task_type_id'])
         self.assertEqual(task.description, body['description'])
         self.assertEqual(task.multimedia_link, body['multimedia_link'])
 
@@ -74,6 +74,6 @@ class AuthViewTests(TestSuit):
         response = self.http_request('get', self.url_path + str(task.id))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['data']['title'], task.title)
-        self.assertEqual(response.json()['data']['task_type'], task.task_type.id)
+        self.assertEqual(response.json()['data']['task_type'], task.task_type)
         self.assertEqual(response.json()['data']['description'], task.description)
         self.assertEqual(response.json()['data']['multimedia_link'], task.multimedia_link)

@@ -6,7 +6,7 @@ from prehab_app.models.Prehab import Prehab
 from prehab_app.serializers.Meal import MealSerializer
 from prehab_app.serializers.PatientMealSchedule import PatientMealScheduleSerializer
 from prehab_app.serializers.PatientTaskSchedule import PatientTaskScheduleSerializer
-from prehab_app.serializers.Task import TaskSerializer
+from prehab_app.serializers.Task import TaskSerializer, FullTaskSerializer
 
 
 class PrehabSerializer(serializers.ModelSerializer):
@@ -56,20 +56,10 @@ class FullPrehabSerializer(serializers.ModelSerializer):
             if date not in task_schedule:
                 task_schedule[date] = []
 
-            # task_info = TaskSerializer(task.task, many=False).data
-            #             # task_info['id'] = task.id
-            #             # task_info['status'] = task.get_status_name()
-            #             # task_schedule[date].append(task_info)
-            patient_task_info = {
-                'id': patient_task.id,
-                'task_title': patient_task.task.title,
-                'task_description': patient_task.task.description,
-                'task_multimedia_link': patient_task.task.multimedia_link,
-                'status_id': patient_task.status,
-                'status': patient_task.get_status_display(),
-                'task_type_id': patient_task.task.task_type,
-                'task_type': patient_task.task.get_task_type_display()
-            }
+            patient_task_info = FullTaskSerializer(patient_task.task, many=False).data
+            patient_task_info['id'] = patient_task.id
+            patient_task_info['status_id'] = patient_task.status
+            patient_task_info['status'] = patient_task.get_status_display()
 
             task_schedule[date].append(patient_task_info)
 
@@ -84,15 +74,10 @@ class FullPrehabSerializer(serializers.ModelSerializer):
             if date not in meal_schedule:
                 meal_schedule[date] = []
 
-            # meal_info = MealSerializer(patient_meal.meal, many=False).data
-            patient_meal_info = {
-                'id': patient_meal.id,
-                'meal_title': patient_meal.meal.title,
-                'meal_description': patient_meal.meal.description,
-                'meal_multimedia_link': patient_meal.meal.multimedia_link,
-                'meal_order_id': patient_meal.meal_order,
-                'meal_order': patient_meal.get_meal_order_display()
-            }
+            patient_meal_info = MealSerializer(patient_meal.meal, many=False).data
+            patient_meal_info['id'] = patient_meal.id
+            patient_meal_info['meal_order_id'] = patient_meal.meal_order
+            patient_meal_info['meal_order'] = patient_meal.get_meal_order_display()
 
             meal_schedule[date].append(patient_meal_info)
 

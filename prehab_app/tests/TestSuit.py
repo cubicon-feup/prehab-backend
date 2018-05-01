@@ -9,8 +9,10 @@ from prehab_app.models import User, Role
 class TestSuit(TestCase):
     fixtures = (
         'constraint_types.json',
+        'meal_constraint_type.json',
+        'meals.json',
         'roles.json',
-        'task_type.json',
+        'tasks.json',
         'users.json'
     )
 
