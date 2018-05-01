@@ -8,7 +8,8 @@ from prehab.helpers.HttpException import HttpException
 from prehab.helpers.HttpResponseHandler import HTTP
 from prehab.helpers.SchemaValidator import SchemaValidator
 from prehab.permissions import Permission
-from prehab_app.models.MealSchedule import PatientMealSchedule
+from prehab_app.models.Meal import Meal
+from prehab_app.models.PatientMealSchedule import PatientMealSchedule
 from prehab_app.models.PatientConstraintType import PatientConstraintType
 from prehab_app.models.PatientTaskSchedule import PatientTaskSchedule
 from prehab_app.models.Doctor import Doctor

@@ -59,7 +59,7 @@ class DataHelper:
                 patient_meal_schedule.append({
                     "week_number": week_number,
                     "day_number": day_number + 1,
-                    "meal_order": snacks_for_week[day_number * 2],
+                    "meal_order": 2,
                     "meal": snacks_for_week[day_number * 2]
                 })
                 patient_meal_schedule.append({
