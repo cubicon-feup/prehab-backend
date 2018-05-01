@@ -27,7 +27,12 @@ class PatientTaskScheduleSerializer(serializers.ModelSerializer):
 
 
 class SimplePatientTaskScheduleSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = PatientTaskSchedule
         fields = '__all__'
+
+
+# class FullPatientTaskScheduleSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = PatientTaskSchedule
+#         fields = '__all__'

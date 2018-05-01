@@ -65,8 +65,8 @@ class FullPrehabSerializer(serializers.ModelSerializer):
                 'task_multimedia_link': patient_task.task.multimedia_link,
                 'status_id': patient_task.status,
                 'status': patient_task.get_status_display(),
-                # 'task_type': patient_task.task.,
-                # 'meal_order': patient_meal.get_meal_order_display()
+                'task_type_id': patient_task.task.task_type,
+                'task_type': patient_task.get_task_type_display()
             }
 
             task_schedule[date].append(patient_task_info)
