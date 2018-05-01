@@ -1,17 +1,24 @@
 from django.db import models
 
-from prehab_app.models.TaskType import TaskType
-
 
 class TaskQuerySet(models.QuerySet):
     pass
 
 
 class Task(models.Model):
+    RESPIRATORIO = 1
+    ENDURANCE = 2
+    MUSCULAR = 3
+
+    type_of_tasks = (
+        (RESPIRATORIO, 'Respiratório'),
+        (ENDURANCE, 'Endurance'),
+        (MUSCULAR, 'Muscular')
+    )
     title = models.CharField(max_length=64, blank=False, null=True)
     description = models.CharField(max_length=512, blank=False, null=True)
     multimedia_link = models.CharField(max_length=512, blank=False, null=True)
-    task_type = models.ForeignKey(TaskType, on_delete=models.CASCADE, db_column='task_type_id')
+    task_type = models.IntegerField(choices=type_of_tasks)
 
     objects = TaskQuerySet.as_manager()
 

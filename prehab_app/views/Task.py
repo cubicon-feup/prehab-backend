@@ -4,7 +4,6 @@ from prehab.helpers.HttpException import HttpException
 from prehab.helpers.HttpResponseHandler import HTTP
 from prehab.helpers.SchemaValidator import SchemaValidator
 from prehab_app.models.Task import Task
-from prehab_app.models.TaskType import TaskType
 from prehab.permissions import Permission
 from prehab_app.serializers.Task import TaskSerializer
 
@@ -42,17 +41,11 @@ class TaskViewSet(GenericViewSet):
             # 1. Check schema
             SchemaValidator.validate_obj_structure(data, 'task/create.json')
 
-            # 2. Check if task type is available
-            task_type = TaskType.objects.task_type(data['task_type_id'])
-
-            if len(task_type) == 0:
-                raise HttpException(400, 'Task Type does not exist.')
-
             new_task = Task(
                 title=data['title'],
                 description=data.get('description', None),
                 multimedia_link=data.get('multimedia_link', None),
-                task_type=task_type.get()
+                task_type=Task.type_of_tasks[data['task_type_id']]
             )
             new_task.save()
 

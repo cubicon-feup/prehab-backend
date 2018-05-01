@@ -10,7 +10,6 @@ from .PatientTaskSchedule import PatientTaskSchedule
 from .Prehab import Prehab
 from .Role import Role
 from .Task import Task
-from .TaskType import TaskType
 from .TaskSchedule import TaskSchedule
 from .User import User
 from .WeekTaskSchedule import WeekTaskSchedule
@@ -28,7 +27,6 @@ __all__ = [
     'Prehab',
     'Role',
     'Task',
-    'TaskType',
     'TaskSchedule',
     'User',
     'WeekTaskSchedule',
