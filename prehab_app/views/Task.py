@@ -45,7 +45,7 @@ class TaskViewSet(GenericViewSet):
                 title=data['title'],
                 description=data.get('description', None),
                 multimedia_link=data.get('multimedia_link', None),
-                task_type=Task.type_of_tasks[data['task_type_id']]
+                task_type=data['task_type_id']
             )
             new_task.save()
 

@@ -65,7 +65,7 @@ class AuthViewTests(TestSuit):
         # SUCCESS - test retrieve task with existent id
         task = Task(
             title="task1",
-            task_type_id=1,
+            task_type=1,
             description="This is the task 1",
             multimedia_link="prehab.pt/task1.jpg"
         )

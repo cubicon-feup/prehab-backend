@@ -12,7 +12,7 @@ class TestSuit(TestCase):
         'meal_constraint_type.json',
         'meals.json',
         'roles.json',
-        'tasks.json',
+        # 'tasks.json',
         'users.json'
     )
 
