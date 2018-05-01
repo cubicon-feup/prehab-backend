@@ -1,6 +1,5 @@
-import random
-
 import math
+import random
 from functools import reduce
 
 from django.db.models import Count
@@ -55,31 +54,31 @@ class DataHelper:
                     "week_number": week_number,
                     "day_number": day_number + 1,
                     "meal_order": 1,
-                    "meal_id": breakfast_for_week[day_number]
+                    "meal": breakfast_for_week[day_number]
                 })
                 patient_meal_schedule.append({
                     "week_number": week_number,
                     "day_number": day_number + 1,
-                    "meal_order": snacks_for_week[day_number*2],
-                    "meal_id": snacks_for_week[day_number*2]
+                    "meal_order": snacks_for_week[day_number * 2],
+                    "meal": snacks_for_week[day_number * 2]
                 })
                 patient_meal_schedule.append({
                     "week_number": week_number,
                     "day_number": day_number + 1,
                     "meal_order": 3,
-                    "meal_id": full_meals_for_week[day_number*2]
+                    "meal": full_meals_for_week[day_number * 2]
                 })
                 patient_meal_schedule.append({
                     "week_number": week_number,
                     "day_number": day_number + 1,
                     "meal_order": 4,
-                    "meal_id": snacks_for_week[day_number*2 + 1]
+                    "meal": snacks_for_week[day_number * 2 + 1]
                 })
                 patient_meal_schedule.append({
                     "week_number": week_number,
                     "day_number": day_number + 1,
                     "meal_order": 5,
-                    "meal_id": full_meals_for_week[day_number*2 + 1]
+                    "meal": full_meals_for_week[day_number * 2 + 1]
                 })
 
         return patient_meal_schedule
@@ -137,7 +136,7 @@ class DataHelper:
     @staticmethod
     def _get_meals(meals, times):
         meals_bulk = []
-        for i in range(math.ceil(times/len(meals))):
+        for i in range(math.ceil(times / len(meals))):
             meals_bulk = meals_bulk + list(meals)
 
         return random.sample(meals_bulk, times)
