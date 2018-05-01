@@ -27,6 +27,8 @@ class FullPrehabSerializer(serializers.ModelSerializer):
         # data['task']['expected_repetitions'] = data['expected_repetitions']
         del data['patient_task_schedule']
         del data['patient_meal_schedule']
+        data['status_id'] = data['status']
+        data['status'] = obj.get_status_display()
 
         return data
 
@@ -66,7 +68,7 @@ class FullPrehabSerializer(serializers.ModelSerializer):
                 'status_id': patient_task.status,
                 'status': patient_task.get_status_display(),
                 'task_type_id': patient_task.task.task_type,
-                'task_type': patient_task.get_task_type_display()
+                'task_type': patient_task.task.get_task_type_display()
             }
 
             task_schedule[date].append(patient_task_info)
