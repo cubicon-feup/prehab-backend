@@ -1,0 +1,30 @@
+{
+    "type": "object",
+    "properties": {
+        "meal_type_id": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 3
+        },
+        "description": {
+            "type": "string"
+        },
+        "multimedia_link": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "constraint_types": {
+            "type": "array",
+            "items": {
+                "type": "integer"
+            }
+        }
+    },
+    "required": [
+        "description",
+        "task_type_id",
+        "constraint_types"
+    ]
+}

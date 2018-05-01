@@ -1,6 +1,5 @@
 from prehab_app.tests.TestSuit import TestSuit
 from prehab_app.models import Task
-from prehab_app.models.TaskType import TaskType
 
 
 class FullTaskViewTests(TestSuit):
@@ -171,12 +170,11 @@ class FullTaskViewTests(TestSuit):
         self.assertEqual(res.json()['details'], 'Task with id 2 does not exist.')
 
         # Test to pass
-        task_type = TaskType.objects.get(pk=1)
         task = Task(
             title="taskToPass",
             description="This task is for testing only",
             multimedia_link="link to pass",
-            task_type=task_type
+            task_type=1
         )
         task.save()
 

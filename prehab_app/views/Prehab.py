@@ -8,7 +8,10 @@ from prehab.helpers.HttpException import HttpException
 from prehab.helpers.HttpResponseHandler import HTTP
 from prehab.helpers.SchemaValidator import SchemaValidator
 from prehab.permissions import Permission
-from prehab_app.models import PatientTaskSchedule
+from prehab_app.models.Meal import Meal
+from prehab_app.models.PatientMealSchedule import PatientMealSchedule
+from prehab_app.models.PatientConstraintType import PatientConstraintType
+from prehab_app.models.PatientTaskSchedule import PatientTaskSchedule
 from prehab_app.models.Doctor import Doctor
 from prehab_app.models.DoctorPatient import DoctorPatient
 from prehab_app.models.Patient import Patient
@@ -73,7 +76,7 @@ class PrehabViewSet(GenericViewSet):
 
             # 1. Validations
             # 1.1. Only Doctors can create new Prehab Plans
-            if not Permission.verify(request, ['Doctor']):
+            if not Permission.verify(request, ['Admin', 'Doctor']):
                 raise HttpException(401)
 
             # 1.2. Check schema
@@ -114,10 +117,11 @@ class PrehabViewSet(GenericViewSet):
                 )
                 prehab.save()
 
-                # 4. Insert Patient Tas Schedule
+                # 4. Insert Patient Task Schedule
                 patient_task_schedule_work_load = DataHelper.patient_task_schedule_work_load(task_schedule)
+                patient_tasks = []
                 for row in patient_task_schedule_work_load:
-                    patient_task_schedule = PatientTaskSchedule(
+                    patient_tasks.append(PatientTaskSchedule(
                         prehab=prehab,
                         week_number=row['week_number'],
                         day_number=row['day_number'],
@@ -125,8 +129,22 @@ class PrehabViewSet(GenericViewSet):
                         expected_repetitions=1,  # row['repetitions'],
                         actual_repetitions=None,
                         status=PatientTaskSchedule.PENDING
-                    )
-                    patient_task_schedule.save()
+                    ))
+                PatientTaskSchedule.objects.bulk_create(patient_tasks)
+
+                # 5. Insert Patient Meal Schedule
+                constraint_types = [pct.constraint_type for pct in PatientConstraintType.objects.filter(patient=patient).all()]
+                patient_meal_schedule = DataHelper.patient_meal_schedule(task_schedule.number_of_weeks, constraint_types)
+                patient_meals = []
+                for row in patient_meal_schedule:
+                    patient_meals.append(PatientMealSchedule(
+                        prehab=prehab,
+                        week_number=row['week_number'],
+                        day_number=row['day_number'],
+                        meal_order=row['meal_order'],
+                        meal=row['meal']
+                    ))
+                PatientMealSchedule.objects.bulk_create(patient_meals)
 
             # 4. Add new Notification to Patient (???????????) - TODO
 
