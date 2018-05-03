@@ -1,3 +1,4 @@
+import math
 import string
 from datetime import datetime
 import random
@@ -8,7 +9,7 @@ from prehab.helpers.HttpException import HttpException
 from prehab.helpers.HttpResponseHandler import HTTP
 from prehab.helpers.SchemaValidator import SchemaValidator
 from prehab.permissions import Permission
-from prehab_app.models import ConstraintType, PatientConstraintType, Doctor, Role, User
+from prehab_app.models import ConstraintType, PatientConstraintType, Doctor, Role, User, Prehab, PatientTaskSchedule
 from prehab_app.models.DoctorPatient import DoctorPatient
 from prehab_app.models.Patient import Patient
 from prehab_app.serializers.Patient import PatientSerializer
@@ -46,7 +47,7 @@ class PatientViewSet(GenericViewSet):
             patient = Patient.objects.get(pk=pk)
 
             # In case it's a Doctor -> check if he/she has permission
-            if request.ROLE_ID == 2 and request.USER_ID not in patient.which_doctor():
+            if request.ROLE_ID == 2 and DoctorPatient.objects.filter(doctor=request.USER_ID).filter(patient=patient).count == 0:
                 raise HttpException(401, 'You don\t have permission to access this Patient Information')
             # In case it's a Patient -> check if it's own information
             elif request.ROLE_ID == 3 and request.USER_ID == patient.id:
@@ -56,10 +57,12 @@ class PatientViewSet(GenericViewSet):
 
         except Patient.DoesNotExist:
             return HTTP.response(404, 'Patient with id {} does not exist'.format(str(pk)))
+        except ValueError:
+            return HTTP.response(404, 'Invalid url format. {}'.format(str(pk)))
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Some error occurred')
+            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
 
         return HTTP.response(200, '', data)
 
@@ -139,3 +142,47 @@ class PatientViewSet(GenericViewSet):
     @staticmethod
     def destroy(request, pk=None):
         return HTTP.response(405, '')
+
+    @staticmethod
+    def statistics(request, pk=None):
+        try:
+            patient = Patient.objects.get(pk=pk)
+            # In case it's a Doctor -> check if he/she has permission
+            if request.ROLE_ID == 2 and DoctorPatient.objects.filter(doctor=request.USER_ID).filter(patient=patient).count == 0:
+                raise HttpException(401, 'You don\t have permission to access this Patient Information')
+            # In case it's a Patient -> check if it's own information
+            elif request.ROLE_ID == 3 and request.USER_ID == patient.id:
+                raise HttpException(401, 'You don\t have permission to access this Patient Information')
+
+            prehab = Prehab.objects.filter(patient=patient).first()
+            patient_tasks = PatientTaskSchedule.objects.filter(prehab=prehab).all()
+
+            days_to_surgery = (datetime.now().date() - prehab.surgery_date).days
+            current_week_num = math.floor(days_to_surgery / 7)
+            current_day_num = days_to_surgery - 7 * current_week_num
+            pass_patient_tasks = [t for t in patient_tasks if t.week_number <= current_week_num and t.day_number <= current_day_num]
+
+            data = {
+                'patient_id': pk,
+                'prehab_week_number': prehab.number_of_weeks,
+                'prehab_start_date': prehab.init_date,
+                'prehab_expected_end_date': prehab.expected_end_date,
+                'surgery_day': prehab.surgery_date,
+                'days_until_surgery': days_to_surgery if days_to_surgery > 0 else None,
+                'total_activities': len(patient_tasks),
+                'total_activities_until_now': len(pass_patient_tasks),
+                'activities_done': len([t for t in pass_patient_tasks if t.status == PatientTaskSchedule.COMPLETED]),
+                'activities_with_difficulty': len([ t for t in pass_patient_tasks if t.was_difficult]),
+                'activities_not_done': len([t for t in pass_patient_tasks if t.status == PatientTaskSchedule.NOT_COMPLETED]),
+                'prehab_status_id': prehab.status,
+                'prehab_status': prehab.get_status_display()
+            }
+
+        except Patient.DoesNotExist:
+            return HTTP.response(404, 'Patient with id {} does not exist'.format(str(pk)))
+        except HttpException as e:
+            return HTTP.response(e.http_code, e.http_detail)
+        except Exception as e:
+            return HTTP.response(400, 'Some error occurred')
+
+        return HTTP.response(200, '', data)
