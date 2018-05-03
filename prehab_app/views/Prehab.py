@@ -44,7 +44,7 @@ class PrehabViewSet(GenericViewSet):
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Some error occurred')
+            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
 
         queryset = self.paginate_queryset(prehabs)
         data = PrehabSerializer(queryset, many=True).data
@@ -62,10 +62,12 @@ class PrehabViewSet(GenericViewSet):
 
         except Prehab.DoesNotExist:
             return HTTP.response(404, 'Prehab with id {} does not exist'.format(str(pk)))
+        except ValueError:
+            return HTTP.response(404, 'Invalid url format. {}'.format(str(pk)))
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Some error occurred')
+            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
 
         return HTTP.response(200, '', data)
 

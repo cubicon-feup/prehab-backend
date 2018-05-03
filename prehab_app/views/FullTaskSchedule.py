@@ -32,10 +32,12 @@ class FullTaskScheduleViewSet(GenericViewSet):
 
         except TaskSchedule.DoesNotExist:
             return HTTP.response(404, 'Task Schedule with id {} does not exist'.format(str(pk)))
+        except ValueError:
+            return HTTP.response(404, 'Invalid url format. {}'.format(str(pk)))
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, str(e))
+            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
 
         return HTTP.response(200, '', data)
 
@@ -86,7 +88,7 @@ class FullTaskScheduleViewSet(GenericViewSet):
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, str(e))
+            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
 
         data = {
             'task_schedule_id': task_schedule.id

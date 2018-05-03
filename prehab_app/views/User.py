@@ -26,5 +26,7 @@ class UserViewSet(GenericViewSet):
             return HTTP.response(404, 'Invalid Activation Code.')
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
+        except Exception as e:
+            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
 
         return HTTP.response(200, 'User Activated.')

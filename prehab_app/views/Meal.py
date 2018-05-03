@@ -14,8 +14,13 @@ from prehab_app.serializers.Meal import MealSerializer
 class MealViewSet(GenericViewSet):
 
     def list(self, request):
-        queryset = self.paginate_queryset(Meal.objects.all())
-        data = MealSerializer(queryset, many=True).data
+        try:
+            queryset = self.paginate_queryset(Meal.objects.all())
+            data = MealSerializer(queryset, many=True).data
+        except HttpException as e:
+            return HTTP.response(e.http_code, e.http_detail)
+        except Exception as e:
+            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
 
         return HTTP.response(200, '', data=data, paginator=self.paginator)
 
@@ -26,10 +31,12 @@ class MealViewSet(GenericViewSet):
 
         except Meal.DoesNotExist:
             return HTTP.response(404, 'Meal with id {} does not exist'.format(str(pk)))
+        except ValueError:
+            return HTTP.response(404, 'Invalid url format. {}'.format(str(pk)))
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Some error occurred')
+            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
 
         data = MealSerializer(meal, many=False).data
         return HTTP.response(200, '', data)
@@ -71,7 +78,7 @@ class MealViewSet(GenericViewSet):
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, str(e))
+            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
 
         # Send Response
         data = {
