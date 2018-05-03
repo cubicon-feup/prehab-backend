@@ -11,8 +11,13 @@ from prehab_app.serializers.Task import TaskSerializer
 class TaskViewSet(GenericViewSet):
 
     def list(self, request):
-        queryset = self.paginate_queryset(Task.objects.all())
-        data = TaskSerializer(queryset, many=True).data
+        try:
+            queryset = self.paginate_queryset(Task.objects.all())
+            data = TaskSerializer(queryset, many=True).data
+        except HttpException as e:
+            return HTTP.response(e.http_code, e.http_detail)
+        except Exception as e:
+            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
 
         return HTTP.response(200, '', data=data, paginator=self.paginator)
 
@@ -23,10 +28,12 @@ class TaskViewSet(GenericViewSet):
 
         except Task.DoesNotExist:
             return HTTP.response(404, 'Task with id {} does not exist'.format(str(pk)))
+        except ValueError:
+            return HTTP.response(404, 'Invalid url format. {}'.format(str(pk)))
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Some error occurred')
+            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
 
         data = TaskSerializer(task, many=False).data
         return HTTP.response(200, '', data)

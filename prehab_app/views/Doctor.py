@@ -26,7 +26,7 @@ class DoctorViewSet(GenericViewSet):
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Some error occurred')
+            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
 
         data = DoctorSerializer(queryset, many=True).data
 
@@ -44,10 +44,12 @@ class DoctorViewSet(GenericViewSet):
 
         except Doctor.DoesNotExist:
             return HTTP.response(404, 'Doctor with id {} does not exist'.format(str(pk)))
+        except ValueError:
+            return HTTP.response(404, 'Invalid url format. {}'.format(str(pk)))
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Some error occurred')
+            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
 
         return HTTP.response(200, '', data)
 
@@ -80,9 +82,9 @@ class DoctorViewSet(GenericViewSet):
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, str(e))
+            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
 
-        return HTTP.response(200, 'New doctor account created sucessfully')
+        return HTTP.response(200, 'New doctor account created successfully')
 
     @staticmethod
     def update(request, pk=None):
