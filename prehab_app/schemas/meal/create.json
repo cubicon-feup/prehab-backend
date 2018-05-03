@@ -24,7 +24,7 @@
     },
     "required": [
         "description",
-        "task_type_id",
+        "meal_type_id",
         "constraint_types"
     ]
 }
