@@ -46,7 +46,7 @@ class PatientViewSet(GenericViewSet):
             patient = Patient.objects.get(pk=pk)
 
             # In case it's a Doctor -> check if he/she has permission
-            if request.ROLE_ID == 2 and request.USER_ID not in patient.which_doctor():
+            if request.ROLE_ID == 2 and DoctorPatient.objects.filter(doctor=request.USER_ID).filter(patient=patient).count == 0:
                 raise HttpException(401, 'You don\t have permission to access this Patient Information')
             # In case it's a Patient -> check if it's own information
             elif request.ROLE_ID == 3 and request.USER_ID == patient.id:
