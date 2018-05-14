@@ -30,5 +30,6 @@ urlpatterns = [
     url(r'logout/', AuthViewSet.as_view({'post': 'logout'}), name='logout'),
     url(r'patient/schedule/task/done', PatientTaskScheduleViewSet.as_view({'put': 'mark_as_done'}), name='updateTaskSchedule'),
     url(r'patient/(?P<pk>\d+)/statistics', PatientViewSet.as_view({'get': 'statistics'}), name='getStatistics'),
+    url(r'patient/add_second_doctor', PatientViewSet.as_view({'post': 'add_second_doctor'}), name='add_second_doctor'),
     path('', include(router.urls)),
 ]

@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "properties": {
+    "patient_id": {
+      "type": "string"
+    },
+    "doctor_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "patient_id",
+    "doctor_id"
+  ]
+}
