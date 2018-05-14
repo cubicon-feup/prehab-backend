@@ -24,7 +24,8 @@ class PatientViewSet(GenericViewSet):
                 queryset = self.paginate_queryset(Patient.objects.all())
             # In case it's a Doctor -> Retrieve ALL his/her patients info
             elif request.ROLE_ID == 2:
-                patients_ids = list(DoctorPatient.objects.filter(doctor_id=request.USER_ID).values_list('patient_id', flat=True))
+                patients_ids = list(
+                    DoctorPatient.objects.filter(doctor_id=request.USER_ID).values_list('patient_id', flat=True))
                 queryset = self.paginate_queryset(Patient.objects.filter(pk__in=patients_ids))
             # In case it's a Patient -> Retrieve info about that specific patient
             elif request.ROLE_ID == 3:
@@ -47,7 +48,8 @@ class PatientViewSet(GenericViewSet):
             patient = Patient.objects.get(pk=pk)
 
             # In case it's a Doctor -> check if he/she has permission
-            if request.ROLE_ID == 2 and DoctorPatient.objects.filter(doctor=request.USER_ID).filter(patient=patient).count == 0:
+            if request.ROLE_ID == 2 and DoctorPatient.objects.filter(doctor=request.USER_ID).filter(
+                    patient=patient).count == 0:
                 raise HttpException(401, 'You don\t have permission to access this Patient Information')
             # In case it's a Patient -> check if it's own information
             elif request.ROLE_ID == 3 and request.USER_ID == patient.id:
@@ -148,7 +150,8 @@ class PatientViewSet(GenericViewSet):
         try:
             patient = Patient.objects.get(pk=pk)
             # In case it's a Doctor -> check if he/she has permission
-            if request.ROLE_ID == 2 and DoctorPatient.objects.filter(doctor=request.USER_ID).filter(patient=patient).count == 0:
+            if request.ROLE_ID == 2 and DoctorPatient.objects.filter(doctor=request.USER_ID).filter(
+                    patient=patient).count == 0:
                 raise HttpException(401, 'You don\t have permission to access this Patient Information')
             # In case it's a Patient -> check if it's own information
             elif request.ROLE_ID == 3 and request.USER_ID == patient.id:
@@ -160,7 +163,8 @@ class PatientViewSet(GenericViewSet):
             days_to_surgery = (datetime.now().date() - prehab.surgery_date).days
             current_week_num = math.floor(days_to_surgery / 7)
             current_day_num = days_to_surgery - 7 * current_week_num
-            pass_patient_tasks = [t for t in patient_tasks if t.week_number <= current_week_num and t.day_number <= current_day_num]
+            pass_patient_tasks = [t for t in patient_tasks if
+                                  t.week_number <= current_week_num and t.day_number <= current_day_num]
 
             data = {
                 'patient_id': pk,
@@ -172,8 +176,9 @@ class PatientViewSet(GenericViewSet):
                 'total_activities': len(patient_tasks),
                 'total_activities_until_now': len(pass_patient_tasks),
                 'activities_done': len([t for t in pass_patient_tasks if t.status == PatientTaskSchedule.COMPLETED]),
-                'activities_with_difficulty': len([ t for t in pass_patient_tasks if t.was_difficult]),
-                'activities_not_done': len([t for t in pass_patient_tasks if t.status == PatientTaskSchedule.NOT_COMPLETED]),
+                'activities_with_difficulty': len([t for t in pass_patient_tasks if t.was_difficult]),
+                'activities_not_done': len(
+                    [t for t in pass_patient_tasks if t.status == PatientTaskSchedule.NOT_COMPLETED]),
                 'prehab_status_id': prehab.status,
                 'prehab_status': prehab.get_status_display()
             }
@@ -186,3 +191,45 @@ class PatientViewSet(GenericViewSet):
             return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
 
         return HTTP.response(200, '', data)
+
+    @staticmethod
+    def add_second_doctor(request):
+        try:
+            # 0 - Handle Permissions
+            if not Permission.verify(request, ['Admin', 'Doctor']):
+                raise HttpException(401)
+
+            data = request.data
+            # 1. Check schema
+            SchemaValidator.validate_obj_structure(data, 'patient/add_second_doctor.json')
+
+            patient = Patient.objects.get(pk=data['patient_id'])
+            second_doctor = Doctor.objects.get(pk=data['doctor_id'])
+            relation = DoctorPatient.objects.filter(patient=patient)
+
+            # 2. Exceptions:
+            # 2.1. If the patient has no doctor and the one calling the api is not an admin
+            if relation.count() == 0 and request.ROLE_ID != 1:
+                raise Exception('You are not allowed to add doctors to this patient.')
+            # 2.2. If patient has 2 doctors already
+            if relation.count() > 1:
+                raise Exception('One patient can only have 2 doctors associated')
+            # 2.3. if the one calling the api is not the first doctor
+            if relation.count() == 1 and relation.get().doctor.id != request.USER_ID:
+                raise Exception('You are not allowed to add doctors to this patient.')
+
+            # 3. Add new relation
+            new_relation = DoctorPatient(
+                patient=patient,
+                doctor=second_doctor
+            )
+
+            new_relation.save()
+
+        except HttpException as e:
+            return HTTP.response(e.http_code, e.http_detail)
+        except Exception as e:
+            return HTTP.response(400, str(e))
+
+        # Send Response
+        return HTTP.response(200, '')
