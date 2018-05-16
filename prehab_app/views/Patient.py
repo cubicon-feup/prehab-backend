@@ -12,6 +12,7 @@ from prehab.permissions import Permission
 from prehab_app.models import ConstraintType, PatientConstraintType, Doctor, Role, User, Prehab, PatientTaskSchedule
 from prehab_app.models.DoctorPatient import DoctorPatient
 from prehab_app.models.Patient import Patient
+from prehab_app.serializers.ConstraintType import ConstraintTypeSerializer
 from prehab_app.serializers.Doctor import DoctorSerializer
 from prehab_app.serializers.Patient import PatientSerializer
 
@@ -69,7 +70,11 @@ class PatientViewSet(GenericViewSet):
 
                 # DOCTORS
                 doctors = DoctorPatient.objects.filter(patient=patient['user']).all()
-                record['doctors_Associated'] = [DoctorSerializer(d.doctor, many=False).data for d in doctors]
+                record['doctors_associated'] = [DoctorSerializer(d.doctor, many=False).data for d in doctors]
+
+                # CONSTRAINTS
+                constraints = PatientConstraintType.objects.filter(patient=patient['user']).all()
+                record['constraints'] = [ConstraintTypeSerializer(c.constraint_type, many=False).data for c in constraints]
 
                 data.append(record)
 
@@ -126,7 +131,11 @@ class PatientViewSet(GenericViewSet):
 
             # DOCTORS
             doctors = DoctorPatient.objects.filter(patient=patient.pk).all()
-            data['doctors_Associated'] = [DoctorSerializer(d.doctor, many=False).data for d in doctors]
+            data['doctors_associated'] = [DoctorSerializer(d.doctor, many=False).data for d in doctors]
+
+            # CONSTRAINTS
+            constraints = PatientConstraintType.objects.filter(patient=patient.pk).all()
+            data['constraints'] = [ConstraintTypeSerializer(c.constraint_type, many=False).data for c in constraints]
 
         except Patient.DoesNotExist:
             return HTTP.response(404, 'Patient with id {} does not exist'.format(str(pk)))
