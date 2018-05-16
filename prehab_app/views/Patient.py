@@ -40,34 +40,6 @@ class PatientViewSet(GenericViewSet):
             for patient in patients:
                 record = dict(patient)
 
-                # STATISTICS
-                prehab = Prehab.objects.filter(patient=patient['user']).first()
-                patient_tasks = PatientTaskSchedule.objects.filter(prehab=prehab).all()
-
-                if prehab is None:
-                    record['info'] = None
-                else:
-                    days_to_surgery = (datetime.now().date() - prehab.surgery_date).days
-                    current_week_num = math.floor(days_to_surgery / 7)
-                    current_day_num = days_to_surgery - 7 * current_week_num
-                    pass_patient_tasks = [t for t in patient_tasks if t.week_number <= current_week_num and t.day_number <= current_day_num]
-
-                    record['info'] = {
-                        'patient_id': patient['user'],
-                        'prehab_week_number': prehab.number_of_weeks,
-                        'prehab_start_date': prehab.init_date,
-                        'prehab_expected_end_date': prehab.expected_end_date,
-                        'surgery_day': prehab.surgery_date,
-                        'days_until_surgery': days_to_surgery if days_to_surgery > 0 else None,
-                        'total_activities': len(patient_tasks),
-                        'total_activities_until_now': len(pass_patient_tasks),
-                        'activities_done': len([t for t in pass_patient_tasks if t.status == PatientTaskSchedule.COMPLETED]),
-                        'activities_with_difficulty': len([t for t in pass_patient_tasks if t.was_difficult]),
-                        'activities_not_done': len([t for t in pass_patient_tasks if t.status == PatientTaskSchedule.NOT_COMPLETED]),
-                        'prehab_status_id': prehab.status,
-                        'prehab_status': prehab.get_status_display()
-                    }
-
                 # DOCTORS
                 doctors = DoctorPatient.objects.filter(patient=patient['user']).all()
                 record['doctors_associated'] = [DoctorSerializer(d.doctor, many=False).data for d in doctors]
@@ -99,35 +71,6 @@ class PatientViewSet(GenericViewSet):
                 raise HttpException(401, 'You don\t have permission to access this Patient Information')
 
             data = PatientSerializer(patient, many=False).data
-
-            # STATISTICS
-            prehab = Prehab.objects.filter(patient=patient).first()
-            if prehab is None:
-                data['info'] = None
-            else:
-                patient_tasks = PatientTaskSchedule.objects.filter(prehab=prehab).all()
-
-                days_to_surgery = (datetime.now().date() - prehab.surgery_date).days
-                current_week_num = math.floor(days_to_surgery / 7)
-                current_day_num = days_to_surgery - 7 * current_week_num
-                pass_patient_tasks = [t for t in patient_tasks if
-                                      t.week_number <= current_week_num and t.day_number <= current_day_num]
-
-                data['info'] = {
-                    'patient_id': pk,
-                    'prehab_week_number': prehab.number_of_weeks,
-                    'prehab_start_date': prehab.init_date,
-                    'prehab_expected_end_date': prehab.expected_end_date,
-                    'surgery_day': prehab.surgery_date,
-                    'days_until_surgery': days_to_surgery if days_to_surgery > 0 else None,
-                    'total_activities': len(patient_tasks),
-                    'total_activities_until_now': len(pass_patient_tasks),
-                    'activities_done': len([t for t in pass_patient_tasks if t.status == PatientTaskSchedule.COMPLETED]),
-                    'activities_with_difficulty': len([t for t in pass_patient_tasks if t.was_difficult]),
-                    'activities_not_done': len([t for t in pass_patient_tasks if t.status == PatientTaskSchedule.NOT_COMPLETED]),
-                    'prehab_status_id': prehab.status,
-                    'prehab_status': prehab.get_status_display()
-                }
 
             # DOCTORS
             doctors = DoctorPatient.objects.filter(patient=patient.pk).all()
@@ -203,9 +146,6 @@ class PatientViewSet(GenericViewSet):
                     patient=new_patient,
                     constraint_type=constraint_type
                 )
-
-            # 6. Generate Task Plan - TODO
-            # TODO
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:

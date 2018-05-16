@@ -3,6 +3,7 @@ from django.urls import path, include
 from rest_framework import routers
 
 from prehab_app.views.Auth import AuthViewSet
+from prehab_app.views.CronJobs import CronJobsViewSet
 from prehab_app.views.Doctor import DoctorViewSet
 from prehab_app.views.FullTaskSchedule import FullTaskScheduleViewSet
 from prehab_app.views.Meal import MealViewSet
@@ -31,5 +32,8 @@ urlpatterns = [
     url(r'patient/schedule/task/done', PatientTaskScheduleViewSet.as_view({'put': 'mark_as_done'}), name='updateTaskSchedule'),
     url(r'patient/(?P<pk>\d+)/statistics', PatientViewSet.as_view({'get': 'statistics'}), name='getStatistics'),
     url(r'patient/add_second_doctor', PatientViewSet.as_view({'post': 'add_second_doctor'}), name='add_second_doctor'),
+
+    url(r'cron/tasks', CronJobsViewSet.as_view({'post': 'clean_tasks'}), name='clean_tasks'),
+    url(r'cron/prehabs', CronJobsViewSet.as_view({'post': 'clean_prehabs'}), name='clean_prehabs'),
     path('', include(router.urls)),
 ]

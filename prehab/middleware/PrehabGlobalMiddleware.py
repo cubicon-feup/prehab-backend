@@ -11,6 +11,9 @@ class PrehabGlobalMiddleware(object):
         # One-time configuration and initialization.
 
     def __call__(self, request):
+        if request.path in ('/api/cron/tasks', '/api/cron/prehabs'):
+            return self.get_response(request)
+
         ########################################################
         # TODO - remove this
         ########################################################

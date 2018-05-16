@@ -10,13 +10,11 @@ class PatientTaskScheduleQuerySet(models.QuerySet):
 
 class PatientTaskSchedule(models.Model):
     PENDING = 1
-    ONGOING = 2
-    COMPLETED = 3
-    NOT_COMPLETED = 4
+    COMPLETED = 2
+    NOT_COMPLETED = 3
 
     Status = (
         (PENDING, 'Pending'),
-        (ONGOING, 'Ongoing'),
         (COMPLETED, 'Completed'),
         (NOT_COMPLETED, 'Not Completed'),
     )
@@ -35,6 +33,8 @@ class PatientTaskSchedule(models.Model):
     patient_notes = models.CharField(max_length=256, blank=False, null=True, default="")
     seen_by_doctor = models.BooleanField(blank=False, null=False, default=False)
     doctor_notes = models.CharField(max_length=256, blank=False, null=True, default="")
+
+    date = models.DateTimeField(blank=False, null=True, default=None, db_column='date')
 
     objects = PatientTaskScheduleQuerySet.as_manager()
 

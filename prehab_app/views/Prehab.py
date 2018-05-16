@@ -1,4 +1,5 @@
-import datetime
+import math
+from datetime import datetime
 
 from django.db import transaction
 from rest_framework.viewsets import GenericViewSet
@@ -8,13 +9,12 @@ from prehab.helpers.HttpException import HttpException
 from prehab.helpers.HttpResponseHandler import HTTP
 from prehab.helpers.SchemaValidator import SchemaValidator
 from prehab.permissions import Permission
-from prehab_app.models.Meal import Meal
-from prehab_app.models.PatientMealSchedule import PatientMealSchedule
-from prehab_app.models.PatientConstraintType import PatientConstraintType
-from prehab_app.models.PatientTaskSchedule import PatientTaskSchedule
 from prehab_app.models.Doctor import Doctor
 from prehab_app.models.DoctorPatient import DoctorPatient
 from prehab_app.models.Patient import Patient
+from prehab_app.models.PatientConstraintType import PatientConstraintType
+from prehab_app.models.PatientMealSchedule import PatientMealSchedule
+from prehab_app.models.PatientTaskSchedule import PatientTaskSchedule
 from prehab_app.models.Prehab import Prehab
 from prehab_app.models.TaskSchedule import TaskSchedule
 from prehab_app.serializers.Prehab import PrehabSerializer, FullPrehabSerializer
@@ -41,13 +41,40 @@ class PrehabViewSet(GenericViewSet):
             else:
                 raise HttpException(400, 'Some error occurred')
 
+            queryset = self.paginate_queryset(prehabs)
+            data = PrehabSerializer(queryset, many=True).data
+            for prehab in data:
+                # STATISTICS
+                prehab = Prehab.objects.get(pk=prehab['id'])
+                patient_tasks = PatientTaskSchedule.objects.filter(prehab=prehab).all()
+
+                days_to_surgery = (datetime.now().date() - prehab.surgery_date).days
+                current_week_num = math.floor(days_to_surgery / 7)
+                current_day_num = days_to_surgery - 7 * current_week_num
+                pass_patient_tasks = [t for t in patient_tasks if
+                                      t.week_number <= current_week_num and t.day_number <= current_day_num]
+
+                prehab['info'] = {
+                    'patient_id': prehab.patient.pk,
+                    'prehab_week_number': prehab.number_of_weeks,
+                    'prehab_start_date': prehab.init_date,
+                    'prehab_expected_end_date': prehab.expected_end_date,
+                    'surgery_day': prehab.surgery_date,
+                    'days_until_surgery': days_to_surgery if days_to_surgery > 0 else None,
+                    'total_activities': len(patient_tasks),
+                    'total_activities_until_now': len(pass_patient_tasks),
+                    'activities_done': len([t for t in pass_patient_tasks if t.status == PatientTaskSchedule.COMPLETED]),
+                    'activities_with_difficulty': len([t for t in pass_patient_tasks if t.was_difficult]),
+                    'activities_not_done': len(
+                        [t for t in pass_patient_tasks if t.status == PatientTaskSchedule.NOT_COMPLETED]),
+                    'prehab_status_id': prehab.status,
+                    'prehab_status': prehab.get_status_display()
+                }
+
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
             return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
-
-        queryset = self.paginate_queryset(prehabs)
-        data = PrehabSerializer(queryset, many=True).data
 
         return HTTP.response(200, '', data=data, paginator=self.paginator)
 
@@ -58,7 +85,31 @@ class PrehabViewSet(GenericViewSet):
             if request.ROLE_ID != 1 and request.USER_ID not in (prehab.created_by.user.id, prehab.patient.user.id):
                 raise HttpException(401, 'You don\'t have permissions to see this Prehab Plan')
 
-            data = FullPrehabSerializer(prehab, many=False).data
+            # STATISTICS
+            patient_tasks = PatientTaskSchedule.objects.filter(prehab=prehab).all()
+
+            days_to_surgery = (datetime.now().date() - prehab.surgery_date).days
+            current_week_num = math.floor(days_to_surgery / 7)
+            current_day_num = days_to_surgery - 7 * current_week_num
+            pass_patient_tasks = [t for t in patient_tasks if
+                                  t.week_number <= current_week_num and t.day_number <= current_day_num]
+
+            prehab_info = {
+                'patient_id': pk,
+                'prehab_week_number': prehab.number_of_weeks,
+                'prehab_start_date': prehab.init_date,
+                'prehab_expected_end_date': prehab.expected_end_date,
+                'surgery_day': prehab.surgery_date,
+                'days_until_surgery': days_to_surgery if days_to_surgery > 0 else None,
+                'total_activities': len(patient_tasks),
+                'total_activities_until_now': len(pass_patient_tasks),
+                'activities_done': len([t for t in pass_patient_tasks if t.status == PatientTaskSchedule.COMPLETED]),
+                'activities_with_difficulty': len([t for t in pass_patient_tasks if t.was_difficult]),
+                'activities_not_done': len(
+                    [t for t in pass_patient_tasks if t.status == PatientTaskSchedule.NOT_COMPLETED]),
+                'prehab_status_id': prehab.status,
+                'prehab_status': prehab.get_status_display()
+            }
 
         except Prehab.DoesNotExist:
             return HTTP.response(404, 'Prehab with id {} does not exist'.format(str(pk)))
@@ -68,6 +119,9 @@ class PrehabViewSet(GenericViewSet):
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
             return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
+
+        data = FullPrehabSerializer(prehab, many=False).data
+        data['info'] = prehab_info
 
         return HTTP.response(200, '', data)
 
