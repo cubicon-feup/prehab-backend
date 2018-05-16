@@ -97,29 +97,32 @@ class PatientViewSet(GenericViewSet):
 
             # STATISTICS
             prehab = Prehab.objects.filter(patient=patient).first()
-            patient_tasks = PatientTaskSchedule.objects.filter(prehab=prehab).all()
+            if prehab is None:
+                data['info'] = None
+            else:
+                patient_tasks = PatientTaskSchedule.objects.filter(prehab=prehab).all()
 
-            days_to_surgery = (datetime.now().date() - prehab.surgery_date).days
-            current_week_num = math.floor(days_to_surgery / 7)
-            current_day_num = days_to_surgery - 7 * current_week_num
-            pass_patient_tasks = [t for t in patient_tasks if
-                                  t.week_number <= current_week_num and t.day_number <= current_day_num]
+                days_to_surgery = (datetime.now().date() - prehab.surgery_date).days
+                current_week_num = math.floor(days_to_surgery / 7)
+                current_day_num = days_to_surgery - 7 * current_week_num
+                pass_patient_tasks = [t for t in patient_tasks if
+                                      t.week_number <= current_week_num and t.day_number <= current_day_num]
 
-            data['info'] = {
-                'patient_id': pk,
-                'prehab_week_number': prehab.number_of_weeks,
-                'prehab_start_date': prehab.init_date,
-                'prehab_expected_end_date': prehab.expected_end_date,
-                'surgery_day': prehab.surgery_date,
-                'days_until_surgery': days_to_surgery if days_to_surgery > 0 else None,
-                'total_activities': len(patient_tasks),
-                'total_activities_until_now': len(pass_patient_tasks),
-                'activities_done': len([t for t in pass_patient_tasks if t.status == PatientTaskSchedule.COMPLETED]),
-                'activities_with_difficulty': len([t for t in pass_patient_tasks if t.was_difficult]),
-                'activities_not_done': len([t for t in pass_patient_tasks if t.status == PatientTaskSchedule.NOT_COMPLETED]),
-                'prehab_status_id': prehab.status,
-                'prehab_status': prehab.get_status_display()
-            }
+                data['info'] = {
+                    'patient_id': pk,
+                    'prehab_week_number': prehab.number_of_weeks,
+                    'prehab_start_date': prehab.init_date,
+                    'prehab_expected_end_date': prehab.expected_end_date,
+                    'surgery_day': prehab.surgery_date,
+                    'days_until_surgery': days_to_surgery if days_to_surgery > 0 else None,
+                    'total_activities': len(patient_tasks),
+                    'total_activities_until_now': len(pass_patient_tasks),
+                    'activities_done': len([t for t in pass_patient_tasks if t.status == PatientTaskSchedule.COMPLETED]),
+                    'activities_with_difficulty': len([t for t in pass_patient_tasks if t.was_difficult]),
+                    'activities_not_done': len([t for t in pass_patient_tasks if t.status == PatientTaskSchedule.NOT_COMPLETED]),
+                    'prehab_status_id': prehab.status,
+                    'prehab_status': prehab.get_status_display()
+                }
 
             # DOCTORS
             doctors = DoctorPatient.objects.filter(patient=patient.pk).all()
