@@ -43,9 +43,9 @@ class PrehabViewSet(GenericViewSet):
 
             queryset = self.paginate_queryset(prehabs)
             data = PrehabSerializer(queryset, many=True).data
-            for prehab in data:
+            for record in data:
                 # STATISTICS
-                prehab = Prehab.objects.get(pk=prehab['id'])
+                prehab = Prehab.objects.get(pk=record['id'])
                 patient_tasks = PatientTaskSchedule.objects.filter(prehab=prehab).all()
 
                 days_to_surgery = (datetime.now().date() - prehab.surgery_date).days
@@ -54,7 +54,7 @@ class PrehabViewSet(GenericViewSet):
                 pass_patient_tasks = [t for t in patient_tasks if
                                       t.week_number <= current_week_num and t.day_number <= current_day_num]
 
-                prehab['info'] = {
+                record['info'] = {
                     'patient_id': prehab.patient.pk,
                     'prehab_week_number': prehab.number_of_weeks,
                     'prehab_start_date': prehab.init_date,
