@@ -58,6 +58,7 @@ class PrehabViewSet(GenericViewSet):
 
                 record['info'] = {
                     'patient_id': prehab.patient.pk,
+                    'patient_tag': prehab.patient.patient_tag,
                     'prehab_week_number': prehab.number_of_weeks,
                     'prehab_start_date': prehab.init_date,
                     'prehab_expected_end_date': prehab.expected_end_date,

@@ -142,10 +142,12 @@ class PatientViewSet(GenericViewSet):
             # 5. Associate Constraints
             for constraint_id in data['constraints']:
                 constraint_type = ConstraintType.objects.get(pk=constraint_id)
-                PatientConstraintType(
+                constraint = PatientConstraintType(
                     patient=new_patient,
                     constraint_type=constraint_type
                 )
+                constraint.save()
+
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
