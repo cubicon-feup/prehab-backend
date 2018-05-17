@@ -10,7 +10,7 @@ class PatientConstraintTypeQuerySet(models.QuerySet):
 
 class PatientConstraintType(models.Model):
     id = models.AutoField(primary_key=True)
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, db_column='patient_id')
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, db_column='patient_id', related_name='patient_constraints')
     constraint_type = models.ForeignKey(ConstraintType, on_delete=models.CASCADE, db_column='constraint_type_id')
 
     objects = PatientConstraintTypeQuerySet.as_manager()

@@ -48,3 +48,19 @@ class DoctorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Doctor
         fields = '__all__'
+
+
+class SimpleDoctorSerializer(serializers.ModelSerializer):
+    user = SimpleUserSerializer(many=False, required=True)
+
+    def to_representation(self, obj):
+        data = super(SimpleDoctorSerializer, self).to_representation(obj)  # the original data
+        data = {
+            'id': data['user']['id'],
+            'name': data['user']['name']
+        }
+        return data
+
+    class Meta:
+        model = Doctor
+        fields = '__all__'

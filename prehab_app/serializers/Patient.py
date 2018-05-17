@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from prehab_app.models.Patient import Patient
+from prehab_app.serializers.PatientConstraintType import PatientConstraintTypeSerializer
 from prehab_app.serializers.Prehab import PrehabSerializer
 
 
@@ -20,6 +21,20 @@ class PatientWithPrehabSerializer(serializers.ModelSerializer):
 
 
 class PatientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Patient
+        fields = '__all__'
+
+
+class PatientWithConstraintsSerializer(serializers.ModelSerializer):
+    patient_constraints = PatientConstraintTypeSerializer(many=True, read_only=True)
+
+    @staticmethod
+    def setup_eager_loading(queryset):
+        """ Perform necessary eager loading of data. """
+        queryset = queryset.prefetch_related('patient_constraints', 'patient')
+        return queryset
+
     class Meta:
         model = Patient
         fields = '__all__'

@@ -17,6 +17,8 @@ from prehab_app.models.PatientMealSchedule import PatientMealSchedule
 from prehab_app.models.PatientTaskSchedule import PatientTaskSchedule
 from prehab_app.models.Prehab import Prehab
 from prehab_app.models.TaskSchedule import TaskSchedule
+from prehab_app.serializers.Doctor import DoctorSerializer, SimpleDoctorSerializer
+from prehab_app.serializers.Patient import PatientSerializer, PatientWithConstraintsSerializer
 from prehab_app.serializers.Prehab import PrehabSerializer, FullPrehabSerializer
 
 
@@ -94,13 +96,7 @@ class PrehabViewSet(GenericViewSet):
             pass_patient_tasks = [t for t in patient_tasks if
                                   t.week_number <= current_week_num and t.day_number <= current_day_num]
 
-            prehab_info = {
-                'patient_id': pk,
-                'prehab_week_number': prehab.number_of_weeks,
-                'prehab_start_date': prehab.init_date,
-                'prehab_expected_end_date': prehab.expected_end_date,
-                'surgery_day': prehab.surgery_date,
-                'days_until_surgery': days_to_surgery if days_to_surgery > 0 else None,
+            prehab_statistics = {
                 'total_activities': len(patient_tasks),
                 'total_activities_until_now': len(pass_patient_tasks),
                 'activities_done': len([t for t in pass_patient_tasks if t.status == PatientTaskSchedule.COMPLETED]),
@@ -110,6 +106,11 @@ class PrehabViewSet(GenericViewSet):
                 'prehab_status_id': prehab.status,
                 'prehab_status': prehab.get_status_display()
             }
+
+            # DOCTORS
+            prehab_doctors = []
+            for doctor_patient in DoctorPatient.objects.filter(patient=prehab.patient).all():
+                prehab_doctors.append(SimpleDoctorSerializer(doctor_patient.doctor, many=False).data)
 
         except Prehab.DoesNotExist:
             return HTTP.response(404, 'Prehab with id {} does not exist'.format(str(pk)))
@@ -121,7 +122,9 @@ class PrehabViewSet(GenericViewSet):
             return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
 
         data = FullPrehabSerializer(prehab, many=False).data
-        data['info'] = prehab_info
+        data['statistics'] = prehab_statistics
+        data['patient'] = PatientWithConstraintsSerializer(prehab.patient, many=False).data
+        data['doctors'] = prehab_doctors
 
         return HTTP.response(200, '', data)
 
