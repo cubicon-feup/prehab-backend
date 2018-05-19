@@ -146,7 +146,7 @@ class PrehabViewSet(GenericViewSet):
             # 1.4. Check if surgery date is greater than init_date
             surgery_date = datetime.datetime.strptime(data['surgery_date'], "%d-%m-%Y")
             init_date = datetime.datetime.strptime(data['init_date'], "%d-%m-%Y")
-            if data['surgery_date'] < data['init_date']:
+            if surgery_date < init_date:
                 raise HttpException(400, 'Surgery Date must be after prehab init.')
 
             # 1.5. Check if Task Schedule Id was created by this specific doctor or a community Task Schedule (created by an admin
@@ -173,7 +173,6 @@ class PrehabViewSet(GenericViewSet):
                     status=Prehab.PENDING,
                     created_by=doctor
                 )
-                prehab.save()
 
                 # 4. Insert Patient Task Schedule
                 patient_task_schedule_work_load = DataHelper.patient_task_schedule_work_load(task_schedule)
@@ -188,8 +187,6 @@ class PrehabViewSet(GenericViewSet):
                         actual_repetitions=None,
                         status=PatientTaskSchedule.PENDING
                     ))
-                PatientTaskSchedule.objects.bulk_create(patient_tasks)
-
                 # 5. Insert Patient Meal Schedule
                 constraint_types = [pct.constraint_type for pct in PatientConstraintType.objects.filter(patient=patient).all()]
                 patient_meal_schedule = DataHelper.patient_meal_schedule(task_schedule.number_of_weeks, constraint_types)
@@ -202,6 +199,9 @@ class PrehabViewSet(GenericViewSet):
                         meal_order=row['meal_order'],
                         meal=row['meal']
                     ))
+
+                prehab.save()
+                PatientTaskSchedule.objects.bulk_create(patient_tasks)
                 PatientMealSchedule.objects.bulk_create(patient_meals)
 
         except Patient.DoesNotExist as e:
