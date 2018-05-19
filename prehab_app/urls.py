@@ -36,7 +36,7 @@ urlpatterns = [
     url(r'cron/tasks', CronJobsViewSet.as_view({'post': 'clean_tasks'}), name='clean_tasks'),
     url(r'cron/prehabs', CronJobsViewSet.as_view({'post': 'clean_prehabs'}), name='clean_prehabs'),
 
-    url(r'prehab/cancel/(?P<pk>\d+)/', PatientViewSet.as_view({'put': 'cancel'}), name='cancelPrehab'),
+    url(r'prehab/cancel/(?P<pk>\d+)/', PrehabViewSet.as_view({'put': 'cancel'}), name='cancel_prehab'),
 
     path('', include(router.urls)),
 ]

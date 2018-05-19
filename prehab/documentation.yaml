@@ -35,13 +35,13 @@ paths:
         By passing username and the correct password, yoy can log and receive a jwt to continue with your requests
       responses:
         '200':
-          description: 'Success.'
+          description: 'Successo.'
         '400':
-          description: 'Some Error occurred.'
+          description: 'Ocorreu um erro inesperado.'
         '401':
-          description: 'Some error occurred with your credentials.'
-        '403':
-          description: 'You are not allowed to access this resource.'
+          description: 'Credenciais não válidas.'
+        '401':
+          description: 'Não tem permissões para aceder a este recurso.'
       requestBody:
         content:
           application/json:
@@ -70,7 +70,7 @@ paths:
         Blacklist JWT token
       responses:
         '200':
-          description: 'Success.'
+          description: 'Successo.'
 
 
   /cron/tasks:
@@ -83,9 +83,9 @@ paths:
         Clean Tasks outdated in the platform. Is intended to run once a day. It will update task status for each patient
       responses:
         '200':
-          description: 'Success.'
+          description: 'Succeso.'
         '400':
-          description: 'Some Error occurred.'
+          description: 'Ocorreu um erro inesperado.'
   /cron/prehabs:
     post:
       tags:
@@ -96,9 +96,9 @@ paths:
         Clean Prehabs outdated in the platform. Is intended to run once a day. It will update prehab status for each patient.
       responses:
         '200':
-          description: 'Success.'
+          description: 'Successo.'
         '400':
-          description: 'Some Error occurred.'
+          description: 'Ocorreu um erro inesperado.'
 
 
 
@@ -113,11 +113,54 @@ paths:
         Get list of all doctors.
       responses:
         '200':
-          description: 'Success.'
+          description: 'Successo.'
         '400':
-          description: 'Some Error occurred.'
-        '403':
-          description: 'You are not allowed to access this resource.'
+          description: 'Ocorreu um erro inesperado.'
+        '401':
+          description: 'Não tem permissões para aceder a este recurso.'
+
+     post:
+       tags:
+         - admins
+         - doctors
+         - patients
+       summary: Log in the application
+       # operationId: searchInventory
+       description: |
+         By passing username and the correct password, yoy can log and receive a jwt to continue with your requests
+       parameters:
+         - in: query
+           name: searchString
+           description: pass an optional search string for looking up inventory
+           required: false
+           schema:
+             type: string
+         - in: query
+           name: skip
+           description: number of records to skip for pagination
+           schema:
+             type: integer
+             format: int32
+             minimum: 0
+         - in: query
+           name: limit
+           description: maximum number of records to return
+           schema:
+             type: integer
+             format: int32
+             minimum: 0
+             maximum: 50
+       responses:
+         '200':
+           description: search results matching criteria
+           content:
+             application/json:
+               schema:
+                 type: array
+                 items:
+                   $ref: '#/components/schemas/InventoryItem'
+         '400':
+           description: bad input parameter
 
   /doctor/<id>:
     get:
@@ -133,8 +176,12 @@ paths:
           description: 'Success.'
         '400':
           description: 'Some Error occurred.'
-        '403':
-          description: 'You are not allowed to access this resource.'
+        '401':
+          description: 'You don\'t have permission to access this resource.'
+        '404':
+          description: 'Doctor with id <id> does not exist.'
+        '404':
+          description: 'Invalid url format.'
       parameters:
          - in: query
            name: id

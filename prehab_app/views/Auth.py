@@ -18,7 +18,7 @@ class AuthViewSet(viewsets.ModelViewSet):
             # 1. Check if pair username-password is correct
             user = User.objects.match_credentials(request.data['username'], request.data['password'])
             if len(user) == 0:
-                raise HttpException(401, 'Some error occurred with your credentials.')
+                raise HttpException(401, 'Credenciais não válidas.')
 
             # 2. Get Relevant Information of the User
             user = user.get()
@@ -26,7 +26,7 @@ class AuthViewSet(viewsets.ModelViewSet):
             # In Case of a Patient - only if platform is MOBILE
             # In Case of a Doctor - only if platform is WEB
             if (user.role.id == 3 and request.PLATFORM != 'mobile') or (user.role.id == 2 and request.PLATFORM != 'web'):
-                raise HttpException(403, 'You are not allowed to access this resource.')
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.')
 
             # 3. Get Context Information - TODO
             prehab_id = None
@@ -45,7 +45,7 @@ class AuthViewSet(viewsets.ModelViewSet):
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
 
         # Send Response
         data = {

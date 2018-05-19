@@ -18,7 +18,7 @@ class DoctorViewSet(GenericViewSet):
         try:
             # In case it's a patient -> don't allow it
             if request.ROLE_ID == 3:
-                raise HttpException(403, 'You can\'t access this information.')
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.')
 
             doctors = self.paginate_queryset(Doctor.objects.all())
             queryset = self.paginate_queryset(doctors)
@@ -26,7 +26,7 @@ class DoctorViewSet(GenericViewSet):
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
 
         data = DoctorSerializer(queryset, many=True).data
 
@@ -37,15 +37,15 @@ class DoctorViewSet(GenericViewSet):
         try:
             # In case it's not Admin -> fails
             if request.ROLE_ID != 1 and request.USER_ID != pk:
-                raise HttpException(401, 'You don\t have permission to access this Doctor Information')
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.')
 
             doctor = Doctor.objects.get(user_id=pk)
             data = FullDoctorSerializer(doctor, many=False).data
 
         except Doctor.DoesNotExist:
-            return HTTP.response(404, 'Doctor with id {} does not exist'.format(str(pk)))
+            return HTTP.response(404, 'Doctor com id {} não foi encpontrado'.format(str(pk)))
         except ValueError:
-            return HTTP.response(404, 'Invalid url format. {}'.format(str(pk)))
+            return HTTP.response(404, 'Url com formato inválido url format. {}'.format(str(pk)))
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
