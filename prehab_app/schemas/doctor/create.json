@@ -9,7 +9,7 @@
         },
         "email": {
             "type": "string"
-        }
+        },
         "department": {
             "type": "string"
         }
