@@ -43,7 +43,7 @@ class PatientTaskScheduleViewSet(GenericViewSet):
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
 
         return HTTP.response(200, '', data=data, paginator=self.paginator)
 
@@ -64,11 +64,11 @@ class PatientTaskScheduleViewSet(GenericViewSet):
         except PatientTaskSchedule.DoesNotExist:
             return HTTP.response(404, 'Patient with id {} does not exist'.format(str(pk)))
         except ValueError:
-            return HTTP.response(404, 'Invalid url format. {}'.format(str(pk)))
+            return HTTP.response(404, 'Url com formato inválido. {}'.format(str(pk)))
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
 
         return HTTP.response(200, '', data)
 
@@ -88,7 +88,7 @@ class PatientTaskScheduleViewSet(GenericViewSet):
             # 1. Validations
             # 1.1. Only Doctors can mark tas schedule as seen
             if not Permission.verify(request, ['Doctor']):
-                raise HttpException(401)
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.')
 
             # 1.2. Check schema
             SchemaValidator.validate_obj_structure(data, 'patient_task_schedule/mark_as_seen.json')
@@ -112,7 +112,7 @@ class PatientTaskScheduleViewSet(GenericViewSet):
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
 
         return HTTP.response(200, '')
 
@@ -124,7 +124,7 @@ class PatientTaskScheduleViewSet(GenericViewSet):
             # 1. Validations
             # 1.1. Only Patients can create new Prehab Plans
             if not Permission.verify(request, ['Patient']):
-                raise HttpException(401)
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.')
 
             # 1.2. Check schema
             SchemaValidator.validate_obj_structure(data, 'patient_task_schedule/mark_as_done.json')
@@ -159,15 +159,15 @@ class PatientTaskScheduleViewSet(GenericViewSet):
             patient_task_schedule.save()
 
         except PatientTaskSchedule.DoesNotExist as e:
-            return HTTP.response(400, 'Patient Task Schedule does not exist.')
+            return HTTP.response(400, 'Patient Task Schedule nõ encontrado.')
         except Prehab.DoesNotExist as e:
-            return HTTP.response(400, 'Prehab with id of {} does not exist.'.format(request.data['prehab_id']))
+            return HTTP.response(400, 'Prehab com id {} não encontrado.'.format(request.data['prehab_id']))
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
             return HTTP.response(400, str(e))
 
-        return HTTP.response(200, 'Updated With Success')
+        return HTTP.response(200, 'Prehab atualizado com sucesso.')
 
     @staticmethod
     def destroy(request, pk=None):

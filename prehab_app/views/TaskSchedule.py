@@ -14,7 +14,7 @@ class TaskScheduleViewSet(GenericViewSet):
             # 0. Check Permissions
 
             if not Permission.verify(request, ['Admin', 'Doctor']):
-                raise HttpException(401)
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.')
 
             # In case it's an Admin -> Retrieve ALL patients info
             if request.ROLE_ID == 1:
@@ -23,14 +23,14 @@ class TaskScheduleViewSet(GenericViewSet):
             elif request.ROLE_ID == 2:
                 queryset = self.paginate_queryset(TaskSchedule.objects.created_by(request.USER_ID))
             else:
-                raise HttpException(400, 'Some error occurred')
+                raise HttpException(400)
 
             data = TaskScheduleSerializer(queryset, many=True).data
 
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
 
         return HTTP.response(200, '', data=data, paginator=self.paginator)
 
@@ -41,13 +41,13 @@ class TaskScheduleViewSet(GenericViewSet):
             data = TaskScheduleSerializer(queryset, many=True).data[0]
 
         except TaskSchedule.DoesNotExist:
-            return HTTP.response(404, 'Patient with id {} does not exist'.format(str(pk)))
+            return HTTP.response(404, 'Patient com id {} não encontrado.'.format(str(pk)))
         except ValueError:
-            return HTTP.response(404, 'Invalid url format. {}'.format(str(pk)))
+            return HTTP.response(404, 'Url com formato inválido. {}'.format(str(pk)))
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
 
         return HTTP.response(200, '', data)
 

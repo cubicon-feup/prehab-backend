@@ -75,7 +75,7 @@ class PrehabViewSet(GenericViewSet):
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
 
         return HTTP.response(200, '', data=data, paginator=self.paginator)
 
@@ -110,11 +110,11 @@ class PrehabViewSet(GenericViewSet):
         except Prehab.DoesNotExist:
             return HTTP.response(404, 'Prehab with id {} does not exist'.format(str(pk)))
         except ValueError:
-            return HTTP.response(404, 'Invalid url format. {}'.format(str(pk)))
+            return HTTP.response(404, 'Url com formato inválido. {}'.format(str(pk)))
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
 
         data = FullPrehabSerializer(prehab, many=False).data
         data['statistics'] = prehab_statistics
@@ -131,7 +131,7 @@ class PrehabViewSet(GenericViewSet):
             # 1. Validations
             # 1.1. Only Doctors can create new Prehab Plans
             if not Permission.verify(request, ['Admin', 'Doctor']):
-                raise HttpException(401)
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.')
 
             # 1.2. Check schema
             SchemaValidator.validate_obj_structure(data, 'prehab/create.json')
@@ -233,21 +233,21 @@ class PrehabViewSet(GenericViewSet):
             prehab = Prehab.objects.get(pk=pk)
 
             if not Permission.verify(request, ['Admin', 'Doctor']):
-                raise HttpException(401)
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.')
 
             if request.ROLE_ID == 2 and not DoctorPatient.objects.is_a_match(request.USER_ID, prehab.patient.id):
-                raise HttpException(400, 'Patient {} is not from Doctor {}.'.format(prehab.patient.id, request.USER_ID))
+                raise HttpException(400, 'Patient {} não é paciente do medico {}.'.format(prehab.patient.id, request.USER_ID))
 
             prehab.actual_end_date = datetime.date.today()
             prehab.status = Prehab.CANCEL
             prehab.save()
 
         except Patient.DoesNotExist as e:
-            return HTTP.response(400, 'Patient with id of {} does not exist.'.format(request.data['patient_id']))
+            return HTTP.response(400, 'Patient com id {} não encontrado.'.format(request.data['patient_id']))
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
             return HTTP.response(400, str(e))
 
         # Send Response
-        return HTTP.response(200, '')
+        return HTTP.response(200, 'Prehab cancelado com sucesso.')

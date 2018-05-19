@@ -43,19 +43,22 @@ class DoctorViewSet(GenericViewSet):
             data = FullDoctorSerializer(doctor, many=False).data
 
         except Doctor.DoesNotExist:
-            return HTTP.response(404, 'Doctor com id {} não foi encpontrado'.format(str(pk)))
+            return HTTP.response(404, 'Doctor com id {} não foi encontrado.'.format(str(pk)))
         except ValueError:
-            return HTTP.response(404, 'Url com formato inválido url format. {}'.format(str(pk)))
+            return HTTP.response(404, 'Url com formato inválido. {}'.format(str(pk)))
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
 
         return HTTP.response(200, '', data)
 
     @staticmethod
     def create(request):
         try:
+            if request.ROLE_ID != 1:
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.')
+
             # 1. Check schema
             SchemaValidator.validate_obj_structure(request.data, 'doctor/create.json')
 
@@ -82,9 +85,9 @@ class DoctorViewSet(GenericViewSet):
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
 
-        return HTTP.response(200, 'New doctor account created successfully')
+        return HTTP.response(201, 'Doctor criado com succeso.')
 
     @staticmethod
     def update(request, pk=None):

@@ -20,7 +20,7 @@ class MealViewSet(GenericViewSet):
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
 
         return HTTP.response(200, '', data=data, paginator=self.paginator)
 
@@ -30,13 +30,13 @@ class MealViewSet(GenericViewSet):
             meal = Meal.objects.get(pk=pk)
 
         except Meal.DoesNotExist:
-            return HTTP.response(404, 'Meal with id {} does not exist'.format(str(pk)))
+            return HTTP.response(404, 'Meal com id {} não encontrado.'.format(str(pk)))
         except ValueError:
-            return HTTP.response(404, 'Invalid url format. {}'.format(str(pk)))
+            return HTTP.response(404, 'Url com formato inválido. {}'.format(str(pk)))
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
 
         data = MealSerializer(meal, many=False).data
         return HTTP.response(200, '', data)
@@ -45,7 +45,7 @@ class MealViewSet(GenericViewSet):
     def create(request):
         try:
             if not Permission.verify(request, ['Admin']):
-                raise HttpException(401)
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.')
 
             data = request.data
             # 1. Check schema
@@ -74,17 +74,17 @@ class MealViewSet(GenericViewSet):
                     meal_constraint_type.save()
 
         except ConstraintType.DoesNotExist:
-            return HTTP.response(404, 'One of the Constraint Types was not found.')
+            return HTTP.response(404, 'Restrição alimentar not found.')
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
 
         # Send Response
         data = {
             'meal_id': new_meal.id
         }
-        return HTTP.response(201, '', data)
+        return HTTP.response(201, 'Meal criada com sucesso.', data)
 
     @staticmethod
     def update(request, pk=None):

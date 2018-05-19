@@ -12,21 +12,21 @@ class UserViewSet(GenericViewSet):
     def activate(request):
         try:
             if 'activation_code' not in request.data or 'password' not in request.data:
-                raise HttpException(400, 'You need to send activation code and password')
+                raise HttpException(400, 'Precisa de enviar código de ativação e nova password.')
 
             user = User.objects.filter(activation_code=request.data['activation_code']).get()
             if user.is_active:
-                raise HttpException(400, 'You are already active.')
+                raise HttpException(400, 'O user já está ativo.')
 
             user.password = request.data['password']
             user.is_active = True
             user.save()
 
         except User.DoesNotExist:
-            return HTTP.response(404, 'Invalid Activation Code.')
+            return HTTP.response(404, 'Código de ativação inválido.')
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
 
-        return HTTP.response(200, 'User Activated.')
+        return HTTP.response(200, 'Utilizador ativado com sucesso.')

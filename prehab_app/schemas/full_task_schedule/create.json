@@ -3,14 +3,10 @@
     "properties": {
         "title": {
             "maxLength": 64,
-            "type": [
-                "string"
-            ]
+            "type": "string"
         },
         "number_of_weeks": {
-            "type": [
-                "integer"
-            ]
+            "type": "integer"
         },
         "weeks": {
             "type": "array",

@@ -17,7 +17,7 @@ class TaskViewSet(GenericViewSet):
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
 
         return HTTP.response(200, '', data=data, paginator=self.paginator)
 
@@ -27,13 +27,13 @@ class TaskViewSet(GenericViewSet):
             task = Task.objects.get(pk=pk)
 
         except Task.DoesNotExist:
-            return HTTP.response(404, 'Task with id {} does not exist'.format(str(pk)))
+            return HTTP.response(404, 'Task com id {} não encontrada.'.format(str(pk)))
         except ValueError:
-            return HTTP.response(404, 'Invalid url format. {}'.format(str(pk)))
+            return HTTP.response(404, 'Url com formato inválido. {}'.format(str(pk)))
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Some error occurred. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
 
         data = TaskSerializer(task, many=False).data
         return HTTP.response(200, '', data)
@@ -42,7 +42,7 @@ class TaskViewSet(GenericViewSet):
     def create(request):
         try:
             if not Permission.verify(request, ['Admin']):
-                raise HttpException(401)
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.')
 
             data = request.data
             # 1. Check schema
@@ -65,7 +65,7 @@ class TaskViewSet(GenericViewSet):
         data = {
             'task_id': new_task.id
         }
-        return HTTP.response(201, '', data)
+        return HTTP.response(201, 'Task adicionada com sucesso.', data)
 
     @staticmethod
     def update(request, pk=None):
