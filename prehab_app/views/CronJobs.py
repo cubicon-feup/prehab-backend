@@ -45,7 +45,7 @@ class CronJobsViewSet(viewsets.ModelViewSet):
                 # Achieve Prehabs due 30 days
                 elif (prehab.expected_end_date + datetime.timedelta(30)) <= datetime.date.today() and prehab.status < 3:
                     prehab.actual_end_date = datetime.date.today()
-                    prehab.status = Prehab.COMPLETED
+                    prehab.status = Prehab.CANCEL
 
                 prehab.save()
 

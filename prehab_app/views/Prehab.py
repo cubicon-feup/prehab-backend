@@ -29,7 +29,7 @@ class PrehabViewSet(GenericViewSet):
             if 'active' in request.GET and request.GET.get('active'):
                 prehabs = Prehab.objects.filter(status__not_in=4)
             else:
-                prehabs = Prehab.objects
+                prehabs = Prehab.objects.filter(status__lt=4)
 
             # In case it's an Admin -> Retrieve ALL PREHABS info
             if request.ROLE_ID == 1:
@@ -234,6 +234,12 @@ class PrehabViewSet(GenericViewSet):
     def cancel(request, pk=None):
         try:
             prehab = Prehab.objects.get(pk=pk)
+
+            if not Permission.verify(request, ['Admin', 'Doctor']):
+                raise HttpException(401)
+
+            if not DoctorPatient.objects.is_a_match(request.USER_ID, prehab.patient.id):
+                raise HttpException(400, 'Patient {} is not from Doctor {}.'.format(prehab.patient.id, request.USER_ID))
 
             prehab.actual_end_date = datetime.date.today()
             prehab.status = Prehab.CANCEL
