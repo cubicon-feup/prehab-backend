@@ -4,7 +4,7 @@ from django.http import JsonResponse
 class HTTP:
 
     @staticmethod
-    def response(http_code, details="", custom_message='', data=None, paginator=None):
+    def response(http_code, custom_message='', details="", data=None, paginator=None):
         message = ''
 
         if http_code == 200:
