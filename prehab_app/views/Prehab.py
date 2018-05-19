@@ -235,7 +235,7 @@ class PrehabViewSet(GenericViewSet):
             if not Permission.verify(request, ['Admin', 'Doctor']):
                 raise HttpException(401)
 
-            if not DoctorPatient.objects.is_a_match(request.USER_ID, prehab.patient.id):
+            if request.ROLE_ID == 2 and not DoctorPatient.objects.is_a_match(request.USER_ID, prehab.patient.id):
                 raise HttpException(400, 'Patient {} is not from Doctor {}.'.format(prehab.patient.id, request.USER_ID))
 
             prehab.actual_end_date = datetime.date.today()
