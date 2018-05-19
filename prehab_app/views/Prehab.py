@@ -1,5 +1,5 @@
+import datetime
 import math
-from datetime import datetime
 
 from django.db import transaction
 from rest_framework.viewsets import GenericViewSet
@@ -17,8 +17,8 @@ from prehab_app.models.PatientMealSchedule import PatientMealSchedule
 from prehab_app.models.PatientTaskSchedule import PatientTaskSchedule
 from prehab_app.models.Prehab import Prehab
 from prehab_app.models.TaskSchedule import TaskSchedule
-from prehab_app.serializers.Doctor import DoctorSerializer, SimpleDoctorSerializer
-from prehab_app.serializers.Patient import PatientSerializer, PatientWithConstraintsSerializer
+from prehab_app.serializers.Doctor import SimpleDoctorSerializer
+from prehab_app.serializers.Patient import PatientWithConstraintsSerializer
 from prehab_app.serializers.Prehab import PrehabSerializer, FullPrehabSerializer
 
 
@@ -50,11 +50,8 @@ class PrehabViewSet(GenericViewSet):
                 prehab = Prehab.objects.get(pk=record['id'])
                 patient_tasks = PatientTaskSchedule.objects.filter(prehab=prehab).all()
 
-                days_to_surgery = (datetime.now().date() - prehab.surgery_date).days
-                current_week_num = math.floor(days_to_surgery / 7)
-                current_day_num = days_to_surgery - 7 * current_week_num
-                pass_patient_tasks = [t for t in patient_tasks if
-                                      t.week_number <= current_week_num and t.day_number <= current_day_num]
+                past_patient_tasks = [t for t in patient_tasks if
+                                      t.week_number <= prehab.get_current_week_num() and t.day_number < prehab.get_current_day_num()]
 
                 record['info'] = {
                     'patient_id': prehab.patient.pk,
@@ -63,15 +60,17 @@ class PrehabViewSet(GenericViewSet):
                     'prehab_start_date': prehab.init_date,
                     'prehab_expected_end_date': prehab.expected_end_date,
                     'surgery_day': prehab.surgery_date,
-                    'days_until_surgery': days_to_surgery if days_to_surgery > 0 else None,
+                    'days_until_surgery': prehab.get_days_to_prehab_end() if prehab.get_days_to_prehab_end() else None,
                     'total_activities': len(patient_tasks),
-                    'total_activities_until_now': len(pass_patient_tasks),
-                    'activities_done': len([t for t in pass_patient_tasks if t.status == PatientTaskSchedule.COMPLETED]),
-                    'activities_with_difficulty': len([t for t in pass_patient_tasks if t.was_difficult]),
+                    'total_activities_until_now': len(past_patient_tasks),
+                    'activities_done': len([t for t in past_patient_tasks if t.status == PatientTaskSchedule.COMPLETED]),
+                    'activities_with_difficulty': len([t for t in past_patient_tasks if t.was_difficult]),
                     'activities_not_done': len(
-                        [t for t in pass_patient_tasks if t.status == PatientTaskSchedule.NOT_COMPLETED]),
+                        [t for t in past_patient_tasks if t.status == PatientTaskSchedule.NOT_COMPLETED]),
                     'prehab_status_id': prehab.status,
-                    'prehab_status': prehab.get_status_display()
+                    'prehab_status': prehab.get_status_display(),
+                    'number_of_alerts': [t for t in past_patient_tasks if
+                                         (t.status == PatientTaskSchedule.NOT_COMPLETED or t.was_difficult) and t.seen_by_doctor]
                 }
 
         except HttpException as e:
@@ -91,7 +90,7 @@ class PrehabViewSet(GenericViewSet):
             # STATISTICS
             patient_tasks = PatientTaskSchedule.objects.filter(prehab=prehab).all()
 
-            days_to_surgery = (datetime.now().date() - prehab.surgery_date).days
+            days_to_surgery = (datetime.datetime.now().date() - prehab.surgery_date).days
             current_week_num = math.floor(days_to_surgery / 7)
             current_day_num = days_to_surgery - 7 * current_week_num
             pass_patient_tasks = [t for t in patient_tasks if
@@ -157,7 +156,7 @@ class PrehabViewSet(GenericViewSet):
 
             # 1.5. Check if Task Schedule Id was created by this specific doctor or a community Task Schedule (created by an admin
             task_schedule = TaskSchedule.objects.get(pk=data['task_schedule_id'])
-            if not task_schedule.doctor_can_use(doctor.user.id):
+            if request.ROLE_ID != 1 and not task_schedule.doctor_can_use(doctor.user.id):
                 raise HttpException(400, 'You are not the owner of this task schedule')
 
             # 2. Transform General Task Schedule to a Custom Patient Task Schedule
@@ -230,3 +229,22 @@ class PrehabViewSet(GenericViewSet):
     @staticmethod
     def destroy(request, pk=None):
         return HTTP.response(405, '')
+
+    @staticmethod
+    def cancel(request, pk=None):
+        try:
+            prehab = Prehab.objects.get(pk=pk)
+
+            prehab.actual_end_date = datetime.date.today()
+            prehab.status = Prehab.CANCEL
+            prehab.save()
+
+        except Patient.DoesNotExist as e:
+            return HTTP.response(400, 'Patient with id of {} does not exist.'.format(request.data['patient_id']))
+        except HttpException as e:
+            return HTTP.response(e.http_code, e.http_detail)
+        except Exception as e:
+            return HTTP.response(400, str(e))
+
+        # Send Response
+        return HTTP.response(200, '')
