@@ -12,6 +12,7 @@ class TaskScheduleViewSet(GenericViewSet):
     def list(self, request):
         try:
             # 0. Check Permissions
+
             if not Permission.verify(request, ['Admin', 'Doctor']):
                 raise HttpException(401)
 

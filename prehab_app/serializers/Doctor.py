@@ -2,12 +2,12 @@ from rest_framework import serializers
 
 from prehab_app.models.Doctor import Doctor
 from prehab_app.serializers.DoctorPatient import DoctorPatientSerializer
-from prehab_app.serializers.User import UserSerializer, SimpleUserSerializer
+from prehab_app.serializers.User import UserSerializer
 
 
 class FullDoctorSerializer(serializers.ModelSerializer):
     doctor = DoctorPatientSerializer(many=True, read_only=True)
-    user = SimpleUserSerializer(many=False, required=True)
+    user = UserSerializer(many=False, required=True)
 
     def to_representation(self, obj):
         data = super(FullDoctorSerializer, self).to_representation(obj)  # the original data
@@ -24,7 +24,7 @@ class FullDoctorSerializer(serializers.ModelSerializer):
         return queryset
 
     def get_user(self, obj):
-        user = SimpleUserSerializer(obj.id).data
+        user = UserSerializer(obj.id).data
         obj['name'] = user['name']
         obj['name'] = user['name']
         for doctor in obj:
@@ -37,7 +37,7 @@ class FullDoctorSerializer(serializers.ModelSerializer):
 
 
 class DoctorSerializer(serializers.ModelSerializer):
-    user = SimpleUserSerializer(many=False, required=True)
+    user = UserSerializer(many=False, required=True)
 
     def to_representation(self, obj):
         data = super(DoctorSerializer, self).to_representation(obj)  # the original data
@@ -51,7 +51,7 @@ class DoctorSerializer(serializers.ModelSerializer):
 
 
 class SimpleDoctorSerializer(serializers.ModelSerializer):
-    user = SimpleUserSerializer(many=False, required=True)
+    user = UserSerializer(many=False, required=True)
 
     def to_representation(self, obj):
         data = super(SimpleDoctorSerializer, self).to_representation(obj)  # the original data

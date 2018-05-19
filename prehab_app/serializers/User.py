@@ -4,11 +4,11 @@ from prehab_app.models.User import User
 from prehab_app.serializers.UserType import RoleSerializer
 
 
-class UserSerializer(serializers.ModelSerializer):
+class SimpleUserSerializer(serializers.ModelSerializer):
     role = RoleSerializer(many=False, read_only=True)
 
     def to_representation(self, obj):
-        data = super(UserSerializer, self).to_representation(obj)  # the original data
+        data = super(SimpleUserSerializer, self).to_representation(obj)  # the original data
 
         data['role_id'] = data['role']['id']
         data['role_name'] = data['role']['title']
@@ -24,14 +24,14 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ['id', 'name', 'role']
 
 
-class SimpleUserSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     role = RoleSerializer(many=False, read_only=True)
 
     def to_representation(self, obj):
-        data = super(SimpleUserSerializer, self).to_representation(obj)  # the original data
+        data = super(UserSerializer, self).to_representation(obj)  # the original data
 
         data['role_id'] = data['role']['id']
         data['role_name'] = data['role']['title']

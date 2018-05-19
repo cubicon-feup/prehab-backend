@@ -1,10 +1,13 @@
 from rest_framework import serializers
 
 from prehab_app.models.TaskSchedule import TaskSchedule
+from prehab_app.serializers.User import SimpleUserSerializer
 from prehab_app.serializers.WeekTaskSchedule import WeekTaskScheduleSerializer
 
 
 class TaskScheduleSerializer(serializers.ModelSerializer):
+    created_by = SimpleUserSerializer(many=False)
+
     class Meta:
         model = TaskSchedule
         fields = '__all__'
