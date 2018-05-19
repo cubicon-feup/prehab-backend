@@ -24,6 +24,3 @@ class Patient(models.Model):
 
     def __str__(self):
         return self.patient_tag
-
-    # def doctor(self):
-    #     return DoctorPatient.objects.filter(patient_id=self.id).values_list('doctor', flat=True)
