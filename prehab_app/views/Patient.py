@@ -259,7 +259,7 @@ class PatientViewSet(GenericViewSet):
                                     'Um paciente pode ter apenas 2 médicos.',
                                     'One patient can only have 2 doctors.')
             # 2.3. if the one calling the api is not the first doctor
-            if relation.count() == 1 and relation.get().doctor.id != request.USER_ID:
+            if relation.count() == 1 and relation.get().doctor.user != request.USER_ID:
                 raise HttpException(400,
                                     'Não tem permissões para adicionar médicos a este paciente.',
                                     'You can\'t add doctors to this patient')
