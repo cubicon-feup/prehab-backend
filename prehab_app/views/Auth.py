@@ -15,10 +15,6 @@ class AuthViewSet(viewsets.ModelViewSet):
     @staticmethod
     def login(request):
         try:
-            # 0. Validate Input (username and password)
-            if 'username' not in request.data or 'password' not in request.data:
-                raise HttpException(400, 'You need to send Username and Password.')
-
             # 1. Check if pair username-password is correct
             user = User.objects.match_credentials(request.data['username'], request.data['password'])
             if len(user) == 0:
@@ -30,7 +26,7 @@ class AuthViewSet(viewsets.ModelViewSet):
             # In Case of a Patient - only if platform is MOBILE
             # In Case of a Doctor - only if platform is WEB
             if (user.role.id == 3 and request.PLATFORM != 'mobile') or (user.role.id == 2 and request.PLATFORM != 'web'):
-                raise HttpException(403, 'You are not allowed to access here.')
+                raise HttpException(403, 'You are not allowed to access this resource.')
 
             # 3. Get Context Information - TODO
             prehab_id = None

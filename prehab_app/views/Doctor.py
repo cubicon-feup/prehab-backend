@@ -18,7 +18,7 @@ class DoctorViewSet(GenericViewSet):
         try:
             # In case it's a patient -> don't allow it
             if request.ROLE_ID == 3:
-                raise HttpException(400, 'Some error occurred')
+                raise HttpException(403, 'You can\'t access this information.')
 
             doctors = self.paginate_queryset(Doctor.objects.all())
             queryset = self.paginate_queryset(doctors)

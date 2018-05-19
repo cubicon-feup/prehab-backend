@@ -1,0 +1,259 @@
+openapi: 3.0.0
+# Added by API Auto Mocking Plugin
+servers:
+# Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/luisfmelo/Prehab/1.0.0
+  - description: Backend Server
+    url: http://prehab.cubicon.xyz:8000
+info:
+  description: Prehab is a project that aims to give the doctor the ability to monitor and control the health of any patient with a hepatobiliary disease in the period leading up to the operation. Our main goal is to develop a Peri-Operative Multimodal Rehabilitation program, based on protocolized attitudes supported by scientific evidence, with a focus on functional recovery of the patient, reduction of the perioperative mortality rate and length of hospital stay.
+  version: "1.0.0"
+  title: Prehab API Documentation
+  contact:
+    email: up201206020@fe.up.pt
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: admins
+    description: Secured Admin-only calls (web app)
+  - name: doctors
+    description: Doctor calls (web app)
+  - name: patients
+    description: Patient calls (mobile app only)
+paths:
+  /login:
+    post:
+      tags:
+        - admins
+        - doctors
+        - patients
+      summary: Log in the application
+      operationId: login
+      description: |
+        By passing username and the correct password, yoy can log and receive a jwt to continue with your requests
+      responses:
+        '200':
+          description: 'Success.'
+        '400':
+          description: 'Some Error occurred.'
+        '401':
+          description: 'Some error occurred with your credentials.'
+        '403':
+          description: 'You are not allowed to access this resource.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                  example: patient
+                password:
+                  type: string
+                  example: my_password
+        description: ''
+  /logout:
+    post:
+      tags:
+        - admins
+        - doctors
+        - patients
+      summary: Log out the application
+      operationId: logoutin
+      description: |
+        Blacklist JWT token
+      responses:
+        '200':
+          description: 'Success.'
+
+
+  /cron/tasks:
+    post:
+      tags:
+        - admins
+      summary: Clean Tasks outdated in the platform.
+      operationId: cronTasks
+      description: |
+        Clean Tasks outdated in the platform. Is intended to run once a day. It will update task status for each patient
+      responses:
+        '200':
+          description: 'Success.'
+        '400':
+          description: 'Some Error occurred.'
+  /cron/prehabs:
+    post:
+      tags:
+        - admins
+      summary: Clean Prehabs outdated in the platform.
+      operationId: cronTasks
+      description: |
+        Clean Prehabs outdated in the platform. Is intended to run once a day. It will update prehab status for each patient.
+      responses:
+        '200':
+          description: 'Success.'
+        '400':
+          description: 'Some Error occurred.'
+
+
+
+  /doctor:
+    get:
+      tags:
+        - admins
+        - doctors
+      summary: Get List of Doctors
+      operationId: listDoctors
+      description: |
+        Get list of all doctors.
+      responses:
+        '200':
+          description: 'Success.'
+        '400':
+          description: 'Some Error occurred.'
+        '403':
+          description: 'You are not allowed to access this resource.'
+
+  /doctor/<id>:
+    get:
+      tags:
+        - admins
+        - doctors
+      summary: Get informtion about one Doctor
+      operationId: retrieveDoctor
+      description: |
+        Get information about one specific doctor.
+      responses:
+        '200':
+          description: 'Success.'
+        '400':
+          description: 'Some Error occurred.'
+        '403':
+          description: 'You are not allowed to access this resource.'
+      parameters:
+         - in: query
+           name: id
+           description: user id of the doctor we want to get more info
+           required: true
+           schema:
+             type: integer
+
+  # /login:
+  #   post:
+  #     tags:
+  #       - admins
+  #       - doctors
+  #       - patients
+  #     summary: Log in the application
+  #     # operationId: searchInventory
+  #     description: |
+  #       By passing username and the correct password, yoy can log and receive a jwt to continue with your requests
+  #     parameters:
+  #       - in: query
+  #         name: searchString
+  #         description: pass an optional search string for looking up inventory
+  #         required: false
+  #         schema:
+  #           type: string
+  #       - in: query
+  #         name: skip
+  #         description: number of records to skip for pagination
+  #         schema:
+  #           type: integer
+  #           format: int32
+  #           minimum: 0
+  #       - in: query
+  #         name: limit
+  #         description: maximum number of records to return
+  #         schema:
+  #           type: integer
+  #           format: int32
+  #           minimum: 0
+  #           maximum: 50
+  #     responses:
+  #       '200':
+  #         description: search results matching criteria
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: array
+  #               items:
+  #                 $ref: '#/components/schemas/InventoryItem'
+  #       '400':
+  #         description: bad input parameter
+  #   post:
+  #     tags:
+  #       - admins
+  #     summary: adds an inventory item
+  #     operationId: addInventory
+  #     description: Adds an item to the system
+  #     responses:
+  #       '201':
+  #         description: item created
+  #       '400':
+  #         description: 'invalid input, object invalid'
+  #       '409':
+  #         description: an existing item already exists
+  #     requestBody:
+  #       content:
+  #         application/json:
+  #           schema:
+  #             $ref: '#/components/schemas/InventoryItem'
+  #       description: Inventory item to add
+
+# components:
+#   schemas:
+    # loginSchema:
+    #   type: object
+    #   required:
+    #     - username
+    #     - password
+    #   properties:
+    #     username:
+    #       type: string
+    #       example: patient
+    #     password:
+    #       type: string
+    #       example: my_password
+
+    # InventoryItem:
+    #   type: object
+    #   required:
+    #     - id
+    #     - name
+    #     - manufacturer
+    #     - releaseDate
+    #   properties:
+    #     id:
+    #       type: string
+    #       format: uuid
+    #       example: d290f1ee-6c54-4b01-90e6-d701748f0851
+    #     name:
+    #       type: string
+    #       example: Widget Adapter
+    #     releaseDate:
+    #       type: string
+    #       format: int32
+    #       example: '2016-08-29T09:12:33.001Z'
+    #     manufacturer:
+    #       $ref: '#/components/schemas/Manufacturer'
+    # Manufacturer:
+    #   required:
+    #     - name
+    #   properties:
+    #     name:
+    #       type: string
+    #       example: ACME Corporation
+    #     homePage:
+    #       type: string
+    #       format: url
+    #       example: 'https://www.acme-corp.com'
+    #     phone:
+    #       type: string
+    #       example: 408-867-5309
+    #   type: object

@@ -1,5 +1,4 @@
 import datetime
-import math
 
 from django.db import transaction
 from rest_framework.viewsets import GenericViewSet
@@ -23,8 +22,6 @@ from prehab_app.serializers.Prehab import PrehabSerializer, FullPrehabSerializer
 
 
 class PrehabViewSet(GenericViewSet):
-
-
 
     def list(self, request):
         try:
@@ -143,7 +140,7 @@ class PrehabViewSet(GenericViewSet):
             patient_id = data['patient_id']
             patient = Patient.objects.get(pk=patient_id)
             doctor = Doctor.objects.get(pk=request.USER_ID)
-            if not DoctorPatient.objects.is_a_match(request.USER_ID, patient_id):
+            if request.ROLE_ID == 2 and not DoctorPatient.objects.is_a_match(request.USER_ID, patient_id):
                 raise HttpException(400, 'Patient {} is not from Doctor {}.'.format(patient_id, request.USER_ID))
 
             # 1.4. Check if surgery date is greater than init_date
@@ -155,7 +152,11 @@ class PrehabViewSet(GenericViewSet):
             # 1.5. Check if Task Schedule Id was created by this specific doctor or a community Task Schedule (created by an admin
             task_schedule = TaskSchedule.objects.get(pk=data['task_schedule_id'])
             if request.ROLE_ID != 1 and not task_schedule.doctor_can_use(doctor.user.id):
-                raise HttpException(400, 'You are not the owner of this task schedule')
+                raise HttpException(400, 'You are not the owner of this task schedule.')
+
+            # 1.6. Check if this patient has some prehab already
+            if Prehab.objects.filter(patient=patient).filter(status__lt=4).count() > 0:
+                raise HttpException(400, 'This patient has a prehab already.')
 
             # 2. Transform General Task Schedule to a Custom Patient Task Schedule
             expected_end_date = init_date + datetime.timedelta(days=7 * task_schedule.number_of_weeks)
@@ -202,8 +203,6 @@ class PrehabViewSet(GenericViewSet):
                         meal=row['meal']
                     ))
                 PatientMealSchedule.objects.bulk_create(patient_meals)
-
-            # 4. Add new Notification to Patient (???????????) - TODO
 
         except Patient.DoesNotExist as e:
             return HTTP.response(400, 'Patient with id of {} does not exist.'.format(request.data['patient_id']))
