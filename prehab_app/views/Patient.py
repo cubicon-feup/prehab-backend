@@ -1,8 +1,8 @@
-import math
 import random
 import string
 from datetime import datetime
 
+import math
 from rest_framework.viewsets import GenericViewSet
 
 from prehab.helpers.HttpException import HttpException
@@ -46,14 +46,16 @@ class PatientViewSet(GenericViewSet):
 
                 # CONSTRAINTS
                 constraints = PatientConstraintType.objects.filter(patient=patient['user']).all()
-                record['constraints'] = [ConstraintTypeSerializer(c.constraint_type, many=False).data for c in constraints]
+                record['constraints'] = [ConstraintTypeSerializer(c.constraint_type, many=False).data for c in
+                                         constraints]
 
                 data.append(record)
 
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Ocorreu um erro inesperado', 'Unexpected Error. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado',
+                                 'Unexpected Error. {}. {}.'.format(type(e).__name__, str(e)))
 
         return HTTP.response(200, '', data=data, paginator=self.paginator)
 
@@ -65,10 +67,12 @@ class PatientViewSet(GenericViewSet):
             # In case it's a Doctor -> check if he/she has permission
             if request.ROLE_ID == 2 and DoctorPatient.objects.filter(doctor=request.USER_ID).filter(
                     patient=patient).count == 0:
-                raise HttpException(401, 'Não tem permissões para aceder a este recurso.', 'You don\'t have acces to this resouurce.')
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.',
+                                    'You don\'t have acces to this resouurce.')
             # In case it's a Patient -> check if it's own information
             elif request.ROLE_ID == 3 and request.USER_ID == patient.id:
-                raise HttpException(401, 'Não tem permissões para aceder a este recurso.', 'You don\'t have acces to this resouurce.')
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.',
+                                    'You don\'t have acces to this resouurce.')
 
             data = PatientSerializer(patient, many=False).data
 
@@ -87,7 +91,8 @@ class PatientViewSet(GenericViewSet):
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Ocorreu um erro inesperado', 'Unexpected Error. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado',
+                                 'Unexpected Error. {}. {}.'.format(type(e).__name__, str(e)))
 
         return HTTP.response(200, data=data)
 
@@ -96,7 +101,8 @@ class PatientViewSet(GenericViewSet):
         try:
             # 0 - Handle Permissions
             if not Permission.verify(request, ['Doctor']):
-                raise HttpException(401, 'Não tem permissões para aceder a este recurso.', 'You don\'t have acces to this resouurce.')
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.',
+                                    'You don\'t have acces to this resouurce.')
 
             data = request.data
             # 1. Check schema
@@ -151,7 +157,8 @@ class PatientViewSet(GenericViewSet):
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Ocorreu um erro inesperado', 'Unexpected Error. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado',
+                                 'Unexpected Error. {}. {}.'.format(type(e).__name__, str(e)))
 
         # Send Response - access code
         data = {
@@ -174,12 +181,19 @@ class PatientViewSet(GenericViewSet):
             # In case it's a Doctor -> check if he/she has permission
             if request.ROLE_ID == 2 and DoctorPatient.objects.filter(doctor=request.USER_ID).filter(
                     patient=patient).count == 0:
-                raise HttpException(401, 'Não tem permissões para aceder a este recurso.', 'You don\'t have acces to this resouurce.')
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.',
+                                    'You don\'t have acces to this resouurce.')
             # In case it's a Patient -> check if it's own information
             elif request.ROLE_ID == 3 and request.USER_ID == patient.id:
-                raise HttpException(401, 'Não tem permissões para aceder a este recurso.', 'You don\'t have acces to this resouurce.')
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.',
+                                    'You don\'t have acces to this resouurce.')
 
             prehab = Prehab.objects.filter(patient=patient).first()
+
+            if prehab is not None:
+                raise HttpException(400, 'Paciente não tem Prehabs associados',
+                                    'Patient needs a prehab to retrieve statistics.')
+
             patient_tasks = PatientTaskSchedule.objects.filter(prehab=prehab).all()
 
             days_to_surgery = (datetime.now().date() - prehab.surgery_date).days
@@ -210,12 +224,15 @@ class PatientViewSet(GenericViewSet):
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Ocorreu um erro inesperado', 'Unexpected Error. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado',
+                                 'Unexpected Error. {}. {}.'.format(type(e).__name__, str(e)))
 
         return HTTP.response(200, data=data)
 
     @staticmethod
     def add_second_doctor(request):
+        data = request.data
+
         try:
             # 0 - Handle Permissions
             if not Permission.verify(request, ['Admin', 'Doctor']):
@@ -223,7 +240,6 @@ class PatientViewSet(GenericViewSet):
                                     'Não tem permissões para aceder a este recurso.',
                                     'You don\'t have acces to this resouurce.')
 
-            data = request.data
             # 1. Check schema
             SchemaValidator.validate_obj_structure(data, 'patient/add_second_doctor.json')
 
@@ -234,13 +250,19 @@ class PatientViewSet(GenericViewSet):
             # 2. Exceptions:
             # 2.1. If the patient has no doctor and the one calling the api is not an admin
             if relation.count() == 0 and request.ROLE_ID != 1:
-                raise Exception('Não tem permissões para adicionar mais médicos a este paciente.')
+                raise HttpException(400,
+                                    'Não tem permissões para adicionar mais médicos a este paciente.',
+                                    'You can\'t add more doctors to this patient.')
             # 2.2. If patient has 2 doctors already
             if relation.count() > 1:
-                raise Exception('Um paciente pode ter apenas 2 médicos.')
+                raise HttpException(400,
+                                    'Um paciente pode ter apenas 2 médicos.',
+                                    'One patient can only have 2 doctors.')
             # 2.3. if the one calling the api is not the first doctor
             if relation.count() == 1 and relation.get().doctor.id != request.USER_ID:
-                raise Exception('Não tem permissões para adicionar médicos a este paciente.')
+                raise HttpException(400,
+                                    'Não tem permissões para adicionar médicos a este paciente.',
+                                    'You can\'t add doctors to this patient')
 
             # 3. Add new relation
             new_relation = DoctorPatient(
@@ -250,10 +272,15 @@ class PatientViewSet(GenericViewSet):
 
             new_relation.save()
 
+        except Doctor.DoesNotExist as e:
+            return HTTP.response(400, 'Médico não encontrado', 'Doctor with id {} not found. {}').format(
+                data['doctor_id'], str(e))
+        except Patient.DoesNotExist as e:
+            return HTTP.response(400, 'Paciente não encontrado', 'Patient with id {} not found. {}').format(
+                data['patient_id'], str(e))
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
             return HTTP.response(400, 'Erro Inesperado', 'Unexpected Error: {}.'.format(str(e)))
-
         # Send Response
         return HTTP.response(201, 'Médico adicionado com sucesso.')
