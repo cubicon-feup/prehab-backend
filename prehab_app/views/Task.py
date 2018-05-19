@@ -15,11 +15,11 @@ class TaskViewSet(GenericViewSet):
             queryset = self.paginate_queryset(Task.objects.all())
             data = TaskSerializer(queryset, many=True).data
         except HttpException as e:
-            return HTTP.response(e.http_code, e.http_detail)
+            return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado', 'Unexpected Error. {}. {}.'.format(type(e).__name__, str(e)))
 
-        return HTTP.response(200, '', data=data, paginator=self.paginator)
+        return HTTP.response(200, data=data)  # , paginator=self.paginator)
 
     @staticmethod
     def retrieve(request, pk=None):
@@ -27,22 +27,22 @@ class TaskViewSet(GenericViewSet):
             task = Task.objects.get(pk=pk)
 
         except Task.DoesNotExist:
-            return HTTP.response(404, 'Task com id {} não encontrada.'.format(str(pk)))
+            return HTTP.response(404, 'Tarefa não encontrada.', 'Task with id {} not found.'.format(str(pk)))
         except ValueError:
-            return HTTP.response(404, 'Url com formato inválido. {}'.format(str(pk)))
+            return HTTP.response(404, 'Url com formato inválido.', 'Invalid URL format. {}'.format(str(pk)))
         except HttpException as e:
-            return HTTP.response(e.http_code, e.http_detail)
+            return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado', 'Unexpected Error. {}. {}.'.format(type(e).__name__, str(e)))
 
         data = TaskSerializer(task, many=False).data
-        return HTTP.response(200, '', data)
+        return HTTP.response(200, data=data)
 
     @staticmethod
     def create(request):
         try:
             if not Permission.verify(request, ['Admin']):
-                raise HttpException(401, 'Não tem permissões para aceder a este recurso.')
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.', 'You don\'t have acces to this resouurce.')
 
             data = request.data
             # 1. Check schema
@@ -57,20 +57,20 @@ class TaskViewSet(GenericViewSet):
             new_task.save()
 
         except HttpException as e:
-            return HTTP.response(e.http_code, e.http_detail)
+            return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, str(e))
+            return HTTP.response(400, 'Erro Inesperado', 'Unexpected Error: {}.'.format(str(e)))
 
         # Send Response
         data = {
             'task_id': new_task.id
         }
-        return HTTP.response(201, 'Task adicionada com sucesso.', data)
+        return HTTP.response(201, 'Tarefa adicionada com sucesso.', data=data)
 
     @staticmethod
     def update(request, pk=None):
-        return HTTP.response(405, '')
+        return HTTP.response(405)
 
     @staticmethod
     def destroy(request, pk=None):
-        return HTTP.response(405, '')
+        return HTTP.response(405)

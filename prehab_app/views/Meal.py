@@ -18,9 +18,10 @@ class MealViewSet(GenericViewSet):
             queryset = self.paginate_queryset(Meal.objects.all())
             data = MealSerializer(queryset, many=True).data
         except HttpException as e:
-            return HTTP.response(e.http_code, e.http_detail)
+            return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado',
+                                 'Unexpected Error. {}. {}.'.format(type(e).__name__, str(e)))
 
         return HTTP.response(200, '', data=data, paginator=self.paginator)
 
@@ -30,30 +31,33 @@ class MealViewSet(GenericViewSet):
             meal = Meal.objects.get(pk=pk)
 
         except Meal.DoesNotExist:
-            return HTTP.response(404, 'Meal com id {} não encontrado.'.format(str(pk)))
+            return HTTP.response(404, 'Refeição não encontrada.', 'Meal with id {} not found.'.format(str(pk)))
         except ValueError:
-            return HTTP.response(404, 'Url com formato inválido. {}'.format(str(pk)))
+            return HTTP.response(404, 'Url com formato inválido.', 'Invalid URL format. {}'.format(str(pk)))
         except HttpException as e:
-            return HTTP.response(e.http_code, e.http_detail)
+            return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado',
+                                 'Unexpected Error. {}. {}.'.format(type(e).__name__, str(e)))
 
         data = MealSerializer(meal, many=False).data
-        return HTTP.response(200, '', data)
+        return HTTP.response(200, data=data)
 
     @staticmethod
     def create(request):
         try:
             if not Permission.verify(request, ['Admin']):
-                raise HttpException(401, 'Não tem permissões para aceder a este recurso.')
+                raise HttpException(401,
+                                    'Não tem permissões para aceder a este recurso.',
+                                    'You don\'t have acces to this resouurce.')
 
             data = request.data
             # 1. Check schema
             SchemaValidator.validate_obj_structure(data, 'meal/create.json')
 
             # 2. Check if meal type is available
-            if not any( data['meal_type_id'] in meal_type for meal_type in Meal.meal_types):
-                raise HttpException(400, 'Meal Type does not exist.')
+            if not any(data['meal_type_id'] in meal_type for meal_type in Meal.meal_types):
+                raise HttpException(400, 'Tipo de refeição não existe.', 'Meal Type does not exist.')
 
             with transaction.atomic():
                 new_meal = Meal(
@@ -74,11 +78,12 @@ class MealViewSet(GenericViewSet):
                     meal_constraint_type.save()
 
         except ConstraintType.DoesNotExist:
-            return HTTP.response(404, 'Restrição alimentar not found.')
+            return HTTP.response(404, 'Restrição alimentar not found.', 'Constraint not found.')
         except HttpException as e:
-            return HTTP.response(e.http_code, e.http_detail)
+            return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado',
+                                 'Unexpected Error. {}. {}.'.format(type(e).__name__, str(e)))
 
         # Send Response
         data = {
@@ -88,8 +93,8 @@ class MealViewSet(GenericViewSet):
 
     @staticmethod
     def update(request, pk=None):
-        return HTTP.response(405, '')
+        return HTTP.response(405)
 
     @staticmethod
     def destroy(request, pk=None):
-        return HTTP.response(405, '')
+        return HTTP.response(405)

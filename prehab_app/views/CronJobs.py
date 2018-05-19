@@ -26,9 +26,9 @@ class CronJobsViewSet(viewsets.ModelViewSet):
                 patient_task.save()
 
         except HttpException as e:
-            return HTTP.response(e.http_code, e.http_detail)
+            return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado', 'Unexpected Error. {}. {}.'.format(type(e).__name__, str(e)))
 
         return HTTP.response(200, '')
 
@@ -50,8 +50,8 @@ class CronJobsViewSet(viewsets.ModelViewSet):
                 prehab.save()
 
         except HttpException as e:
-            return HTTP.response(e.http_code, e.http_detail)
+            return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado', 'Unexpected Error. {}. {}.'.format(type(e).__name__, str(e)))
 
         return HTTP.response(200, '')

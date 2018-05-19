@@ -13,40 +13,45 @@ class FullTaskScheduleViewSet(GenericViewSet):
 
     @staticmethod
     def list(request):
-        return HTTP.response(405, '')
+        return HTTP.response(405)
 
     @staticmethod
     def retrieve(request, pk=None):
         try:
             # 0 - Handle Permissions
             if not Permission.verify(request, ['Admin', 'Doctor']):
-                raise HttpException(401, 'Não tem permissões para aceder a este recurso.')
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.',
+                                    'You don\'t have acces to this resouurce.')
 
             # Check if Task Schedule exists and if it's the owner requesting it
             task_schedule = TaskSchedule.objects.get(pk=pk)
 
             if request.ROLE_ID == 2 and task_schedule.created_by.id != request.USER_ID:
-                raise HttpException(401, 'Não tem permissões para aceder a este recurso.')
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.',
+                                    'You don\'t have acces to this resouurce.')
 
             data = FullTaskScheduleSerializer(instance=task_schedule).data
 
         except TaskSchedule.DoesNotExist:
-            return HTTP.response(404, 'Task Schedule com id {} não encontrado.'.format(str(pk)))
+            return HTTP.response(404, 'Plano de Tarefas não encontrado.',
+                                 'Task Schedule with id {} not found.'.format(str(pk)))
         except ValueError:
-            return HTTP.response(404, 'Url com formato inválido. {}'.format(str(pk)))
+            return HTTP.response(404, 'Url com formato inválido.', 'Invalid URL format. {}'.format(str(pk)))
         except HttpException as e:
-            return HTTP.response(e.http_code, e.http_detail)
+            return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado',
+                                 'Unexpected Error. {}. {}.'.format(type(e).__name__, str(e)))
 
-        return HTTP.response(200, '', data)
+        return HTTP.response(200, data=data)
 
     @staticmethod
     def create(request):
         try:
             # 0. Check Permissions
             if not Permission.verify(request, ['Admin', 'Doctor']):
-                raise HttpException(401, 'Não tem permissões para aceder a este recurso.')
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.',
+                                    'You don\'t have acces to this resouurce.')
 
             data = request.data
             # 1. Check schema
@@ -67,13 +72,15 @@ class FullTaskScheduleViewSet(GenericViewSet):
                 for week in request.data['weeks']:
                     week_number = week['week_number']
                     if 0 > week_number > request.data['number_of_weeks']:
-                        raise HttpException(400, 'Number of week is not allowed.')
+                        raise HttpException(400, 'Número de semanas não eprmitida', 'Number of week is not allowed.')
 
                     for week_task in week['tasks']:
                         try:
                             task = Task.objects.get(pk=week_task['task_id'])
                         except Task.DoesNotExist:
-                            raise HttpException(404, 'Task with id {} does not exist.'.format(str(week_task['task_id'])))
+                            raise HttpException(404,
+                                                'Tarefa não enconbtrada',
+                                                'Task with id {} does not exist.'.format(str(week_task['task_id'])))
 
                         schedule_week_task = WeekTaskSchedule(
                             task_schedule=task_schedule,
@@ -86,9 +93,11 @@ class FullTaskScheduleViewSet(GenericViewSet):
                         schedule_week_task.save()
 
         except HttpException as e:
-            return HTTP.response(e.http_code, e.http_detail)
+            return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400,
+                                 'Ocorreu um erro inesperado',
+                                 'Unexpected Error. {}. {}.'.format(type(e).__name__, str(e)))
 
         data = {
             'task_schedule_id': task_schedule.id
@@ -98,8 +107,8 @@ class FullTaskScheduleViewSet(GenericViewSet):
 
     @staticmethod
     def update(request, pk=None):
-        return HTTP.response(405, '')
+        return HTTP.response(405)
 
     @staticmethod
     def destroy(request, pk=None):
-        return HTTP.response(405, '')
+        return HTTP.response(405)

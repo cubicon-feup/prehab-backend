@@ -4,6 +4,7 @@ from functools import reduce
 
 from django.db.models import Count
 
+from prehab.helpers.HttpException import HttpException
 from prehab_app.models import WeekTaskSchedule
 from prehab_app.models.Meal import Meal
 from prehab_app.models.MealConstraintType import MealConstraintType
@@ -136,6 +137,9 @@ class DataHelper:
     @staticmethod
     def _get_meals(meals, times):
         meals_bulk = []
+        if len(meals) == 0:
+            raise HttpException(401, 'Não existem refeições para este tipo de paciente.', 'Number of meals for this type of patient is zero.')
+
         for i in range(math.ceil(times / len(meals))):
             meals_bulk = meals_bulk + list(meals)
 

@@ -40,7 +40,7 @@ class PrehabViewSet(GenericViewSet):
             elif request.ROLE_ID == 3:
                 prehabs = prehabs.filter(patient_id=request.USER_ID).all()
             else:
-                raise HttpException(400, 'Some error occurred')
+                raise HttpException(400)
 
             queryset = self.paginate_queryset(prehabs)
             data = PrehabSerializer(queryset, many=True).data
@@ -62,20 +62,24 @@ class PrehabViewSet(GenericViewSet):
                     'days_until_surgery': prehab.get_days_to_prehab_end() if prehab.get_days_to_prehab_end() else None,
                     'total_activities': len(patient_tasks),
                     'total_activities_until_now': len(past_patient_tasks),
-                    'activities_done': len([t for t in past_patient_tasks if t.status == PatientTaskSchedule.COMPLETED]),
+                    'activities_done': len(
+                        [t for t in past_patient_tasks if t.status == PatientTaskSchedule.COMPLETED]),
                     'activities_with_difficulty': len([t for t in past_patient_tasks if t.was_difficult]),
                     'activities_not_done': len(
                         [t for t in past_patient_tasks if t.status == PatientTaskSchedule.NOT_COMPLETED]),
                     'prehab_status_id': prehab.status,
                     'prehab_status': prehab.get_status_display(),
                     'number_of_alerts': [t for t in past_patient_tasks if
-                                         (t.status == PatientTaskSchedule.NOT_COMPLETED or t.was_difficult) and t.seen_by_doctor]
+                                         (
+                                                 t.status == PatientTaskSchedule.NOT_COMPLETED or t.was_difficult) and t.seen_by_doctor]
                 }
 
         except HttpException as e:
-            return HTTP.response(e.http_code, e.http_detail)
+            return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400,
+                                 'Ocorreu um erro inesperado',
+                                 'Unexpected Error. {}. {}.'.format(type(e).__name__, str(e)))
 
         return HTTP.response(200, '', data=data, paginator=self.paginator)
 
@@ -84,7 +88,8 @@ class PrehabViewSet(GenericViewSet):
         try:
             prehab = Prehab.objects.get(pk=pk)
             if request.ROLE_ID != 1 and request.USER_ID not in (prehab.created_by.user.id, prehab.patient.user.id):
-                raise HttpException(401, 'You don\'t have permissions to see this Prehab Plan')
+                raise HttpException(401, 'Você não tem permissões para ver este prehab.',
+                                    'You don\'t have permissions to see this Prehab Plan')
 
             # STATISTICS
             patient_tasks = PatientTaskSchedule.objects.filter(prehab=prehab).all()
@@ -108,20 +113,21 @@ class PrehabViewSet(GenericViewSet):
                 prehab_doctors.append(SimpleDoctorSerializer(doctor_patient.doctor, many=False).data)
 
         except Prehab.DoesNotExist:
-            return HTTP.response(404, 'Prehab with id {} does not exist'.format(str(pk)))
+            return HTTP.response(404, 'Prehab não encontrado', 'Prehab with id {} does not exist'.format(str(pk)))
         except ValueError:
-            return HTTP.response(404, 'Url com formato inválido. {}'.format(str(pk)))
+            return HTTP.response(404, 'Url com formato inválido.', 'Invalid URL format. {}'.format(str(pk)))
         except HttpException as e:
-            return HTTP.response(e.http_code, e.http_detail)
+            return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado',
+                                 'Unexpected Error. {}. {}.'.format(type(e).__name__, str(e)))
 
         data = FullPrehabSerializer(prehab, many=False).data
         data['statistics'] = prehab_statistics
         data['patient'] = PatientWithConstraintsSerializer(prehab.patient, many=False).data
         data['doctors'] = prehab_doctors
 
-        return HTTP.response(200, '', data)
+        return HTTP.response(200, data=data)
 
     @staticmethod
     def create(request):
@@ -131,7 +137,9 @@ class PrehabViewSet(GenericViewSet):
             # 1. Validations
             # 1.1. Only Doctors can create new Prehab Plans
             if not Permission.verify(request, ['Admin', 'Doctor']):
-                raise HttpException(401, 'Não tem permissões para aceder a este recurso.')
+                raise HttpException(401,
+                                    'Não tem permissões para aceder a este recurso.',
+                                    'You don\'t have acces to this resouurce.')
 
             # 1.2. Check schema
             SchemaValidator.validate_obj_structure(data, 'prehab/create.json')
@@ -141,22 +149,31 @@ class PrehabViewSet(GenericViewSet):
             patient = Patient.objects.get(pk=patient_id)
             doctor = Doctor.objects.get(pk=request.USER_ID)
             if request.ROLE_ID == 2 and not DoctorPatient.objects.is_a_match(request.USER_ID, patient_id):
-                raise HttpException(400, 'Patient {} is not from Doctor {}.'.format(patient_id, request.USER_ID))
+                raise HttpException(400,
+                                    'Paciente não é do médico especificado.',
+                                    'Patient {} is not from Doctor {}.'.format(patient_id, request.USER_ID))
 
             # 1.4. Check if surgery date is greater than init_date
             surgery_date = datetime.datetime.strptime(data['surgery_date'], "%d-%m-%Y")
             init_date = datetime.datetime.strptime(data['init_date'], "%d-%m-%Y")
             if surgery_date < init_date:
-                raise HttpException(400, 'Surgery Date must be after prehab init.')
+                raise HttpException(400,
+                                    'Data de cirurgia deve ser posterior à data de inicio de prehab,',
+                                    'Surgery Date must be after prehab init.')
 
-            # 1.5. Check if Task Schedule Id was created by this specific doctor or a community Task Schedule (created by an admin
+            # 1.5. Check if Task Schedule Id was created by
+            # this specific doctor or a community Task Schedule (created by an admin)
             task_schedule = TaskSchedule.objects.get(pk=data['task_schedule_id'])
             if request.ROLE_ID != 1 and not task_schedule.doctor_can_use(doctor.user.id):
-                raise HttpException(400, 'You are not the owner of this task schedule.')
+                raise HttpException(400,
+                                    'Você não é o dono deste prehab',
+                                    'You are not the owner of this task schedule.')
 
             # 1.6. Check if this patient has some prehab already
             if Prehab.objects.filter(patient=patient).filter(status__lt=4).count() > 0:
-                raise HttpException(400, 'This patient has a prehab already.')
+                raise HttpException(400,
+                                    'Este paciente já tem um prehab',
+                                    'This patient has a prehab already.')
 
             # 2. Transform General Task Schedule to a Custom Patient Task Schedule
             expected_end_date = init_date + datetime.timedelta(days=7 * task_schedule.number_of_weeks)
@@ -191,8 +208,10 @@ class PrehabViewSet(GenericViewSet):
                 PatientTaskSchedule.objects.bulk_create(patient_tasks)
 
                 # 5. Insert Patient Meal Schedule
-                constraint_types = [pct.constraint_type for pct in PatientConstraintType.objects.filter(patient=patient).all()]
-                patient_meal_schedule = DataHelper.patient_meal_schedule(task_schedule.number_of_weeks, constraint_types)
+                constraint_types = [pct.constraint_type for pct in
+                                    PatientConstraintType.objects.filter(patient=patient).all()]
+                patient_meal_schedule = DataHelper.patient_meal_schedule(task_schedule.number_of_weeks,
+                                                                         constraint_types)
                 patient_meals = []
                 for row in patient_meal_schedule:
                     patient_meals.append(PatientMealSchedule(
@@ -208,11 +227,12 @@ class PrehabViewSet(GenericViewSet):
         except Patient.DoesNotExist as e:
             return HTTP.response(400, 'Patient with id of {} does not exist.'.format(request.data['patient_id']))
         except TaskSchedule.DoesNotExist as e:
-            return HTTP.response(400, 'Task Schedule with id of {} does not exist.'.format(request.data['task_schedule_id']))
+            return HTTP.response(400,
+                                 'Task Schedule with id of {} does not exist.'.format(request.data['task_schedule_id']))
         except HttpException as e:
-            return HTTP.response(e.http_code, e.http_detail)
+            return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, str(e))
+            return HTTP.response(400, 'Erro Inesperado', 'Unexpected Error: {}.'.format(str(e)))
 
         # Send Response
         data = {
@@ -222,11 +242,11 @@ class PrehabViewSet(GenericViewSet):
 
     @staticmethod
     def update(request, pk=None):
-        return HTTP.response(405, '')
+        return HTTP.response(405)
 
     @staticmethod
     def destroy(request, pk=None):
-        return HTTP.response(405, '')
+        return HTTP.response(405)
 
     @staticmethod
     def cancel(request, pk=None):
@@ -234,21 +254,27 @@ class PrehabViewSet(GenericViewSet):
             prehab = Prehab.objects.get(pk=pk)
 
             if not Permission.verify(request, ['Admin', 'Doctor']):
-                raise HttpException(401, 'Não tem permissões para aceder a este recurso.')
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.',
+                                    'You don\'t have acces to this resouurce.')
 
             if request.ROLE_ID == 2 and not DoctorPatient.objects.is_a_match(request.USER_ID, prehab.patient.id):
-                raise HttpException(400, 'Patient {} não é paciente do medico {}.'.format(prehab.patient.id, request.USER_ID))
+                raise HttpException(400,
+                                    'Paciente não é paciente do medico especificado.'.format(prehab.patient.id,
+                                                                                             request.USER_ID),
+                                    'Patient {} is not from doctor {}.'.format(prehab.patient.id, request.USER_ID)
+                                    )
 
             prehab.actual_end_date = datetime.date.today()
             prehab.status = Prehab.CANCEL
             prehab.save()
 
         except Patient.DoesNotExist as e:
-            return HTTP.response(400, 'Patient com id {} não encontrado.'.format(request.data['patient_id']))
+            return HTTP.response(400, 'Paciente não encontrado.',
+                                 'Patient with id {} not found.'.format(request.data['patient_id']))
         except HttpException as e:
-            return HTTP.response(e.http_code, e.http_detail)
+            return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, str(e))
+            return HTTP.response(400, 'Erro Inesperado', 'Unexpected Error: {}.'.format(str(e)))
 
         # Send Response
         return HTTP.response(200, 'Prehab cancelado com sucesso.')

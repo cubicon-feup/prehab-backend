@@ -18,7 +18,7 @@ class AuthViewSet(viewsets.ModelViewSet):
             # 1. Check if pair username-password is correct
             user = User.objects.match_credentials(request.data['username'], request.data['password'])
             if len(user) == 0:
-                raise HttpException(401, 'Credenciais não válidas.')
+                raise HttpException(401, 'Credenciais não válidas.', 'Credentials not valid.')
 
             # 2. Get Relevant Information of the User
             user = user.get()
@@ -26,7 +26,7 @@ class AuthViewSet(viewsets.ModelViewSet):
             # In Case of a Patient - only if platform is MOBILE
             # In Case of a Doctor - only if platform is WEB
             if (user.role.id == 3 and request.PLATFORM != 'mobile') or (user.role.id == 2 and request.PLATFORM != 'web'):
-                raise HttpException(401, 'Não tem permissões para aceder a este recurso.')
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.', 'You don\'t have acces to this resouurce.')
 
             # 3. Get Context Information - TODO
             prehab_id = None
@@ -43,9 +43,9 @@ class AuthViewSet(viewsets.ModelViewSet):
             jwt_encoded = jwt.encode(jwt_data, settings.JWT_SECRET, algorithm=settings.JWT_ALGORITHM).decode('utf-8')
 
         except HttpException as e:
-            return HTTP.response(e.http_code, e.http_detail)
+            return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado', 'Unexpected Error. {}. {}.'.format(type(e).__name__, str(e)))
 
         # Send Response
         data = {
@@ -56,9 +56,9 @@ class AuthViewSet(viewsets.ModelViewSet):
         if prehab_id is not None:
             data['prehab_id'] = prehab_id
 
-        return HTTP.response(200, '', data)
+        return HTTP.response(200, data=data)
 
     @staticmethod
     def logout(request):
         # TODO - Not Implemented - blacklist token
-        return HTTP.response(200, '', None)
+        return HTTP.response(200)

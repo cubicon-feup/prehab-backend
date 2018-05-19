@@ -51,9 +51,9 @@ class PatientViewSet(GenericViewSet):
                 data.append(record)
 
         except HttpException as e:
-            return HTTP.response(e.http_code, e.http_detail)
+            return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado', 'Unexpected Error. {}. {}.'.format(type(e).__name__, str(e)))
 
         return HTTP.response(200, '', data=data, paginator=self.paginator)
 
@@ -65,10 +65,10 @@ class PatientViewSet(GenericViewSet):
             # In case it's a Doctor -> check if he/she has permission
             if request.ROLE_ID == 2 and DoctorPatient.objects.filter(doctor=request.USER_ID).filter(
                     patient=patient).count == 0:
-                raise HttpException(401, 'Não tem permissões para aceder a este recurso.')
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.', 'You don\'t have acces to this resouurce.')
             # In case it's a Patient -> check if it's own information
             elif request.ROLE_ID == 3 and request.USER_ID == patient.id:
-                raise HttpException(401, 'Não tem permissões para aceder a este recurso.')
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.', 'You don\'t have acces to this resouurce.')
 
             data = PatientSerializer(patient, many=False).data
 
@@ -81,22 +81,22 @@ class PatientViewSet(GenericViewSet):
             data['constraints'] = [ConstraintTypeSerializer(c.constraint_type, many=False).data for c in constraints]
 
         except Patient.DoesNotExist:
-            return HTTP.response(404, 'Patient com id {} não encontrado.'.format(str(pk)))
+            return HTTP.response(404, 'Paciente não encontrado.', 'Patient with id {} not found.'.format(str(pk)))
         except ValueError:
-            return HTTP.response(404, 'Url com formato inválido. {}'.format(str(pk)))
+            return HTTP.response(404, 'Url com formato inválido.', 'Invalid URL format. {}'.format(str(pk)))
         except HttpException as e:
-            return HTTP.response(e.http_code, e.http_detail)
+            return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado', 'Unexpected Error. {}. {}.'.format(type(e).__name__, str(e)))
 
-        return HTTP.response(200, '', data)
+        return HTTP.response(200, data=data)
 
     @staticmethod
     def create(request):
         try:
             # 0 - Handle Permissions
             if not Permission.verify(request, ['Doctor']):
-                raise HttpException(401, 'Não tem permissões para aceder a este recurso.')
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.', 'You don\'t have acces to this resouurce.')
 
             data = request.data
             # 1. Check schema
@@ -149,9 +149,9 @@ class PatientViewSet(GenericViewSet):
                 constraint.save()
 
         except HttpException as e:
-            return HTTP.response(e.http_code, e.http_detail)
+            return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado', 'Unexpected Error. {}. {}.'.format(type(e).__name__, str(e)))
 
         # Send Response - access code
         data = {
@@ -161,11 +161,11 @@ class PatientViewSet(GenericViewSet):
 
     @staticmethod
     def update(request, pk=None):
-        return HTTP.response(405, '')
+        return HTTP.response(405)
 
     @staticmethod
     def destroy(request, pk=None):
-        return HTTP.response(405, '')
+        return HTTP.response(405)
 
     @staticmethod
     def statistics(request, pk=None):
@@ -174,10 +174,10 @@ class PatientViewSet(GenericViewSet):
             # In case it's a Doctor -> check if he/she has permission
             if request.ROLE_ID == 2 and DoctorPatient.objects.filter(doctor=request.USER_ID).filter(
                     patient=patient).count == 0:
-                raise HttpException(401, 'Não tem permissões para aceder a este recurso.')
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.', 'You don\'t have acces to this resouurce.')
             # In case it's a Patient -> check if it's own information
             elif request.ROLE_ID == 3 and request.USER_ID == patient.id:
-                raise HttpException(401, 'Não tem permissões para aceder a este recurso.')
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.', 'You don\'t have acces to this resouurce.')
 
             prehab = Prehab.objects.filter(patient=patient).first()
             patient_tasks = PatientTaskSchedule.objects.filter(prehab=prehab).all()
@@ -206,20 +206,22 @@ class PatientViewSet(GenericViewSet):
             }
 
         except Patient.DoesNotExist:
-            return HTTP.response(404, 'Patient com id {} não encontrado.'.format(str(pk)))
+            return HTTP.response(404, 'Paciente não encontrado', 'Patient with id {} not found.'.format(str(pk)))
         except HttpException as e:
-            return HTTP.response(e.http_code, e.http_detail)
+            return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400, 'Ocorreu um erro inesperado', 'Unexpected Error. {}. {}.'.format(type(e).__name__, str(e)))
 
-        return HTTP.response(200, '', data)
+        return HTTP.response(200, data=data)
 
     @staticmethod
     def add_second_doctor(request):
         try:
             # 0 - Handle Permissions
             if not Permission.verify(request, ['Admin', 'Doctor']):
-                raise HttpException(401, 'Não tem permissões para aceder a este recurso.')
+                raise HttpException(401,
+                                    'Não tem permissões para aceder a este recurso.',
+                                    'You don\'t have acces to this resouurce.')
 
             data = request.data
             # 1. Check schema
@@ -249,9 +251,9 @@ class PatientViewSet(GenericViewSet):
             new_relation.save()
 
         except HttpException as e:
-            return HTTP.response(e.http_code, e.http_detail)
+            return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, str(e))
+            return HTTP.response(400, 'Erro Inesperado', 'Unexpected Error: {}.'.format(str(e)))
 
         # Send Response
         return HTTP.response(201, 'Médico adicionado com sucesso.')

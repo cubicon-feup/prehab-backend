@@ -15,20 +15,20 @@ class SchemaValidator:
             jsonschema.validate(req_json, schema)
 
         except jsonschema.SchemaError as e:
-            raise HttpException(400, e.message)
+            raise HttpException(400, 'Erro de Validação de dados.', e.message)
 
         except jsonschema.ValidationError as e:
             if e.validator in ('pattern', 'required', 'maxLength'):
                 detail = "Validation Error. Parameter {}".format(e.message.replace('\'', ''))
             else:
                 detail = "Validation Error. {}".format(SchemaValidator.get_error_message(e))
-            raise HttpException(400, detail)
+            raise HttpException(400, 'Erro de Validação de dados', detail)
 
         # except AttributeError as e:
         #     raise HttpException(400, str(e))
 
         except FileNotFoundError as e:
-            raise HttpException(400, "File {} not found".format(e.filename))
+            raise HttpException(400, 'Erro com esquema de validação.', "File {} not found".format(e.filename))
 
         # except Exception as e:
         #     raise HttpException(400, str(e))

@@ -35,15 +35,17 @@ class PatientTaskScheduleViewSet(GenericViewSet):
             elif request.ROLE_ID == 3:
                 patient_task_schedule = patient_task_schedule.filter(prehab__patient_id=request.USER_ID).all()
             else:
-                raise HttpException(400, 'Some error occurred')
+                raise HttpException(400)
 
             queryset = self.paginate_queryset(patient_task_schedule)
             data = SimplePatientTaskScheduleSerializer(queryset, many=True).data
 
         except HttpException as e:
-            return HTTP.response(e.http_code, e.http_detail)
+            return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400,
+                                 'Ocorreu um erro inesperado',
+                                 'Unexpected Error. {}. {}.'.format(type(e).__name__, str(e)))
 
         return HTTP.response(200, '', data=data, paginator=self.paginator)
 
@@ -54,31 +56,37 @@ class PatientTaskScheduleViewSet(GenericViewSet):
 
             # In case it's a Doctor -> check if he/she has permission
             if request.ROLE_ID == 2 and request.USER_ID != patient_task_schedule.prehab.created_by.user.id:
-                raise HttpException(401, 'You don\'t have permission to access this')
+                raise HttpException(401,
+                                    'Não tem permissões para aceder a este recurso.',
+                                    'You don\'t have acces to this resouurce.')
             # In case it's a Patient -> check if it's own information
             elif request.ROLE_ID == 3 and request.USER_ID != patient_task_schedule.prehab.patient.user.id:
-                raise HttpException(401, 'You don\'t have permission to access this')
+                raise HttpException(401,
+                                    'Não tem permissões para aceder a este recurso.',
+                                    'You don\'t have acces to this resouurce.')
 
             data = SimplePatientTaskScheduleSerializer(patient_task_schedule, many=False).data
 
         except PatientTaskSchedule.DoesNotExist:
-            return HTTP.response(404, 'Patient with id {} does not exist'.format(str(pk)))
+            return HTTP.response(404, 'Paciente não encontrado.', 'Patient with id {} does not exist'.format(str(pk)))
         except ValueError:
-            return HTTP.response(404, 'Url com formato inválido. {}'.format(str(pk)))
+            return HTTP.response(404, 'Url com formato inválido.', 'Invalid URL format. {}'.format(str(pk)))
         except HttpException as e:
-            return HTTP.response(e.http_code, e.http_detail)
+            return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400,
+                                 'Ocorreu um erro inesperado',
+                                 'Unexpected Error. {}. {}.'.format(type(e).__name__, str(e)))
 
-        return HTTP.response(200, '', data)
+        return HTTP.response(200, data=data)
 
     @staticmethod
     def create(request):
-        return HTTP.response(405, '')
+        return HTTP.response(405)
 
     @staticmethod
     def update(request, pk=None):
-        return HTTP.response(405, '')
+        return HTTP.response(405)
 
     @staticmethod
     def seen(request):
@@ -88,7 +96,9 @@ class PatientTaskScheduleViewSet(GenericViewSet):
             # 1. Validations
             # 1.1. Only Doctors can mark tas schedule as seen
             if not Permission.verify(request, ['Doctor']):
-                raise HttpException(401, 'Não tem permissões para aceder a este recurso.')
+                raise HttpException(401,
+                                    'Não tem permissões para aceder a este recurso.',
+                                    'You don\'t have acces to this resouurce.')
 
             # 1.2. Check schema
             SchemaValidator.validate_obj_structure(data, 'patient_task_schedule/mark_as_seen.json')
@@ -96,11 +106,15 @@ class PatientTaskScheduleViewSet(GenericViewSet):
             # 1.3. Check if Patient Task Schedule is valid
             patient_task_schedule = PatientTaskSchedule.objects.get(pk=data['patient_task_schedule_id'])
             if patient_task_schedule.status > 2:
-                raise HttpException(400, 'This activity was mark as done already.')
+                raise HttpException(400,
+                                    'Esta atividade já foi realizada anteriormente',
+                                    'This activity was mark as done already.')
 
             # 1.4. Check if doctor is prehab's owner
             if request.ROLE_ID != 2 or request.ROLE_ID == 2 and patient_task_schedule.prehab.doctor.user.id != request.USER_ID:
-                raise HttpException(400, 'You can\'t update this Prehab Plan')
+                raise HttpException(400,
+                                    'Não tem permissões para editar este Prehab',
+                                    'You can\'t update this Prehab Plan')
 
             # 2. Update This specific Task in PatientTaskSchedule
             patient_task_schedule.seen_by_doctor = data['seen']
@@ -108,11 +122,16 @@ class PatientTaskScheduleViewSet(GenericViewSet):
             patient_task_schedule.save()
 
         except PatientTaskSchedule.DoesNotExist:
-            return HTTP.response(404, 'Patient Task with id {} does not exist'.format(str(request.data['patient_task_schedule_id'])))
+            return HTTP.response(404,
+                                 'Tarefa não encontrada',
+                                 'Patient Task with id {} does not exist'.format(
+                                     str(request.data['patient_task_schedule_id'])))
         except HttpException as e:
-            return HTTP.response(e.http_code, e.http_detail)
+            return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, 'Ocorreu um erro inesperado. {}. {}.'.format(type(e).__name__, str(e)))
+            return HTTP.response(400,
+                                 'Ocorreu um erro inesperado',
+                                 'Unexpected Error. {}. {}.'.format(type(e).__name__, str(e)))
 
         return HTTP.response(200, '')
 
@@ -124,7 +143,8 @@ class PatientTaskScheduleViewSet(GenericViewSet):
             # 1. Validations
             # 1.1. Only Patients can create new Prehab Plans
             if not Permission.verify(request, ['Patient']):
-                raise HttpException(401, 'Não tem permissões para aceder a este recurso.')
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.',
+                                    'You don\'t have acces to this resouurce.')
 
             # 1.2. Check schema
             SchemaValidator.validate_obj_structure(data, 'patient_task_schedule/mark_as_done.json')
@@ -132,11 +152,12 @@ class PatientTaskScheduleViewSet(GenericViewSet):
             # 1.3. Check if Patient Task Schedule is valid
             patient_task_schedule = PatientTaskSchedule.objects.get(pk=data['patient_task_schedule_id'])
             if patient_task_schedule.status > 2:
-                raise HttpException(400, 'This activity was mark as done already.')
+                raise HttpException(400, 'Esta atividade já tinha sido realizada.',
+                                    'This activity was mark as done already.')
 
             # 1.4. Check if patient is prehab's owner
             if patient_task_schedule.prehab.patient.user.id != request.USER_ID:
-                raise HttpException(400, 'You can\'t update this Prehab Plan')
+                raise HttpException(400, 'Não pode atualizar este prehab.', 'You can\'t update this Prehab Plan')
 
             # 2. Update This specific Task in PatientTaskSchedule
             # 2.1. Task completed with success
@@ -159,16 +180,16 @@ class PatientTaskScheduleViewSet(GenericViewSet):
             patient_task_schedule.save()
 
         except PatientTaskSchedule.DoesNotExist as e:
-            return HTTP.response(400, 'Patient Task Schedule nõ encontrado.')
+            return HTTP.response(404, 'Tarefa do paciente não encontrada.', 'Patient Task Schedule not found.')
         except Prehab.DoesNotExist as e:
-            return HTTP.response(400, 'Prehab com id {} não encontrado.'.format(request.data['prehab_id']))
+            return HTTP.response(404, 'Prehab não encontrado', 'Prehab with id {} not found'.format(request.data['prehab_id']))
         except HttpException as e:
-            return HTTP.response(e.http_code, e.http_detail)
+            return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
-            return HTTP.response(400, str(e))
+            return HTTP.response(400, 'Erro Inesperado', 'Unexpected Error: {}.'.format(str(e)))
 
         return HTTP.response(200, 'Prehab atualizado com sucesso.')
 
     @staticmethod
     def destroy(request, pk=None):
-        return HTTP.response(405, '')
+        return HTTP.response(405)
