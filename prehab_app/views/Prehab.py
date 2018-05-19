@@ -24,6 +24,8 @@ from prehab_app.serializers.Prehab import PrehabSerializer, FullPrehabSerializer
 
 class PrehabViewSet(GenericViewSet):
 
+
+
     def list(self, request):
         try:
             if 'active' in request.GET and request.GET.get('active'):
@@ -51,7 +53,7 @@ class PrehabViewSet(GenericViewSet):
                 patient_tasks = PatientTaskSchedule.objects.filter(prehab=prehab).all()
 
                 past_patient_tasks = [t for t in patient_tasks if
-                                      t.week_number <= prehab.get_current_week_num() and t.day_number < prehab.get_current_day_num()]
+                                      t.week_number <= prehab.get_current_week_num() and t.day_number <= prehab.get_current_day_num()]
 
                 record['info'] = {
                     'patient_id': prehab.patient.pk,
@@ -89,12 +91,8 @@ class PrehabViewSet(GenericViewSet):
 
             # STATISTICS
             patient_tasks = PatientTaskSchedule.objects.filter(prehab=prehab).all()
-
-            days_to_surgery = (datetime.datetime.now().date() - prehab.surgery_date).days
-            current_week_num = math.floor(days_to_surgery / 7)
-            current_day_num = days_to_surgery - 7 * current_week_num
             pass_patient_tasks = [t for t in patient_tasks if
-                                  t.week_number <= current_week_num and t.day_number <= current_day_num]
+                                  t.week_number <= prehab.get_current_week_num() and t.day_number <= prehab.get_current_day_num()]
 
             prehab_statistics = {
                 'total_activities': len(patient_tasks),
