@@ -69,9 +69,10 @@ class PrehabViewSet(GenericViewSet):
                         [t for t in past_patient_tasks if t.status == PatientTaskSchedule.NOT_COMPLETED]),
                     'prehab_status_id': prehab.status,
                     'prehab_status': prehab.get_status_display(),
+                    'number_of_alerts_unseen': [t for t in past_patient_tasks if
+                                                (t.status == PatientTaskSchedule.NOT_COMPLETED or t.was_difficult) and not t.seen_by_doctor],
                     'number_of_alerts': [t for t in past_patient_tasks if
-                                         (
-                                                 t.status == PatientTaskSchedule.NOT_COMPLETED or t.was_difficult) and t.seen_by_doctor]
+                                         (t.status == PatientTaskSchedule.NOT_COMPLETED or t.was_difficult)]
                 }
 
         except HttpException as e:
@@ -137,7 +138,7 @@ class PrehabViewSet(GenericViewSet):
                 'was_difficult': t['patient_task_info']['was_difficult'],
             }
             for d, tasks in data['task_schedule'].items()
-            for t in tasks if t['patient_task_info']['was_difficult'] or t['status_id'] == 3
+            for t in tasks if t['patient_task_info']['was_difficult'] or t['status_id'] == PatientTaskSchedule.NOT_COMPLETED
         ]
 
         data['number_of_alerts_unseen'] = len([a for a in data['alerts'] if not a['seen_by_doctor']])
