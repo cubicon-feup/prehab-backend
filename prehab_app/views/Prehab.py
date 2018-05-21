@@ -126,7 +126,7 @@ class PrehabViewSet(GenericViewSet):
 
         data['alerts'] = [
             {
-                'task_id': t['id'],
+                'patient_task_schedule_id': t['id'],
                 'task_title': t['title'],
                 'task_description': t['description'],
                 'task_type': t['task_type'],
@@ -141,17 +141,13 @@ class PrehabViewSet(GenericViewSet):
         ]
 
         data['number_of_alerts_unseen'] = len([a for a in data['alerts'] if not a['seen_by_doctor']])
-        data['number_of_alerts'] = len([a for a in data['alerts']])
+        data['number_of_alerts'] = len(data['alerts'])
 
         data['statistics'] = prehab_statistics
         data['patient'] = PatientWithConstraintsSerializer(prehab.patient, many=False).data
         data['doctors'] = prehab_doctors
 
-        # [t for d, tasks in data['task_schedule'].items() for t in tasks]  # if t.was_difficult or t.status_id == 3]  #for t in d]
-
         return HTTP.response(200, data=data)
-
-
 
     @staticmethod
     def create(request):
