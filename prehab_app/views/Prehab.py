@@ -124,15 +124,21 @@ class PrehabViewSet(GenericViewSet):
 
         data = FullPrehabSerializer(prehab, many=False).data
 
-        data['alerts'] = [{
-            **t,
-            **t['patient_task_info']
-        }
+        data['alerts'] = [
+            {
+                'task_id': t['id'],
+                'task_title': t['title'],
+                'task_description': t['description'],
+                'task_type': t['task_type'],
+                'status': t['status'],
+                'date': t['patient_task_info']['date'],
+                'seen_by_doctor': t['patient_task_info']['seen_by_doctor'],
+                'doctor_notes': t['patient_task_info']['doctor_notes'],
+                'was_difficult': t['patient_task_info']['was_difficult'],
+            }
             for d, tasks in data['task_schedule'].items()
             for t in tasks if t['patient_task_info']['was_difficult'] or t['status_id'] == 3
         ]
-
-        # del data['alerts']['patient_task_info']
 
         data['number_of_alerts_unseen'] = len([a for a in data['alerts'] if not a['seen_by_doctor']])
         data['number_of_alerts'] = len([a for a in data['alerts']])
