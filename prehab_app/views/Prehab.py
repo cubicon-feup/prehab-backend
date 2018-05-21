@@ -69,10 +69,10 @@ class PrehabViewSet(GenericViewSet):
                         [t for t in past_patient_tasks if t.status == PatientTaskSchedule.NOT_COMPLETED]),
                     'prehab_status_id': prehab.status,
                     'prehab_status': prehab.get_status_display(),
-                    'number_of_alerts_unseen': [t for t in past_patient_tasks if
-                                                (t.status == PatientTaskSchedule.NOT_COMPLETED or t.was_difficult) and not t.seen_by_doctor],
-                    'number_of_alerts': [t for t in past_patient_tasks if
-                                         (t.status == PatientTaskSchedule.NOT_COMPLETED or t.was_difficult)]
+                    'number_of_alerts_unseen': len([t for t in past_patient_tasks if
+                                                (t.status == PatientTaskSchedule.NOT_COMPLETED or t.was_difficult) and not t.seen_by_doctor]),
+                    'number_of_alerts': len([t for t in past_patient_tasks if
+                                         (t.status == PatientTaskSchedule.NOT_COMPLETED or t.was_difficult)])
                 }
 
         except HttpException as e:
@@ -82,7 +82,7 @@ class PrehabViewSet(GenericViewSet):
                                  'Ocorreu um erro inesperado',
                                  'Unexpected Error. {}. {}.'.format(type(e).__name__, str(e)))
 
-        return HTTP.response(200, '', data=data, paginator=self.paginator)
+        return HTTP.response(200, '', data=data)  # , paginator=self.paginator)
 
     @staticmethod
     def retrieve(request, pk=None):
