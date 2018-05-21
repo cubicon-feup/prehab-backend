@@ -5,7 +5,7 @@ from prehab_app.models import TaskSchedule
 from prehab_app.models.Prehab import Prehab
 from prehab_app.serializers.Meal import MealSerializer
 from prehab_app.serializers.PatientMealSchedule import PatientMealScheduleSerializer
-from prehab_app.serializers.PatientTaskSchedule import PatientTaskScheduleSerializer
+from prehab_app.serializers.PatientTaskSchedule import PatientTaskScheduleSerializer, SimplePatientTaskScheduleSerializer
 from prehab_app.serializers.Task import TaskSerializer, FullTaskSerializer
 
 
@@ -60,6 +60,7 @@ class FullPrehabSerializer(serializers.ModelSerializer):
             patient_task_info['id'] = patient_task.id
             patient_task_info['status_id'] = patient_task.status
             patient_task_info['status'] = patient_task.get_status_display()
+            patient_task_info['patient_task_info'] = SimplePatientTaskScheduleSerializer(patient_task, many=False).data
 
             task_schedule[date].append(patient_task_info)
 

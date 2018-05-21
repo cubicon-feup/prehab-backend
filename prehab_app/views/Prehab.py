@@ -123,11 +123,29 @@ class PrehabViewSet(GenericViewSet):
                                  'Unexpected Error. {}. {}.'.format(type(e).__name__, str(e)))
 
         data = FullPrehabSerializer(prehab, many=False).data
+
+        data['alerts'] = [{
+            **t,
+            **t['patient_task_info']
+        }
+            for d, tasks in data['task_schedule'].items()
+            for t in tasks if t['patient_task_info']['was_difficult'] or t['status_id'] == 3
+        ]
+
+        # del data['alerts']['patient_task_info']
+
+        data['number_of_alerts_unseen'] = len([a for a in data['alerts'] if not a['seen_by_doctor']])
+        data['number_of_alerts'] = len([a for a in data['alerts']])
+
         data['statistics'] = prehab_statistics
         data['patient'] = PatientWithConstraintsSerializer(prehab.patient, many=False).data
         data['doctors'] = prehab_doctors
 
+        # [t for d, tasks in data['task_schedule'].items() for t in tasks]  # if t.was_difficult or t.status_id == 3]  #for t in d]
+
         return HTTP.response(200, data=data)
+
+
 
     @staticmethod
     def create(request):
