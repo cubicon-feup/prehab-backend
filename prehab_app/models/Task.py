@@ -15,7 +15,7 @@ class Task(models.Model):
         (ENDURANCE, 'Endurance'),
         (MUSCULAR, 'Muscular')
     )
-    title = models.CharField(max_length=64, blank=False, null=True)
+    title = models.CharField(max_length=256, blank=False, null=True)
     description = models.CharField(max_length=512, blank=False, null=True)
     multimedia_link = models.CharField(max_length=512, blank=False, null=True)
     task_type = models.IntegerField(choices=type_of_tasks, db_column='task_type_id')

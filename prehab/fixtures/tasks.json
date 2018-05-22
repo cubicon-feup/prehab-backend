@@ -3,30 +3,90 @@
         "model": "prehab_app.Task",
         "pk": 1,
         "fields": {
-            "title": "Task 1",
-            "task_type_id": 1,
-            "description": "This is the First Task",
-            "multimedia_link": "https://media.giphy.com/media/krP2NRkLqnKEg/giphy.gif"
+            "title": "Caminhada",
+            "task_type": 2,
+            "description": "Caminhe durante 30 minutos.",
+            "multimedia_link": "https://s3.eu-west-2.amazonaws.com/prehab-gifs/Walking.gif"
         }
     },
     {
         "model": "prehab_app.Task",
         "pk": 2,
         "fields": {
-            "title": "Task 2",
-            "task_type_id": 2,
-            "description": "This is the Second Task",
-            "multimedia_link": "https://media.giphy.com/media/l44QeXqzp5JoYSNe8/giphy.gif"
+            "title": "Bicicleta Estática",
+            "task_type": 2,
+            "description": "Faça o exercício durante 20 minutos.",
+            "multimedia_link": "https://s3.eu-west-2.amazonaws.com/prehab-gifs/Cycling.gif"
         }
     },
     {
         "model": "prehab_app.Task",
         "pk": 3,
         "fields": {
-            "title": "Task 3",
-            "task_type_id": 3,
-            "description": "This is the Third Task",
-            "multimedia_link": "https://media.giphy.com/media/Vq6up3A0oBjsk/giphy.gif"
+            "title": "Rotação do tornozelo",
+            "task_type": 3,
+            "description": "Faça 10 rotações do tornozelo direito e de seguida 10 rotações do tornozelo esquerdo.",
+            "multimedia_link": "https://s3.eu-west-2.amazonaws.com/prehab-gifs/Ankle_rotation.gif"
+        }
+    },
+    {
+        "model": "prehab_app.Task",
+        "pk": 4,
+        "fields": {
+            "title": "Pumping do tornozelo",
+            "task_type": 3,
+            "description": "Faça 10 bombeamentos do tornozelo direito e de seguida 10 bombeamentos do tornozelo esquerdo.",
+            "multimedia_link": "https://s3.eu-west-2.amazonaws.com/prehab-gifs/Ankle_pump.gif"
+        }
+    },
+    {
+        "model": "prehab_app.Task",
+        "pk": 5,
+        "fields": {
+            "title": "Respiração Diafragmática",
+            "task_type": 1,
+            "description": "Inspire projectando ligeiramente a barriga, puxando para baixo o diafragma, enchendo, assim, todo o pulmão inclusive na sua base, repita o exercício durante 5 minutos.",
+            "multimedia_link": "https://s3.eu-west-2.amazonaws.com/prehab-gifs/Diaphragmatic_breathing.gif"
+        }
+    },
+    {
+        "model": "prehab_app.Task",
+        "pk": 6,
+        "fields": {
+            "title": "Espirometria",
+            "task_type": 1,
+            "description": "Inspire  e de seguida expire para o expirómetro de forma levantar as 3 bolas, repita o exercício durante 5 minutos, três vezes ao dia.",
+            "multimedia_link": "https://s3.eu-west-2.amazonaws.com/prehab-gifs/Incentive_spirometry_expiration.gif"
+        }
+    },
+    {
+        "model": "prehab_app.Task",
+        "pk": 7,
+        "fields": {
+            "title": "Inspirometria",
+            "task_type": 1,
+            "description": "Expire  e de seguida inspire para o expirómetro de forma levantar as 3 bolas, repita o exercício durante 5 minutos, três vezes ao dia.",
+            "multimedia_link": "https://s3.eu-west-2.amazonaws.com/prehab-gifs/Incentive_spirometry_inspiration.gif"
+        }
+    },
+    {
+        "model": "prehab_app.Task",
+        "pk": 8,
+        "fields": {
+            "title": "Incentivo à tosse",
+            "task_type": 1,
+            "description": "Force tosse 5 vezes.",
+            "multimedia_link": "https://s3.eu-west-2.amazonaws.com/prehab-gifs/Coughing.gif"
+        }
+    },
+    {
+        "model": "prehab_app.Task",
+        "pk": 9,
+        "fields": {
+            "title": "Exercício de abertura da grade costal, com bastão associado a exercício respiratório",
+            "task_type": 3,
+            "description": "Agarre o bastão com as mãos paralelas  aos ombros, de seguida levante os braços., repita o movimento 10 vezes três vezes ao dia",
+            "multimedia_link": "https://s3.eu-west-2.amazonaws.com/prehab-gifs/opening_of_the_costal_grid.gif"
         }
     }
 ]
