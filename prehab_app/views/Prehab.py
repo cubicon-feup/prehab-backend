@@ -132,7 +132,7 @@ class PrehabViewSet(GenericViewSet):
                 'task_description': t['description'],
                 'task_type': t['task_type'],
                 'status': t['status'],
-                'date': t['patient_task_info']['date'],
+                'date': t['patient_task_info']['date'].split('T')[0],
                 'seen_by_doctor': t['patient_task_info']['seen_by_doctor'],
                 'doctor_notes': t['patient_task_info']['doctor_notes'],
                 'was_difficult': t['patient_task_info']['was_difficult'],
