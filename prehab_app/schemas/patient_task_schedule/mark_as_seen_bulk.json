@@ -1,0 +1,11 @@
+{
+    "type": "object",
+    "properties": {
+        "prehab_id": {
+            "type": "integer"
+        }
+    },
+    "required": [
+        "prehab_id"
+    ]
+}

@@ -136,6 +136,41 @@ class PatientTaskScheduleViewSet(GenericViewSet):
         return HTTP.response(200, '')
 
     @staticmethod
+    def seen_in_bulk(request):
+        try:
+            data = request.data
+
+            # 1. Validations
+            # 1.1. Only Doctors can mark tas schedule as seen
+            if not Permission.verify(request, ['Doctor', 'Admin']):
+                raise HttpException(401,
+                                    'Não tem permissões para aceder a este recurso.',
+                                    'You don\'t have acces to this resouurce.')
+
+            # 1.2. Check schema
+            SchemaValidator.validate_obj_structure(data, 'patient_task_schedule/mark_as_seen_bulk.json')
+
+            # 1.3. Check if Patient Task Schedule is valid
+            patient_tasks = PatientTaskSchedule.objects.filter(prehab=data['prehab_id']).all()
+            for patient_task in patient_tasks:
+                patient_task.seen_by_doctor = True
+                patient_task.save()
+
+        except PatientTaskSchedule.DoesNotExist:
+            return HTTP.response(404,
+                                 'Tarefa não encontrada',
+                                 'Patient Task with id {} does not exist'.format(
+                                     str(request.data['patient_task_schedule_id'])))
+        except HttpException as e:
+            return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
+        except Exception as e:
+            return HTTP.response(400,
+                                 'Ocorreu um erro inesperado',
+                                 'Unexpected Error. {}. {}.'.format(type(e).__name__, str(e)))
+
+        return HTTP.response(200, '')
+
+    @staticmethod
     def mark_as_done(request):
         try:
             data = request.data
