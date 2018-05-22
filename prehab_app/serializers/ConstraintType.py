@@ -7,3 +7,9 @@ class ConstraintTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ConstraintType
         fields = '__all__'
+
+
+class ConstraintTypeNameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ConstraintType
+        fields = ['title']

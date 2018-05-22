@@ -70,9 +70,9 @@ class PrehabViewSet(GenericViewSet):
                     'prehab_status_id': prehab.status,
                     'prehab_status': prehab.get_status_display(),
                     'number_of_alerts_unseen': len([t for t in past_patient_tasks if
-                                                (t.status == PatientTaskSchedule.NOT_COMPLETED or t.was_difficult) and not t.seen_by_doctor]),
+                                                    (t.status == PatientTaskSchedule.NOT_COMPLETED or t.was_difficult) and not t.seen_by_doctor]),
                     'number_of_alerts': len([t for t in past_patient_tasks if
-                                         (t.status == PatientTaskSchedule.NOT_COMPLETED or t.was_difficult)])
+                                             (t.status == PatientTaskSchedule.NOT_COMPLETED or t.was_difficult)])
                 }
 
         except HttpException as e:
@@ -146,6 +146,10 @@ class PrehabViewSet(GenericViewSet):
 
         data['statistics'] = prehab_statistics
         data['patient'] = PatientWithConstraintsSerializer(prehab.patient, many=False).data
+
+        data['patient']['patient_constraints'] = [patient_constraint['constraint_type']['title']
+                                                  for patient_constraint in data['patient']['patient_constraints']]
+
         data['doctors'] = prehab_doctors
 
         return HTTP.response(200, data=data)
