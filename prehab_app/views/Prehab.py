@@ -282,11 +282,11 @@ class PrehabViewSet(GenericViewSet):
                 raise HttpException(401, 'Não tem permissões para aceder a este recurso.',
                                     'You don\'t have acces to this resouurce.')
 
-            if request.ROLE_ID == 2 and not DoctorPatient.objects.is_a_match(request.USER_ID, prehab.patient.id):
+            if request.ROLE_ID == 2 and not DoctorPatient.objects.is_a_match(request.USER_ID, prehab.patient.pk):
                 raise HttpException(400,
-                                    'Paciente não é paciente do medico especificado.'.format(prehab.patient.id,
+                                    'Paciente não é paciente do medico especificado.'.format(prehab.patient.pk,
                                                                                              request.USER_ID),
-                                    'Patient {} is not from doctor {}.'.format(prehab.patient.id, request.USER_ID)
+                                    'Patient {} is not from doctor {}.'.format(prehab.patient.pk, request.USER_ID)
                                     )
 
             prehab.actual_end_date = datetime.date.today()
