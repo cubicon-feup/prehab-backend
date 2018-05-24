@@ -258,8 +258,8 @@ class PatientViewSet(GenericViewSet):
                 raise HttpException(400,
                                     'Um paciente pode ter apenas 2 médicos.',
                                     'One patient can only have 2 doctors.')
-            # 2.3. if the one calling the api is not the first doctor
-            if relation.count() == 1 and relation.get().doctor.user != request.USER_ID:
+            # 2.3. if the one calling the api is not the first doctor and is not an admin
+            if relation.count() == 1 and relation.get().doctor.user != request.USER_ID and request.ROLE_ID != 1:
                 raise HttpException(400,
                                     'Não tem permissões para adicionar médicos a este paciente.',
                                     'You can\'t add doctors to this patient')
@@ -273,11 +273,14 @@ class PatientViewSet(GenericViewSet):
             new_relation.save()
 
         except Doctor.DoesNotExist as e:
-            return HTTP.response(400, 'Médico não encontrado', 'Doctor with id {} not found. {}').format(
-                data['doctor_id'], str(e))
+            return HTTP.response(400, 'Médico não encontrado', 'Doctor with id {} not found. {}'.format(
+                data['doctor_id'], str(e)))
         except Patient.DoesNotExist as e:
-            return HTTP.response(400, 'Paciente não encontrado', 'Patient with id {} not found. {}').format(
-                data['patient_id'], str(e))
+            return HTTP.response(400, 'Pacient não encontrado', 'Patient with id {} not found. {}'.format(
+                data['patient_id'], str(e)))
+        except Patient.DoesNotExist as e:
+            return HTTP.response(400, 'Paciente não encontrado', 'Patient with id {} not found. {}'.format(
+                data['patient_id'], str(e)))
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
