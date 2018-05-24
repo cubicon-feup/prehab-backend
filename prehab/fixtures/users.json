@@ -7,7 +7,7 @@
             "email": "admin@cubicon.xyz",
             "phone": null,
             "username": "admin",
-            "password": "admin",
+            "password": "$2b$12$PHVGzBwh4nQsLW7nT/apleJEnzDaboKEXHUA7lG.KuPIV45IwBMCW",
             "role_id": 1,
             "is_active": true
         }
@@ -20,7 +20,7 @@
             "email": "doctor@cubicon.xyz",
             "phone": null,
             "username": "doctor",
-            "password": "doctor",
+            "password": "$2b$12$70b91X7qivL/ZXHUzgiPPOL7PfaBRawhpsK4NzXtJiYDpSPj7IbGe",
             "role_id": 2,
             "is_active": true
         }
@@ -33,7 +33,7 @@
             "email": "patient@cubicon.xyz",
             "phone": null,
             "username": "patient",
-            "password": "patient",
+            "password": "$2b$12$oFIOZDD0pWCwbkLIagQQp.Yao6brp1ZyZVE8J24qahOk4jYq7qZ1q",
             "role_id": 3,
             "is_active": true
         }

@@ -1,5 +1,5 @@
 # import SchemaValidator
-
+import bcrypt
 import jwt
 from django.conf import settings
 from rest_framework import viewsets
@@ -16,12 +16,9 @@ class AuthViewSet(viewsets.ModelViewSet):
     def login(request):
         try:
             # 1. Check if pair username-password is correct
-            user = User.objects.match_credentials(request.data['username'], request.data['password'])
-            if len(user) == 0:
-                raise HttpException(401, 'Credenciais não válidas.', 'Credentials not valid.')
-
-            # 2. Get Relevant Information of the User
-            user = user.get()
+            user = User.objects.filter(username=request.data['username']).get()
+            if not bcrypt.checkpw(request.data['password'].encode('utf-8'), user.password):
+                raise HttpException(401, 'Credenciais não válidas.', 'Wrong credentials.')
 
             # In Case of a Patient - only if platform is MOBILE
             # In Case of a Doctor - only if platform is WEB
@@ -42,6 +39,8 @@ class AuthViewSet(viewsets.ModelViewSet):
             }
             jwt_encoded = jwt.encode(jwt_data, settings.JWT_SECRET, algorithm=settings.JWT_ALGORITHM).decode('utf-8')
 
+        except User.DoesNotExist as e:
+            return HTTP.response(401, 'Utilizador não existe.', 'User not valid.')
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)
         except Exception as e:
