@@ -1,3 +1,4 @@
+import bcrypt
 from rest_framework.decorators import list_route
 from rest_framework.viewsets import GenericViewSet
 
@@ -19,7 +20,7 @@ class UserViewSet(GenericViewSet):
             if user.is_active:
                 raise HttpException(400, 'O user já está ativo.', 'The user is already active.')
 
-            user.password = request.data['password']
+            user.password = bcrypt.hashpw(request.data['password'].encode('utf-8'), bcrypt.gensalt().encode('utf-8'))
             user.is_active = True
             user.save()
 
