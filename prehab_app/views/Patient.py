@@ -68,11 +68,11 @@ class PatientViewSet(GenericViewSet):
             if request.ROLE_ID == 2 and DoctorPatient.objects.filter(doctor=request.USER_ID).filter(
                     patient=patient).count == 0:
                 raise HttpException(401, 'Não tem permissões para aceder a este recurso.',
-                                    'You don\'t have acces to this resouurce.')
+                                    'You don\'t have access to this resource.')
             # In case it's a Patient -> check if it's own information
-            elif request.ROLE_ID == 3 and request.USER_ID == patient.id:
+            elif request.ROLE_ID == 3 and request.USER_ID == patient.user.id:
                 raise HttpException(401, 'Não tem permissões para aceder a este recurso.',
-                                    'You don\'t have acces to this resouurce.')
+                                    'You don\'t have access to this resource.')
 
             data = PatientSerializer(patient, many=False).data
 
@@ -102,7 +102,7 @@ class PatientViewSet(GenericViewSet):
             # 0 - Handle Permissions
             if not Permission.verify(request, ['Doctor']):
                 raise HttpException(401, 'Não tem permissões para aceder a este recurso.',
-                                    'You don\'t have acces to this resouurce.')
+                                    'You don\'t have access to this resource.')
 
             data = request.data
             # 1. Check schema
@@ -182,11 +182,11 @@ class PatientViewSet(GenericViewSet):
             if request.ROLE_ID == 2 and DoctorPatient.objects.filter(doctor=request.USER_ID).filter(
                     patient=patient).count == 0:
                 raise HttpException(401, 'Não tem permissões para aceder a este recurso.',
-                                    'You don\'t have acces to this resouurce.')
+                                    'You don\'t have access to this resource.')
             # In case it's a Patient -> check if it's own information
-            elif request.ROLE_ID == 3 and request.USER_ID == patient.id:
+            elif request.ROLE_ID == 3 and request.USER_ID == patient.user.id:
                 raise HttpException(401, 'Não tem permissões para aceder a este recurso.',
-                                    'You don\'t have acces to this resouurce.')
+                                    'You don\'t have access to this resource.')
 
             prehab = Prehab.objects.filter(patient=patient).first()
 
@@ -238,7 +238,7 @@ class PatientViewSet(GenericViewSet):
             if not Permission.verify(request, ['Admin', 'Doctor']):
                 raise HttpException(401,
                                     'Não tem permissões para aceder a este recurso.',
-                                    'You don\'t have acces to this resouurce.')
+                                    'You don\'t have access to this resource.')
 
             # 1. Check schema
             SchemaValidator.validate_obj_structure(data, 'patient/add_second_doctor.json')
@@ -273,13 +273,10 @@ class PatientViewSet(GenericViewSet):
             new_relation.save()
 
         except Doctor.DoesNotExist as e:
-            return HTTP.response(400, 'Médico não encontrado', 'Doctor with id {} not found. {}'.format(
+            return HTTP.response(404, 'Médico não encontrado', 'Doctor with id {} not found. {}'.format(
                 data['doctor_id'], str(e)))
         except Patient.DoesNotExist as e:
-            return HTTP.response(400, 'Pacient não encontrado', 'Patient with id {} not found. {}'.format(
-                data['patient_id'], str(e)))
-        except Patient.DoesNotExist as e:
-            return HTTP.response(400, 'Paciente não encontrado', 'Patient with id {} not found. {}'.format(
+            return HTTP.response(404, 'Paciente não encontrado', 'Patient with id {} not found. {}'.format(
                 data['patient_id'], str(e)))
         except HttpException as e:
             return HTTP.response(e.http_code, e.http_custom_message, e.http_detail)

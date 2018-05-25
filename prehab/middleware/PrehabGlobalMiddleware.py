@@ -14,27 +14,6 @@ class PrehabGlobalMiddleware(object):
         if request.path in ('/api/cron/tasks', '/api/cron/prehabs'):
             return self.get_response(request)
 
-        ########################################################
-        # TODO - remove this
-        ########################################################
-        if 'HTTP_SIMULATE' in request.META:
-            if request.META['HTTP_SIMULATE'] == 'admin':
-                request.USER_ID = 1
-                request.ROLE_ID = 1
-                request.PLATFORM = 'web'
-            if request.META['HTTP_SIMULATE'] == 'doctor':
-                request.USER_ID = 2
-                request.ROLE_ID = 2
-                request.PLATFORM = 'web'
-            if request.META['HTTP_SIMULATE'] == 'patient':
-                request.USER_ID = 3
-                request.ROLE_ID = 3
-                request.PLATFORM = 'mobile'
-            return self.get_response(request)
-        ########################################################
-        # TODO - remove this
-        ########################################################
-
         if 'HTTP_PLATFORM' not in request.META or request.META['HTTP_PLATFORM'] not in ('web', 'mobile'):
             return HTTP.response(403, 'Precisa de enviar a plataforma', 'You don\'t have access')
 

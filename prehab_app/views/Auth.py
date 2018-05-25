@@ -23,7 +23,7 @@ class AuthViewSet(viewsets.ModelViewSet):
             # In Case of a Patient - only if platform is MOBILE
             # In Case of a Doctor - only if platform is WEB
             if (user.role.id == 3 and request.PLATFORM != 'mobile') or (user.role.id == 2 and request.PLATFORM != 'web'):
-                raise HttpException(401, 'Não tem permissões para aceder a este recurso.', 'You don\'t have acces to this resouurce.')
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.', 'You don\'t have access to this resource.')
 
             # 3. Get Context Information - TODO
             prehab_id = None

@@ -2,15 +2,6 @@ from prehab_app.models.User import User
 from prehab_app.tests.TestSuit import TestSuit
 
 
-class UserQuerySetTests(TestSuit):
-
-    def test_match_credentials_queryset(self):
-        queryset = User.objects.match_credentials('admin', 'notadmin')
-        self.assertEquals(queryset.count(), 0)
-        queryset = User.objects.match_credentials('admin', 'admin')
-        self.assertEquals(queryset.count(), 1)
-
-
 class UserTests(TestSuit):
     def test_to_string_method(self):
         self.assertEquals(str(self.admin_user), 'Admin')

@@ -4,8 +4,7 @@ from prehab_app.models.Role import Role
 
 
 class UserQuerySet(models.QuerySet):
-    def match_credentials(self, username, password):
-        return self.filter(username=username, password=password)
+    pass
 
 
 class User(models.Model):

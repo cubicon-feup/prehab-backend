@@ -21,14 +21,14 @@ class FullTaskScheduleViewSet(GenericViewSet):
             # 0 - Handle Permissions
             if not Permission.verify(request, ['Admin', 'Doctor']):
                 raise HttpException(401, 'Não tem permissões para aceder a este recurso.',
-                                    'You don\'t have acces to this resouurce.')
+                                    'You don\'t have access to this resource.')
 
             # Check if Task Schedule exists and if it's the owner requesting it
             task_schedule = TaskSchedule.objects.get(pk=pk)
 
             if request.ROLE_ID == 2 and task_schedule.created_by.id != request.USER_ID:
                 raise HttpException(401, 'Não tem permissões para aceder a este recurso.',
-                                    'You don\'t have acces to this resouurce.')
+                                    'You don\'t have access to this resource.')
 
             data = FullTaskScheduleSerializer(instance=task_schedule).data
 
@@ -51,7 +51,7 @@ class FullTaskScheduleViewSet(GenericViewSet):
             # 0. Check Permissions
             if not Permission.verify(request, ['Admin', 'Doctor']):
                 raise HttpException(401, 'Não tem permissões para aceder a este recurso.',
-                                    'You don\'t have acces to this resouurce.')
+                                    'You don\'t have access to this resource.')
 
             data = request.data
             # 1. Check schema

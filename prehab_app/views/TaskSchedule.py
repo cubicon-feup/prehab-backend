@@ -14,7 +14,7 @@ class TaskScheduleViewSet(GenericViewSet):
             # 0. Check Permissions
 
             if not Permission.verify(request, ['Admin', 'Doctor']):
-                raise HttpException(401, 'Não tem permissões para aceder a este recurso.', 'You don\'t have acces to this resouurce.')
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.', 'You don\'t have access to this resource.')
 
             # In case it's an Admin -> Retrieve ALL patients info
             if request.ROLE_ID == 1:

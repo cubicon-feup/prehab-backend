@@ -5,6 +5,16 @@ from prehab_app.models import Task
 class FullTaskViewTests(TestSuit):
     full_task_path_url = '/api/schedule/task/full/'
 
+    def test_retrieve_full_task(self):
+        # Test Delete
+        res = self.http_request('get', self.full_task_path_url + '1', auth_user='patient')
+        self.assertEqual(res.status_code, 200)
+
+    def test_list_all_tasks(self):
+        # Test Delete
+        res = self.http_request('get', self.full_task_path_url, auth_user='patient')
+        self.assertEqual(res.status_code, 405)
+
     def test_register_full_task(self):
         # Error in schema
         body = {}
@@ -148,7 +158,7 @@ class FullTaskViewTests(TestSuit):
                     "week_number": 1,
                     "tasks":
                         [{
-                            "task_id": 2,
+                            "task_id": 20000,
                             "times_per_week": 2
 
                         },
@@ -167,7 +177,7 @@ class FullTaskViewTests(TestSuit):
         }
         res = self.http_request('post', self.full_task_path_url, body)
         self.assertEqual(res.status_code, 404)
-        self.assertEqual(res.json()['details'], 'Task with id 2 does not exist.')
+        self.assertEqual(res.json()['details'], 'Task with id 20000 does not exist.')
 
         # Test to pass
         task = Task(

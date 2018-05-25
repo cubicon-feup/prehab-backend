@@ -58,12 +58,12 @@ class PatientTaskScheduleViewSet(GenericViewSet):
             if request.ROLE_ID == 2 and request.USER_ID != patient_task_schedule.prehab.created_by.user.id:
                 raise HttpException(401,
                                     'Não tem permissões para aceder a este recurso.',
-                                    'You don\'t have acces to this resouurce.')
+                                    'You don\'t have access to this resource.')
             # In case it's a Patient -> check if it's own information
             elif request.ROLE_ID == 3 and request.USER_ID != patient_task_schedule.prehab.patient.user.id:
                 raise HttpException(401,
                                     'Não tem permissões para aceder a este recurso.',
-                                    'You don\'t have acces to this resouurce.')
+                                    'You don\'t have access to this resource.')
 
             data = SimplePatientTaskScheduleSerializer(patient_task_schedule, many=False).data
 
@@ -98,7 +98,7 @@ class PatientTaskScheduleViewSet(GenericViewSet):
             if not Permission.verify(request, ['Doctor']):
                 raise HttpException(401,
                                     'Não tem permissões para aceder a este recurso.',
-                                    'You don\'t have acces to this resouurce.')
+                                    'You don\'t have access to this resource.')
 
             # 1.2. Check schema
             SchemaValidator.validate_obj_structure(data, 'patient_task_schedule/mark_as_seen.json')
@@ -145,7 +145,7 @@ class PatientTaskScheduleViewSet(GenericViewSet):
             if not Permission.verify(request, ['Doctor', 'Admin']):
                 raise HttpException(401,
                                     'Não tem permissões para aceder a este recurso.',
-                                    'You don\'t have acces to this resouurce.')
+                                    'You don\'t have access to this resource.')
 
             # 1.2. Check schema
             SchemaValidator.validate_obj_structure(data, 'patient_task_schedule/mark_as_seen_bulk.json')
@@ -179,7 +179,7 @@ class PatientTaskScheduleViewSet(GenericViewSet):
             # 1.1. Only Patients can create new Prehab Plans
             if not Permission.verify(request, ['Patient']):
                 raise HttpException(401, 'Não tem permissões para aceder a este recurso.',
-                                    'You don\'t have acces to this resouurce.')
+                                    'You don\'t have access to this resource.')
 
             # 1.2. Check schema
             SchemaValidator.validate_obj_structure(data, 'patient_task_schedule/mark_as_done.json')

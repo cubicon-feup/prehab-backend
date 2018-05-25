@@ -164,7 +164,7 @@ class PrehabViewSet(GenericViewSet):
             if not Permission.verify(request, ['Admin', 'Doctor']):
                 raise HttpException(401,
                                     'Não tem permissões para aceder a este recurso.',
-                                    'You don\'t have acces to this resouurce.')
+                                    'You don\'t have access to this resource.')
 
             # 1.2. Check schema
             SchemaValidator.validate_obj_structure(data, 'prehab/create.json')
@@ -280,7 +280,7 @@ class PrehabViewSet(GenericViewSet):
 
             if not Permission.verify(request, ['Admin', 'Doctor']):
                 raise HttpException(401, 'Não tem permissões para aceder a este recurso.',
-                                    'You don\'t have acces to this resouurce.')
+                                    'You don\'t have access to this resource.')
 
             if request.ROLE_ID == 2 and not DoctorPatient.objects.is_a_match(request.USER_ID, prehab.patient.pk):
                 raise HttpException(400,

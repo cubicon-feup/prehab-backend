@@ -12,7 +12,7 @@ class TestSuit(TestCase):
         'meal_constraint_type.json',
         'meals.json',
         'roles.json',
-        # 'tasks.json',
+        'tasks.json',
         'users.json'
     )
 
@@ -30,6 +30,69 @@ class TestSuit(TestCase):
         self.admin_jwt = self.get_jwt_from_login('admin', 'admin', platform='web')
         self.doctor_jwt = self.get_jwt_from_login('doctor', 'doctor', platform='web')
         self.patient_jwt = self.get_jwt_from_login('patient', 'patient', platform='mobile')
+
+        # Set Task Schedule and prehab
+        body = {
+            "title": "New Task Schedule",
+            "number_of_weeks": 2,
+            "weeks": [
+                {
+                    "week_number": 1,
+                    "tasks": [
+                        {
+                            "task_id": 1,
+                            "times_per_week": 5
+                        },
+                        {
+                            "task_id": 2,
+                            "times_per_week": 3
+                        },
+                        {
+                            "task_id": 3,
+                            "times_per_week": 2,
+                            "repetition_number": 10
+                        }
+                    ]
+                },
+
+                {
+                    "week_number": 2,
+                    "tasks": [
+                        {
+                            "task_id": 1,
+                            "times_per_week": 1
+                        },
+                        {
+                            "task_id": 2,
+                            "times_per_week": 12
+                        },
+                        {
+                            "task_id": 3,
+                            "times_per_week": 3,
+                            "repetition_number": 20
+                        }
+                    ]
+                }
+            ]
+        }
+        self.http_request('post', '/api/schedule/task/full/', body, 'admin')
+
+        body = {
+            "patient_id": 3,
+            "init_date": "22-05-2018",
+            "surgery_date": "06-06-2018",
+            "task_schedule_id": 1
+        }
+        self.http_request('post', '/api/prehab/', body, 'admin')
+
+        # MArk 1 as done
+        body = {
+            "patient_task_schedule_id": 16,
+            "completed": True,
+            "difficulties": True,
+            "notes": "Doi me as costas"
+        }
+        self.http_request('post', '/api/patient/schedule/task/done/', body, 'patient')
 
     def get_jwt_from_login(self, username, password, platform='web'):
         headers = {'HTTP_PLATFORM': platform}

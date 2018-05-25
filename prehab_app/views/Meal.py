@@ -49,7 +49,7 @@ class MealViewSet(GenericViewSet):
             if not Permission.verify(request, ['Admin']):
                 raise HttpException(401,
                                     'Não tem permissões para aceder a este recurso.',
-                                    'You don\'t have acces to this resouurce.')
+                                    'You don\'t have access to this resource.')
 
             data = request.data
             # 1. Check schema

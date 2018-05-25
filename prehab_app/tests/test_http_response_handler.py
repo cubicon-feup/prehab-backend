@@ -12,7 +12,9 @@ class HttpResponseHandlerTest(TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertEqual(body['code'], 200)
         self.assertEqual(body['message'], 'Success')
+        self.assertEqual(body['custom_message'], '')
         self.assertEqual(body['details'], '')
+        self.assertEqual(body['custom_message'], '')
         self.assertEqual(body['data'], {})
 
         res = HTTP.response(201)
@@ -20,6 +22,7 @@ class HttpResponseHandlerTest(TestCase):
         self.assertEqual(res.status_code, 201)
         self.assertEqual(body['code'], 201)
         self.assertEqual(body['message'], 'Created')
+        self.assertEqual(body['custom_message'], '')
         self.assertEqual(body['details'], '')
         self.assertEqual(body['data'], {})
 
@@ -28,6 +31,7 @@ class HttpResponseHandlerTest(TestCase):
         self.assertEqual(res.status_code, 202)
         self.assertEqual(body['code'], 202)
         self.assertEqual(body['message'], 'Accepted')
+        self.assertEqual(body['custom_message'], '')
         self.assertEqual(body['details'], '')
         self.assertEqual(body['data'], {})
 
@@ -36,6 +40,7 @@ class HttpResponseHandlerTest(TestCase):
         self.assertEqual(res.status_code, 204)
         self.assertEqual(body['code'], 204)
         self.assertEqual(body['message'], 'No content')
+        self.assertEqual(body['custom_message'], '')
         self.assertEqual(body['details'], '')
         self.assertEqual(body['data'], {})
 
@@ -44,6 +49,7 @@ class HttpResponseHandlerTest(TestCase):
         self.assertEqual(res.status_code, 400)
         self.assertEqual(body['code'], 400)
         self.assertEqual(body['message'], 'Bad request')
+        self.assertEqual(body['custom_message'], '')
         self.assertEqual(body['details'], '')
         self.assertEqual(body['data'], {})
 
@@ -52,6 +58,7 @@ class HttpResponseHandlerTest(TestCase):
         self.assertEqual(res.status_code, 401)
         self.assertEqual(body['code'], 401)
         self.assertEqual(body['message'], 'Unauthorized')
+        self.assertEqual(body['custom_message'], '')
         self.assertEqual(body['details'], '')
         self.assertEqual(body['data'], {})
 
@@ -60,6 +67,7 @@ class HttpResponseHandlerTest(TestCase):
         self.assertEqual(res.status_code, 403)
         self.assertEqual(body['code'], 403)
         self.assertEqual(body['message'], 'Forbidden')
+        self.assertEqual(body['custom_message'], '')
         self.assertEqual(body['details'], '')
         self.assertEqual(body['data'], {})
 
@@ -68,6 +76,7 @@ class HttpResponseHandlerTest(TestCase):
         self.assertEqual(res.status_code, 404)
         self.assertEqual(body['code'], 404)
         self.assertEqual(body['message'], 'Not found')
+        self.assertEqual(body['custom_message'], '')
         self.assertEqual(body['details'], '')
         self.assertEqual(body['data'], {})
 
@@ -76,6 +85,7 @@ class HttpResponseHandlerTest(TestCase):
         self.assertEqual(res.status_code, 405)
         self.assertEqual(body['code'], 405)
         self.assertEqual(body['message'], 'Method not allowed')
+        self.assertEqual(body['custom_message'], '')
         self.assertEqual(body['details'], '')
         self.assertEqual(body['data'], {})
 
@@ -84,6 +94,7 @@ class HttpResponseHandlerTest(TestCase):
         self.assertEqual(res.status_code, 500)
         self.assertEqual(body['code'], 500)
         self.assertEqual(body['message'], 'Internal error')
+        self.assertEqual(body['custom_message'], '')
         self.assertEqual(body['details'], '')
         self.assertEqual(body['data'], {})
 
@@ -92,24 +103,28 @@ class HttpResponseHandlerTest(TestCase):
         self.assertEqual(res.status_code, 501)
         self.assertEqual(body['code'], 501)
         self.assertEqual(body['message'], 'Not Implemented')
+        self.assertEqual(body['custom_message'], '')
         self.assertEqual(body['details'], '')
+        self.assertEqual(body['custom_message'], '')
         self.assertEqual(body['data'], {})
 
     def test_details_in_responses(self):
-        res = HTTP.response(200, 'This is a test for details')
+        res = HTTP.response(200, 'Este é um teste para ver os detalhes', 'This is a test for details')
         body = json.loads(res.content)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(body['code'], 200)
         self.assertEqual(body['message'], 'Success')
         self.assertEqual(body['details'], 'This is a test for details')
+        self.assertEqual(body['custom_message'], 'Este é um teste para ver os detalhes')
         self.assertEqual(body['data'], {})
 
     def test_data_in_responses(self):
-        res = HTTP.response(200, 'This is a test for details', {'foo': 'bar', 'test': 'success'})
+        res = HTTP.response(200, 'Este é um teste para ver os detalhes', 'This is a test for details', {'foo': 'bar', 'test': 'success'})
         body = json.loads(res.content)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(body['code'], 200)
         self.assertEqual(body['message'], 'Success')
         self.assertEqual(body['details'], 'This is a test for details')
+        self.assertEqual(body['custom_message'], 'Este é um teste para ver os detalhes')
         self.assertEqual(body['data']['foo'], 'bar')
         self.assertEqual(body['data']['test'], 'success')

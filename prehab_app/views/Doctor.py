@@ -19,7 +19,7 @@ class DoctorViewSet(GenericViewSet):
         try:
             # In case it's a patient -> don't allow it
             if request.ROLE_ID == 3:
-                raise HttpException(401, 'Não tem permissões para aceder a este recurso.', 'You don\'t have acces to this resouurce.')
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.', 'You don\'t have access to this resource.')
 
             doctors = self.paginate_queryset(Doctor.objects.all())
             queryset = self.paginate_queryset(doctors)
@@ -38,7 +38,7 @@ class DoctorViewSet(GenericViewSet):
         try:
             # In case it's not Admin -> fails
             if request.ROLE_ID != 1 and request.USER_ID != pk:
-                raise HttpException(401, 'Não tem permissões para aceder a este recurso.', 'You don\'t have acces to this resouurce.')
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.', 'You don\'t have access to this resource.')
 
             doctor = Doctor.objects.get(user_id=pk)
             data = FullDoctorSerializer(doctor, many=False).data
@@ -58,7 +58,7 @@ class DoctorViewSet(GenericViewSet):
     def create(request):
         try:
             if request.ROLE_ID != 1:
-                raise HttpException(401, 'Não tem permissões para aceder a este recurso.', 'You don\'t have acces to this resouurce.')
+                raise HttpException(401, 'Não tem permissões para aceder a este recurso.', 'You don\'t have access to this resource.')
 
             # 1. Check schema
             SchemaValidator.validate_obj_structure(request.data, 'doctor/create.json')
@@ -69,7 +69,7 @@ class DoctorViewSet(GenericViewSet):
                 username=request.data['username'],
                 email=request.data['email'],
                 phone=request.data['phone'] if 'phone' in request.data else None,
-                password=bcrypt.hashpw(request.data['password'].encode('utf-8'), bcrypt.gensalt().encode('utf-8')),
+                password=bcrypt.hashpw(request.data['password'].encode('utf-8'), bcrypt.gensalt()),
                 role=Role.objects.doctor_role().get(),
                 activation_code=''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8)),
                 is_active=True,

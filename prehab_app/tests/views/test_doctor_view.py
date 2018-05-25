@@ -46,7 +46,7 @@ class DoctorViewTests(TestSuit):
             "email": "test_to_pass@mail.com"
         }
         res = self.http_request('post', self.doctor_path_url, body)
-        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.status_code, 201)
 
         # Test get
 
@@ -54,10 +54,28 @@ class DoctorViewTests(TestSuit):
         # Fail with permission
         res = self.http_request('get', self.doctor_path_url + '2', auth_user='patient')
         self.assertEqual(res.status_code, 401)
-        self.assertEqual(res.json()['details'], 'You don\t have permission to access this Doctor Information')
+        self.assertEqual(res.json()['details'], 'You don\'t have access to this resource.')
+
+        # Test to fail - get
+        res = self.http_request('get', self.doctor_path_url + '20', auth_user='admin')
+        self.assertEqual(res.status_code, 404)
 
         # Test to pass - get
         res = self.http_request('get', self.doctor_path_url + '2', auth_user='admin')
+        self.assertEqual(res.status_code, 200)
+
+    def test_list_doctors(self):
+        # Fail with permission
+        res = self.http_request('get', self.doctor_path_url, auth_user='patient')
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(res.json()['details'], 'You don\'t have access to this resource.')
+        #
+        # # Test to fail - get
+        # res = self.http_request('get', self.doctor_path_url + '20', auth_user='admin')
+        # self.assertEqual(res.status_code, 404)
+
+        # Test to pass - get
+        res = self.http_request('get', self.doctor_path_url, auth_user='admin')
         self.assertEqual(res.status_code, 200)
 
     def test_update_doctor(self):
