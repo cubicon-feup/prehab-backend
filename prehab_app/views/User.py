@@ -1,8 +1,9 @@
 from rest_framework.decorators import list_route
 from rest_framework.viewsets import GenericViewSet
-from prehab.helpers.HttpResponseHandler import HTTP
 
 from prehab.helpers.HttpException import HttpException
+from prehab.helpers.HttpResponseHandler import HTTP
+from prehab.helpers.SchemaValidator import SchemaValidator
 from prehab_app.models import User
 
 
@@ -11,10 +12,8 @@ class UserViewSet(GenericViewSet):
     @list_route(methods=['post'])
     def activate(request):
         try:
-            if 'activation_code' not in request.data or 'password' not in request.data:
-                raise HttpException(400,
-                                    'Precisa de enviar código de ativação e nova password.',
-                                    'You need to send activation code and password')
+            # 1.2. Check schema
+            SchemaValidator.validate_obj_structure(request.data, 'user/activate.json')
 
             user = User.objects.filter(activation_code=request.data['activation_code']).get()
             if user.is_active:
