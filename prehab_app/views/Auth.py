@@ -17,7 +17,7 @@ class AuthViewSet(viewsets.ModelViewSet):
         try:
             # 1. Check if pair username-password is correct
             user = User.objects.filter(username=request.data['username']).get()
-            if not bcrypt.checkpw(request.data['password'].encode('utf-8'), user.password):
+            if not bcrypt.checkpw(request.data['password'].encode('utf-8'), user.password.encode('utf-8')):
                 raise HttpException(401, 'Credenciais não válidas.', 'Wrong credentials.')
 
             # In Case of a Patient - only if platform is MOBILE
