@@ -38,7 +38,7 @@ class TaskScheduleViewSet(GenericViewSet):
     def retrieve(request, pk=None):
         try:
             queryset = TaskSchedule.objects.get(pk=pk)
-            data = TaskScheduleSerializer(queryset, many=True).data[0]
+            data = TaskScheduleSerializer(queryset, many=False).data
 
         except TaskSchedule.DoesNotExist:
             return HTTP.response(404, 'Paciente não encontrado', 'Patient with id {} not found.'.format(str(pk)))
