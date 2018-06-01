@@ -20,7 +20,7 @@ class UserViewSet(GenericViewSet):
             if user.is_active:
                 raise HttpException(400, 'O user já está ativo.', 'The user is already active.')
 
-            user.password = bcrypt.hashpw(request.data['password'].encode('utf-8'), bcrypt.gensalt())
+            user.password = bcrypt.hashpw(request.data['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
             user.is_active = True
             user.save()
 

@@ -69,7 +69,7 @@ class DoctorViewSet(GenericViewSet):
                 username=request.data['username'],
                 email=request.data['email'],
                 phone=request.data['phone'] if 'phone' in request.data else None,
-                password=bcrypt.hashpw(request.data['password'].encode('utf-8'), bcrypt.gensalt()),
+                password=bcrypt.hashpw(request.data['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8'),
                 role=Role.objects.doctor_role().get(),
                 activation_code=''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8)),
                 is_active=True,
