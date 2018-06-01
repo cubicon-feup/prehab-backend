@@ -1,66 +1,162 @@
 [
-    {
-        "model": "prehab_app.Meal",
-        "pk": 1,
-        "fields": {
-            "title": "Breakfast 1",
-            "description": "This is the breakfast 1",
-            "meal_type": 1,
-            "multimedia_link": ""
-        }
-    },
-    {
-        "model": "prehab_app.Meal",
-        "pk": 2,
-        "fields": {
-            "title": "Breakfast 2",
-            "description": "This is the breakfast 2",
-            "meal_type": 1,
-            "multimedia_link": ""
-        }
-    },
-
-
-    {
-        "model": "prehab_app.Meal",
-        "pk": 3,
-        "fields": {
-            "title": "Snack 1",
-            "description": "This is the snack 1",
-            "meal_type": 2,
-            "multimedia_link": ""
-        }
-    },
-    {
-        "model": "prehab_app.Meal",
-        "pk": 4,
-        "fields": {
-            "title": "Snack 2",
-            "description": "This is the snack 2",
-            "meal_type": 2,
-            "multimedia_link": ""
-        }
-    },
-
-
-    {
-        "model": "prehab_app.Meal",
-        "pk": 5,
-        "fields": {
-            "title": "Big Meal 1",
-            "description": "This is the Big Meal 1",
-            "meal_type": 3,
-            "multimedia_link": ""
-        }
-    },
-    {
-        "model": "prehab_app.Meal",
-        "pk": 6,
-        "fields": {
-            "title": "Big Meal 2",
-            "description": "This is the Big Meal 2",
-            "meal_type": 3,
-            "multimedia_link": ""
-        }
+  {
+    "model": "prehab_app.Meal",
+    "pk": 1,
+    "fields": {
+      "title": "Pequeno-almoço",
+      "description": "1 chávena almoçadeira de leite meio gordo (240 ml), 1 pão, 1 fatia fina de queijo (30g)",
+      "meal_type": 1,
+      "multimedia_link": ""
     }
+  },
+  {
+    "model": "prehab_app.Meal",
+    "pk": 2,
+    "fields": {
+      "title": "Pequeno-almoço",
+      "description": "1 iogurte líquido (200 ml), 8 bolachas de água e sal ('redondas'), 1 fatia fina de fiambre (30g)",
+      "meal_type": 1,
+      "multimedia_link": ""
+    }
+  },
+  {
+    "model": "prehab_app.Meal",
+    "pk": 3,
+    "fields": {
+      "title": "Pequeno-almoço",
+      "description": "2 iogurtes sólidos (125 g cada), 6 bolachas Maria/torrada ou 4 bolachas 'cream cracker', 10 g de manteiga",
+      "meal_type": 1,
+      "multimedia_link": ""
+    }
+  },
+  {
+    "model": "prehab_app.Meal",
+    "pk": 4,
+    "fields": {
+      "title": "Lanche Meio da Manhã",
+      "description": "1 peça de fruta com cerca de 100g (maçã, pêra, laranja, pêssego...), 1 iogurte líquido",
+      "meal_type": 2,
+      "multimedia_link": ""
+    }
+  },
+  {
+    "model": "prehab_app.Meal",
+    "pk": 5,
+    "fields": {
+      "title": "Lanche Meio da Manhã",
+      "description": "Cerca de 50g (banana, uvas) ou com cerca de 80g (figos) ou com cerca de 200g (melão, melancia ou morangos) e 1 iogurte líquido ou sólido de aromas ou pedaços.",
+      "meal_type": 2,
+      "multimedia_link": ""
+    }
+  },
+  {
+    "model": "prehab_app.Meal",
+    "pk": 6,
+    "fields": {
+      "title": "Carne e batatas",
+      "description": "Sopa (quantidades para 2 refeições): 3 chávenas almoçadeiras de legumes e/ou hortaliças (couves, cenoura, abóbora, nabo, brócolos...); 1 colher de chá de azeite ('em cru'). Prato: 120 g de carne e 3 batatas médias (240g), 10 g de azeite (2 colheres de chá); meio chávena almoçadeira de legumes e/ou hortaliças ou saladas; 1 peça de fruta com cerca de 100g (maçã, pêra, laranja, pêssego...)",
+      "meal_type": 3,
+      "multimedia_link": ""
+    }
+  },
+  {
+    "model": "prehab_app.Meal",
+    "pk": 7,
+    "fields": {
+      "title": "Peixe com arroz ou massa",
+      "description": "Sopa (quantidades para 2 refeições): 3 chávenas almoçadeiras de legumes e/ou hortaliças (couves, cenoura, abóbora, nabo, brócolos...); 1 colher de chá de azeite ('em cru'). Prato: 120 g de peixe; 9 colheres de sopa de arroz ou massa ou milho, 10 g de azeite (2 colheres de chá); meio chávena almoçadeira de legumes e/ou hortaliças ou saladas, cerca de 50g (banana, uvas) ou com cerca de 80g (figos)",
+      "meal_type": 3,
+      "multimedia_link": ""
+    }
+  },
+  {
+    "model": "prehab_app.Meal",
+    "pk": 8,
+    "fields": {
+      "title": "Ovos e Legumes",
+      "description": "Sopa (quantidades para 2 refeições): 3 chávenas almoçadeiras de legumes e/ou hortaliças (couves, cenoura, abóbora, nabo, brócolos...); 1 colher de chá de azeite ('em cru'). Prato: 2 ovos, 12 colheres de sopa de feijão, grão ou ervilhas, 10 g de azeite (2 colheres de chá); meio chávena almoçadeira de legumes e/ou hortaliças ou saladas, cerca de 200g (melão, melancia ou morangos)",
+      "meal_type": 3,
+      "multimedia_link": ""
+    }
+  },
+  {
+    "model": "prehab_app.Meal",
+    "pk": 9,
+    "fields": {
+      "title": "Pequeno-almoço",
+      "description": " 1 chávena almoçadeira de bebida vegetal (aveia, arroz, amêndoa ou soja),, 1 pão, compota ou manteiga de amendoim ou margarina (10 g)",
+      "meal_type": 1,
+      "multimedia_link": ""
+    }
+  },
+  {
+    "model": "prehab_app.Meal",
+    "pk": 10,
+    "fields": {
+      "title": "Pequeno-almoço",
+      "description": "iogurte de soja, 1 pão, manteiga de amendoim ou margarina (10 g)",
+      "meal_type": 1,
+      "multimedia_link": ""
+    }
+  },
+  {
+    "model": "prehab_app.Meal",
+    "pk": 11,
+    "fields": {
+      "title": "Lanche Meio da Manhã",
+      "description": "1 peça de fruta com cerca de 100g (maçã, pêra, laranja, pêssego...), 1 iogurte líquido ou sólido de aromas ou pedaços.",
+      "meal_type": 2,
+      "multimedia_link": ""
+    }
+  },
+  {
+    "model": "prehab_app.Meal",
+    "pk": 12,
+    "fields": {
+      "title": "Lanche Meio da Manhã",
+      "description": "Cerca de 50g (banana, uvas) ou com cerca de 80g (figos) ou com cerca de 200g (melão, melancia ou morangos) e 1 punhado de oleaginosas (nozes, avelãs, amêndoas, castanha do pará...)",
+      "meal_type": 2,
+      "multimedia_link": ""
+    }
+  },
+  {
+    "model": "prehab_app.Meal",
+    "pk": 13,
+    "fields": {
+      "title": "Seitan e Batatas",
+      "description": "Sopa (quantidades para 2 refeições): 3 chávenas almoçadeiras de legumes e/ou hortaliças (couves, cenoura, abóbora, nabo, brócolos...); 1 colher de chá de azeite ('em cru'). Prato: Seitan ou cogumelos (300 g), 3 batatas médias (240g), 10 g de azeite (2 colheres de chá); meio chávena almoçadeira de legumes e/ou hortaliças; 1 peça de fruta com cerca de 100g (maçã, pêra, laranja, pêssego...)",
+      "meal_type": 3,
+      "multimedia_link": ""
+    }
+  },
+  {
+    "model": "prehab_app.Meal",
+    "pk": 14,
+    "fields": {
+      "title": "Peixe com arroz ou massa",
+      "description": "Sopa (quantidades para 2 refeições): 3 chávenas almoçadeiras de legumes e/ou hortaliças (couves, cenoura, abóbora, nabo, brócolos...); 1 colher de chá de azeite ('em cru'). Prato: Tofu ou leguminosas secas (300 g), 9 colheres de sopa rasas de quinoa ou couscous, 10 g de azeite (2 colheres de chá); meio chávena almoçadeira de legumes e/ou hortaliças ou saladas, cerca de 50g (banana, uvas) ou com cerca de 80g (figos)",
+      "meal_type": 3,
+      "multimedia_link": ""
+    }
+  },
+  {
+    "model": "prehab_app.Meal",
+    "pk": 15,
+    "fields": {
+      "title": "Pequeno-almoço",
+      "description": "2 iogurtes sólidos sem açúcar (125 g cada), 6 bolachas Maria/torrada ou 4 bolachas 'cream cracker', 10 g de manteiga",
+      "meal_type": 1,
+      "multimedia_link": ""
+    }
+  },
+  {
+    "model": "prehab_app.Meal",
+    "pk": 16,
+    "fields": {
+      "title": "Pequeno-almoço",
+      "description": "1 iogurte liquido ou sólidos magros (125 g cada), 6 bolachas Maria/torrada ou 4 bolachas 'cream cracker', 10g compota light",
+      "meal_type": 1,
+      "multimedia_link": ""
+    }
+  }
 ]

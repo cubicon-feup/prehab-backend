@@ -1,98 +1,130 @@
 [
-    {
-        "model": "prehab_app.MealConstraintType",
-        "pk": 1,
-        "fields": {
-            "meal": 1,
-            "constraint_type": 1
-        }
-    },
-    {
-        "model": "prehab_app.MealConstraintType",
-        "pk": 2,
-        "fields": {
-            "meal": 1,
-            "constraint_type": 2
-        }
-    },
-    {
-        "model": "prehab_app.MealConstraintType",
-        "pk": 3,
-        "fields": {
-            "meal": 2,
-            "constraint_type": 1
-        }
-    },
-    {
-        "model": "prehab_app.MealConstraintType",
-        "pk": 4,
-        "fields": {
-            "meal": 2,
-            "constraint_type": 2
-        }
-    },
-    {
-        "model": "prehab_app.MealConstraintType",
-        "pk": 5,
-        "fields": {
-            "meal": 3,
-            "constraint_type": 1
-        }
-    },
-    {
-        "model": "prehab_app.MealConstraintType",
-        "pk": 6,
-        "fields": {
-            "meal": 3,
-            "constraint_type": 2
-        }
-    },
-    {
-        "model": "prehab_app.MealConstraintType",
-        "pk": 7,
-        "fields": {
-            "meal": 4,
-            "constraint_type": 1
-        }
-    },
-    {
-        "model": "prehab_app.MealConstraintType",
-        "pk": 8,
-        "fields": {
-            "meal": 4,
-            "constraint_type": 2
-        }
-    },
-    {
-        "model": "prehab_app.MealConstraintType",
-        "pk": 9,
-        "fields": {
-            "meal": 5,
-            "constraint_type": 1
-        }
-    },
-    {
-        "model": "prehab_app.MealConstraintType",
-        "pk": 10,
-        "fields": {
-            "meal": 5,
-            "constraint_type": 2
-        }
-    },
-    {
-        "model": "prehab_app.MealConstraintType",
-        "pk": 11,
-        "fields": {
-            "meal": 6,
-            "constraint_type": 1
-        }
-    },
-    {
-        "model": "prehab_app.MealConstraintType",
-        "pk": 12,
-        "fields": {
-            "meal": 6,
-            "constraint_type": 2
-        }
+  {
+    "model": "prehab_app.MealConstraintType",
+    "pk": 1,
+    "fields": {
+      "meal": 1,
+      "constraint_type": 5
     }
+  },
+  {
+    "model": "prehab_app.MealConstraintType",
+    "pk": 2,
+    "fields": {
+      "meal": 1,
+      "constraint_type": 4
+    }
+  },
+  {
+    "model": "prehab_app.MealConstraintType",
+    "pk": 3,
+    "fields": {
+      "meal": 2,
+      "constraint_type": 3
+    }
+  },
+  {
+    "model": "prehab_app.MealConstraintType",
+    "pk": 4,
+    "fields": {
+      "meal": 2,
+      "constraint_type": 5
+    }
+  },
+  {
+    "model": "prehab_app.MealConstraintType",
+    "pk": 5,
+    "fields": {
+      "meal": 2,
+      "constraint_type": 4
+    }
+  },
+  {
+    "model": "prehab_app.MealConstraintType",
+    "pk": 6,
+    "fields": {
+      "meal": 3,
+      "constraint_type": 1
+    }
+  },
+  {
+    "model": "prehab_app.MealConstraintType",
+    "pk": 7,
+    "fields": {
+      "meal": 3,
+      "constraint_type": 4
+    }
+  },
+  {
+    "model": "prehab_app.MealConstraintType",
+    "pk": 8,
+    "fields": {
+      "meal": 4,
+      "constraint_type": 1
+    }
+  },
+  {
+    "model": "prehab_app.MealConstraintType",
+    "pk": 9,
+    "fields": {
+      "meal": 4,
+      "constraint_type": 4
+    }
+  },
+  {
+    "model": "prehab_app.MealConstraintType",
+    "pk": 10,
+    "fields": {
+      "meal": 5,
+      "constraint_type": 1
+    }
+  },
+  {
+    "model": "prehab_app.MealConstraintType",
+    "pk": 11,
+    "fields": {
+      "meal": 5,
+      "constraint_type": 3
+    }
+  },
+  {
+    "model": "prehab_app.MealConstraintType",
+    "pk": 12,
+    "fields": {
+      "meal": 5,
+      "constraint_type": 4
+    }
+  },
+  {
+    "model": "prehab_app.MealConstraintType",
+    "pk": 13,
+    "fields": {
+      "meal": 6,
+      "constraint_type": 3
+    }
+  },
+  {
+    "model": "prehab_app.MealConstraintType",
+    "pk": 14,
+    "fields": {
+      "meal": 7,
+      "constraint_type": 3
+    }
+  },
+  {
+    "model": "prehab_app.MealConstraintType",
+    "pk": 15,
+    "fields": {
+      "meal": 15,
+      "constraint_type": 1
+    }
+  },
+  {
+    "model": "prehab_app.MealConstraintType",
+    "pk": 16,
+    "fields": {
+      "meal": 15,
+      "constraint_type": 4
+    }
+  }
 ]
