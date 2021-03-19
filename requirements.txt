@@ -17,7 +17,7 @@ gunicorn==19.7.1
 idna==2.6
 idna-ssl==1.0.0
 itypes==1.1.0
-Jinja2==2.7.3
+Jinja2==2.11.3
 jsonify==0.5
 jsonschema==2.6.0
 kombu==4.1.0
